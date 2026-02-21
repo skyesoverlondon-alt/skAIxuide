@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kAIxu Nexus Pro</title>
+    
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Rendering Engines -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked-katex-extension@1.0.2/lib/index.umd.js"></script>
+    
+    <!-- Document Processing Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- Code Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        :root {
+            --cosmic-dark: #090310;
+            --royal-purple: #1f0d3d;
+            --royal-light: #3a1c6b;
+            --neon-gold: #ffcc00;
+            --neon-glow: rgba(255, 204, 0, 0.4);
+            --canvas-bg: #140826;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: radial-gradient(circle at top right, var(--royal-purple), var(--cosmic-dark) 80%);
+            color: #e5e7eb; 
+            height: 100vh;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .gold-border { border: 1px solid var(--neon-gold); box-shadow: 0 0 10px var(--neon-glow); }
+        .text-neon { color: var(--neon-gold); text-shadow: 0 0 8px var(--neon-glow); }
+        .floating-logo { background: transparent; filter: drop-shadow(0px 0px 8px var(--neon-glow)); }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--royal-light); border-radius: 10px; }
+
+        .message-bubble.user { background: rgba(58, 28, 107, 0.4); border: 1px solid var(--royal-light); }
+        .message-bubble.ai { background: transparent; }
+
+        /* Prose Overrides */
+        .prose { max-width: 100% !important; color: #d1d5db !important; }
+        .prose pre { background: #000 !important; border: 1px solid var(--royal-light); padding: 0 !important; border-radius: 12px; margin-top: 1rem; }
+        .prose code { color: #e5e7eb; font-family: "Fira Code", monospace; font-size: 0.9em; }
+        .prose p code { color: var(--neon-gold); background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 4px; }
+
+        /* Canvas Animation */
+        .canvas-closed #canvas-panel { transform: translateX(100%); width: 0; opacity: 0; pointer-events: none; border-left: none; }
+        .canvas-open #canvas-panel { transform: translateX(0); width: 50%; opacity: 1; pointer-events: all; }
+        #canvas-panel { transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1); border-left: 1px solid var(--royal-light); z-index: 60; }
+        .active-tab { border-bottom: 2px solid var(--neon-gold); color: var(--neon-gold); }
+        
+        .doc-chip { background: rgba(58, 28, 107, 0.6); border: 1px solid var(--royal-light); backdrop-filter: blur(4px); }
+    </style>
+</head>
+<body class="flex flex-col md:flex-row h-screen canvas-closed" id="app-body">
+
+    <!-- Sidebar -->
+    <aside class="w-full md:w-72 bg-black/40 backdrop-blur-xl border-r border-yellow-500/20 flex flex-col z-50 flex-shrink-0">
+        <div class="p-6 border-b border-yellow-500/20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="https://cdn1.sharemyimage.com/2026/02/15/Screenshot-2026-02-14-1.45.11-PM-3.png" alt="kAIxu Logo" class="w-8 h-8 object-contain floating-logo">
+                <h1 class="font-black text-lg tracking-tighter text-neon uppercase">Nexus Pro</h1>
+            </div>
+            <button onclick="toggleWorkspace(true)" class="text-gray-400 hover:text-yellow-400 text-sm hidden md:block" title="Open Canvas"><i class="fa-solid fa-laptop-code"></i></button>
+        </div>
+        
+        <div class="p-4">
+            <button onclick="createNewSession()" class="w-full py-3 gold-border bg-yellow-500/10 text-yellow-400 rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-yellow-500/20 transition-all">
+                <i class="fa-solid fa-plus mr-2"></i> New Protocol
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto px-4 py-2 space-y-1" id="history-list">
+            <!-- History populated via JS -->
+        </div>
+
+        <div class="p-4 border-t border-yellow-500/20 space-y-3">
+            <div id="budget-display" class="hidden flex justify-between items-center text-[10px] font-black uppercase tracking-widest bg-yellow-500/10 p-3 rounded-xl gold-border">
+                <span class="text-gray-400">Remaining Cap</span>
+                <span class="text-neon" id="budget-amount">--</span>
+            </div>
+            <a href="../skAIxuide/index.html" class="w-full flex items-center justify-between px-4 py-3 text-xs text-gray-300 hover:text-indigo-400 hover:bg-white/5 rounded-xl transition-all font-bold group">
+                <span class="uppercase tracking-widest"><i class="fa-solid fa-arrow-left mr-2"></i> Back to IDE</span>
+            </a>
+            <button onclick="toggleSettings()" class="w-full flex items-center justify-between px-4 py-3 text-xs text-gray-300 hover:text-yellow-400 hover:bg-white/5 rounded-xl transition-all font-bold group">
+                <span class="uppercase tracking-widest"><i class="fa-solid fa-microchip mr-2"></i> System Config</span>
+                <i class="fa-solid fa-chevron-right opacity-0 group-hover:opacity-100 transition-opacity"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Chat Area -->
+    <main class="flex-1 flex flex-col relative h-full overflow-hidden bg-[var(--cosmic-dark)]/50">
+        
+        <!-- Error Banner -->
+        <div id="error-banner" class="hidden absolute top-4 left-1/2 transform -translate-x-1/2 z-50 bg-red-900/95 border border-red-500 text-red-200 px-6 py-4 rounded-xl text-xs font-bold flex items-center shadow-2xl backdrop-blur-md max-w-xl text-center leading-relaxed">
+            <i class="fa-solid fa-triangle-exclamation mr-3 text-lg"></i>
+            <span id="error-text">System Error</span>
+            <button onclick="document.getElementById('error-banner').classList.add('hidden')" class="ml-4 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div id="chat-window" class="flex-1 overflow-y-auto p-6 md:p-10 scroll-smooth pb-40">
+            <div id="welcome-view" class="h-full flex flex-col items-center justify-center text-center space-y-6 max-w-lg mx-auto">
+                <img src="https://cdn1.sharemyimage.com/2026/02/15/Screenshot-2026-02-14-1.45.11-PM-3.png" alt="kAIxu Big Logo" class="w-24 h-24 object-contain floating-logo animate-pulse">
+                <div>
+                    <h2 class="text-4xl font-black tracking-tighter text-white">READY FOR INPUT.</h2>
+                    <p class="text-yellow-500/70 font-medium mt-2 tracking-widest uppercase text-xs leading-relaxed">Secure kAIxuGateway13 Connection Established.<br>Supports Multi-Document Analysis.</p>
+                </div>
+            </div>
+            <div id="messages-list" class="max-w-4xl mx-auto space-y-8"></div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="absolute bottom-0 w-full bg-gradient-to-t from-[#090310] via-[#090310]/95 to-transparent pt-10 pb-6 px-6">
+            <div class="max-w-4xl mx-auto relative">
+                
+                <!-- Attachment Strip -->
+                <div id="attachment-strip" class="hidden flex flex-wrap gap-2 mb-3 px-2"></div>
+
+                <div class="bg-[#1a0d33]/90 backdrop-blur-xl rounded-2xl border border-yellow-500/30 flex flex-col overflow-hidden focus-within:gold-border transition-all shadow-2xl">
+                    <textarea id="user-input" rows="1" placeholder="Initialize command sequence or drop files..." class="w-full bg-transparent p-5 text-sm text-white resize-none outline-none max-h-[250px]" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';"></textarea>
+                    
+                    <div class="flex items-center justify-between px-5 pb-4">
+                        <div class="flex items-center gap-2">
+                            <input type="file" id="file-upload" class="hidden" accept=".pdf,.xlsx,.xls,.csv" multiple onchange="handleFiles(event)">
+                            <button onclick="document.getElementById('file-upload').click()" class="p-2 text-gray-400 hover:text-yellow-400 transition-colors rounded-lg hover:bg-white/5" title="Attach Documents (PDF, Excel)">
+                                <i class="fa-solid fa-paperclip"></i>
+                            </button>
+                            <span class="text-[10px] text-gray-500 uppercase tracking-widest font-bold ml-2 border-l border-white/10 pl-4 hidden sm:block">
+                                Engine: <span class="text-yellow-500/70">Gemini 2.0 Flash</span>
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button id="stop-btn" onclick="stopEngine()" class="hidden text-[10px] text-red-400 hover:text-red-300 font-bold uppercase tracking-widest px-3 py-2 border border-red-500/30 rounded-lg">Interrupt</button>
+                            <button id="send-btn" onclick="handleSend()" class="w-10 h-10 bg-yellow-500 text-black rounded-xl flex items-center justify-center hover:scale-105 transition-transform disabled:opacity-30 disabled:hover:scale-100 font-bold shadow-[0_0_15px_rgba(255,204,0,0.3)]">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Canvas Right Panel -->
+    <section id="canvas-panel" class="bg-[var(--canvas-bg)] flex flex-col shadow-2xl overflow-hidden relative flex-shrink-0">
+        <header class="h-16 border-b border-yellow-500/20 flex items-center justify-between px-6 bg-black/40">
+            <div class="flex gap-6" id="canvas-tabs">
+                <button onclick="setCanvasMode('edit')" class="text-[10px] font-black uppercase tracking-widest active-tab pb-1 transition-colors">Code Editor</button>
+                <button id="preview-tab" onclick="setCanvasMode('preview')" class="text-[10px] font-black uppercase tracking-widest text-gray-500 pb-1 hover:text-yellow-500/70 transition-colors">Live Preview</button>
+            </div>
+            <button onclick="toggleWorkspace(false)" class="text-gray-400 hover:text-white p-2 rounded-lg hover:bg-white/5"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+        </header>
+        <div class="flex-1 flex flex-col overflow-hidden relative">
+            <textarea id="canvas-editor" class="flex-1 bg-transparent p-6 font-mono text-[13px] leading-relaxed text-gray-300 resize-none outline-none" placeholder="<!-- Paste HTML/JS code here to preview -->"></textarea>
+            <iframe id="canvas-preview" class="hidden w-full h-full bg-white border-none"></iframe>
+        </div>
+    </section>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="hidden fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-6">
+        <div class="bg-[#1f0d3d] border border-yellow-500/30 w-full max-w-lg rounded-3xl p-8 shadow-[0_0_50px_rgba(255,204,0,0.1)]">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-black tracking-tighter text-neon uppercase flex items-center gap-3">
+                    <i class="fa-solid fa-microchip"></i> System Config
+                </h3>
+                <button onclick="toggleSettings()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            
+            <div class="space-y-5">
+                <div>
+                    <label class="text-[10px] font-black text-yellow-500/70 uppercase tracking-widest mb-2 block">KAIXU_VIRTUAL_KEY (Required)</label>
+                    <input type="password" id="api-key-input" class="w-full bg-black/50 border border-yellow-500/20 rounded-xl p-4 text-sm outline-none focus:border-yellow-500 transition-colors text-white font-mono" placeholder="Enter Virtual Key...">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-yellow-500/70 uppercase tracking-widest mb-2 block">System Blueprint (Prompt)</label>
+                    <textarea id="sys-prompt-input" rows="3" class="w-full bg-black/50 border border-yellow-500/20 rounded-xl p-4 text-sm outline-none focus:border-yellow-500 transition-colors text-white resize-none" placeholder="You are an expert technical assistant..."></textarea>
+                </div>
+                <div class="pt-2">
+                    <button onclick="saveSettings()" class="w-full py-4 bg-yellow-500 text-black font-black uppercase tracking-widest rounded-xl hover:bg-yellow-400 transition-all shadow-[0_0_15px_rgba(255,204,0,0.2)]">Synchronize Core</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- LIVE DIAGNOSTICS CHANNEL ---
+        const diagChannel = new BroadcastChannel('kaixu_events');
+        const _neonLogQueue = [];
+        const _neonIsLocal = (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.includes('github.dev') || location.hostname.includes('codespaces'));
+        let _neonFlushTimer = null;
+        function _flushNeonLogs() {
+            _neonFlushTimer = null;
+            if (_neonLogQueue.length === 0 || _neonIsLocal) return;
+            const batch = _neonLogQueue.splice(0, 100);
+            fetch('/.netlify/functions/logs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(batch) }).catch(() => {});
+        }
+        function broadcastLog(message, type = 'info') {
+            try {
+                diagChannel.postMessage({ source: 'NexusPro', message, type, timestamp: Date.now() });
+            } catch (e) {}
+            if (!_neonIsLocal) {
+                _neonLogQueue.push({ source: 'NexusPro', type, message, hostname: location.hostname });
+                if (!_neonFlushTimer) _neonFlushTimer = setTimeout(_flushNeonLogs, 5000);
+            }
+        }
+        window.addEventListener('beforeunload', () => { if (_neonLogQueue.length > 0 && !_neonIsLocal) navigator.sendBeacon('/.netlify/functions/logs', JSON.stringify(_neonLogQueue)); });
+
+        // --- 1. CORE GATEWAY 13 IMPLEMENTATION (STRICT & ROBUST) ---
+        // Ported exactly from original robust index (39).html environment
+        const KAIXU_IS_LOCAL = (
+            location.hostname === 'localhost' ||
+            location.hostname === '127.0.0.1' ||
+            location.hostname === '' || // Allows file:// execution
+            location.hostname.includes('codespaces') ||
+            location.hostname.endsWith('.app.github.dev') ||
+            location.port === '8000'
+        );
+        const KAIXU_GATEWAY_PRIMARY = '/api';
+        const KAIXU_GATEWAY_FALLBACK = 'https://kaixugateway13.netlify.app';
+        
+        let abortCtrl = null;
+        const kaixuDiag = { lastBase: null, lastError: null, lastPayload: null };
+        window.kaixuDiag = kaixuDiag;
+
+        const describeClientEnv = () => {
+            const ua = navigator.userAgent || '';
+            const baseMode = KAIXU_IS_LOCAL ? 'local+fallback' : 'direct';
+            return `online=${navigator.onLine} secure=${window.isSecureContext} protocol=${location.protocol} host=${location.host} baseMode=${baseMode} ua=${ua.slice(0,180)}`;
+        };
+
+        function mapGatewayError(status, body) {
+            const trimmed = (body || '').slice(0, 500);
+            if (status === 401) return new Error('Invalid or missing Kaixu Key');
+            if (status === 402) return new Error('Monthly cap reached');
+            if (status === 429) return new Error('Rate limited, retry later');
+            if (status === 500) return new Error(trimmed || 'Gateway/provider error');
+            return new Error(`HTTP ${status}: ${trimmed || 'no body'}`);
+        }
+
+        async function kaixuStreamChat(kaixuKey, payload, { onMeta, onDelta, onDone, onError }) {
+            const bases = [KAIXU_GATEWAY_PRIMARY, KAIXU_GATEWAY_FALLBACK];
+            let streamErr = null;
+            kaixuDiag.lastPayload = payload;
+
+            for (const base of bases) {
+                let res = null;
+                try {
+                    kaixuDiag.lastBase = base;
+                    const ctrl = abortCtrl || new AbortController();
+                    res = await fetch(`${base}/.netlify/functions/gateway-stream`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${kaixuKey}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload),
+                        signal: ctrl.signal
+                    });
+                } catch (err) {
+                    const msg = err && err.stack ? err.stack : String(err);
+                    streamErr = new Error(`Fetch failed via ${base}: ${msg} | ${describeClientEnv()}`);
+                    
+                    // --- THE CANVAS SANDBOX FIX ---
+                    // Detect if the user is testing in the isolated Gemini Canvas 'blob:' environment.
+                    // The 'blob:' protocol causes the browser to send an 'Origin: null' header, 
+                    // which your perfectly-functioning Netlify Gateway automatically rejects via CORS.
+                    if (err instanceof TypeError && err.message === 'Failed to fetch' && location.protocol === 'blob:') {
+                        streamErr = new Error(`CORS Sandbox Block: The Canvas preview uses a 'blob:' protocol that blocks cross-origin fetch requests to your Gateway. Download the file and test on localhost to bypass this sandbox limit.`);
+                    }
+
+                    kaixuDiag.lastError = streamErr.message;
+                    if (base !== bases[bases.length - 1]) {
+                        console.warn(`Stream fetch failed via proxy (${err.message}); retrying direct gateway...`);
+                        continue;
+                    }
+                    throw streamErr;
+                }
+
+                if (!res.ok) {
+                    const body = await res.text().catch(() => '');
+                    if (base === KAIXU_GATEWAY_PRIMARY && res.status === 404) {
+                        console.warn('Proxy missing, retrying direct gateway...');
+                        continue;
+                    }
+                    const err = mapGatewayError(res.status, body);
+                    err.message = `[${base}] ${err.message}; body=${body.slice(0, 240) || 'none'}; ${describeClientEnv()}`;
+                    kaixuDiag.lastError = err.message;
+                    throw err;
+                }
+
+                const _streamStart = Date.now();
+                let _deltaCount = 0;
+                const reader = res.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+                let firstDataSeen = false;
+                let sawDelta = false;
+                let sawDone = false;
+                let metaCount = 0;
+                let errorCount = 0;
+                let idleTimer = null;
+                let lastActivity = Date.now();
+                
+                const resetIdle = () => {
+                    clearTimeout(idleTimer);
+                    idleTimer = setTimeout(() => {
+                        const idleMsg = `Stream idle timeout: no delta/done for ${Math.round((Date.now() - lastActivity) / 1000)}s`;
+                        try { reader.cancel(); } catch {}
+                        kaixuDiag.lastError = idleMsg;
+                        if (onError) onError(new Error(idleMsg));
+                    }, 20000);
+                };
+                
+                const watchdog = setTimeout(() => {
+                    if (firstDataSeen) return;
+                    try { reader.cancel(); } catch {}
+                    if (onError) onError(new Error('Stream timeout: no data from gateway'));
+                }, 15000);
+
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    firstDataSeen = true;
+                    clearTimeout(watchdog);
+                    lastActivity = Date.now();
+                    resetIdle();
+                    
+                    buffer += decoder.decode(value, { stream: true });
+                    const events = buffer.split('\n\n');
+                    buffer = events.pop();
+
+                    for (const evt of events) {
+                        let event = null, data = '';
+                        evt.split('\n').forEach(line => {
+                            if (line.startsWith('event:')) event = line.slice(6).trim();
+                            if (line.startsWith('data:')) data += line.slice(5).trim();
+                        });
+                        if (!data) continue;
+                        
+                        try {
+                            const parsed = JSON.parse(data);
+                            if (event === 'meta' && onMeta) { metaCount += 1; onMeta(parsed); }
+                            else if (event === 'delta' && onDelta) { sawDelta = true; _deltaCount++; onDelta(parsed.text || ''); }
+                            else if (event === 'done') {
+                                sawDone = true;
+                                const _elapsed = ((Date.now() - _streamStart) / 1000).toFixed(1);
+                                const _usage = parsed.usage || {};
+                                broadcastLog(`Stream COMPLETE in ${_elapsed}s | chunks=${_deltaCount} | in=${_usage.input_tokens||'?'} out=${_usage.output_tokens||'?'}`, 'success');
+                                if (onDone) onDone(parsed);
+                            }
+                            else if (event === 'error') { errorCount += 1; if (onError) onError(new Error(parsed.error)); }
+                        } catch (e) {
+                            if (onError) onError(new Error(`Bad stream chunk: ${e.message}`));
+                        }
+                    }
+                }
+
+                clearTimeout(watchdog);
+                clearTimeout(idleTimer);
+
+                if (!firstDataSeen || (!sawDelta && !sawDone)) {
+                    const summary = `meta=${metaCount} delta=${sawDelta} done=${sawDone} errors=${errorCount}`;
+                    if (onError) onError(new Error(`Stream ended with no data (no delta/done). ${summary}`));
+                    kaixuDiag.lastError = `no-delta-done ${summary}`;
+                }
+
+                return; // success path, stop trying further bases
+            }
+
+            if (streamErr) throw streamErr;
+        }
+
+        // --- 2. APP STATE & INITIALIZATION ---
+        let currentChatId = null;
+        let conversationHistory = []; // Format: [{role, content}]
+        let pendingAttachments = [];  // Format: [{id, name, type, content}]
+        
+        // Initialize Markdown with KaTeX
+        marked.use(markedKatex({ throwOnError: false }));
+        // Initialize PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        // Load Initial State
+        window.onload = () => {
+            syncSidebarHistory();
+            document.getElementById('api-key-input').value = localStorage.getItem('KAIXU_VIRTUAL_KEY') || '';
+            document.getElementById('sys-prompt-input').value = localStorage.getItem('KAIXU_SYS_PROMPT') || 'You are kAIxu Nexus, an advanced technical architecture AI. Prioritize accuracy, clean code generation, and concise explanations.';
+        };
+
+        // --- 3. UI HANDLERS ---
+        function toggleWorkspace(open) {
+            const body = document.getElementById('app-body');
+            if (open) {
+                body.classList.remove('canvas-closed');
+                body.classList.add('canvas-open');
+            } else {
+                body.classList.remove('canvas-open');
+                body.classList.add('canvas-closed');
+            }
+        }
+
+        function setCanvasMode(mode) {
+            const editor = document.getElementById('canvas-editor');
+            const preview = document.getElementById('canvas-preview');
+            const tabs = document.querySelectorAll('#canvas-tabs button');
+            
+            tabs.forEach(t => t.classList.remove('active-tab'));
+            
+            if (mode === 'preview') {
+                document.getElementById('preview-tab').classList.add('active-tab');
+                editor.classList.add('hidden');
+                preview.classList.remove('hidden');
+                preview.srcdoc = editor.value; // Inject code to iframe
+            } else {
+                tabs[0].classList.add('active-tab');
+                editor.classList.remove('hidden');
+                preview.classList.add('hidden');
+            }
+        }
+
+        function toggleSettings() {
+            document.getElementById('settings-modal').classList.toggle('hidden');
+        }
+
+        function saveSettings() {
+            const key = document.getElementById('api-key-input').value.trim();
+            const sys = document.getElementById('sys-prompt-input').value.trim();
+            if (key) localStorage.setItem('KAIXU_VIRTUAL_KEY', key);
+            if (sys) localStorage.setItem('KAIXU_SYS_PROMPT', sys);
+            toggleSettings();
+        }
+
+        function showError(msg) {
+            const banner = document.getElementById('error-banner');
+            document.getElementById('error-text').innerText = msg;
+            banner.classList.remove('hidden');
+            if (msg.includes('Monthly cap reached')) {
+                document.getElementById('user-input').disabled = true;
+                document.getElementById('send-btn').disabled = true;
+            }
+        }
+
+        function updateBudgetUI(monthData) {
+            if (!monthData || monthData.cap_cents === undefined) return;
+            const remainingCents = monthData.cap_cents - monthData.spent_cents;
+            document.getElementById('budget-display').classList.remove('hidden');
+            document.getElementById('budget-amount').innerText = `$${(remainingCents / 100).toFixed(2)}`;
+            if (remainingCents <= 0) showError("Monthly cap reached");
+        }
+
+        function scrollToBottom() {
+            const win = document.getElementById('chat-window');
+            win.scrollTo({ top: win.scrollHeight, behavior: 'smooth' });
+        }
+
+        window.stopEngine = () => { 
+            if (abortCtrl) abortCtrl.abort(); 
+        };
+
+        // --- 4. FILE PROCESSING (Local Text Extraction to fit Payload Shape) ---
+        async function handleFiles(e) {
+            const files = Array.from(e.target.files);
+            const strip = document.getElementById('attachment-strip');
+            strip.classList.remove('hidden');
+
+            for (const file of files) {
+                const id = Math.random().toString(36).substring(2, 9);
+                let parsedText = "";
+                let icon = 'fa-file';
+                
+                try {
+                    if (file.type === 'application/pdf') {
+                        icon = 'fa-file-pdf text-red-400';
+                        const arrayBuffer = await file.arrayBuffer();
+                        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                        for (let i = 1; i <= pdf.numPages; i++) {
+                            const page = await pdf.getPage(i);
+                            const textContent = await page.getTextContent();
+                            parsedText += textContent.items.map(s => s.str).join(" ") + "\n";
+                        }
+                    } else if (file.name.match(/\.(xlsx|xls|csv)$/)) {
+                        icon = 'fa-file-excel text-green-400';
+                        const arrayBuffer = await file.arrayBuffer();
+                        const workbook = XLSX.read(arrayBuffer);
+                        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                        parsedText = XLSX.utils.sheet_to_csv(firstSheet);
+                    } else {
+                        throw new Error("Unsupported file type for text extraction.");
+                    }
+
+                    pendingAttachments.push({ id, name: file.name, type: file.type, content: parsedText, icon });
+                    renderAttachmentStrip();
+                } catch (err) {
+                    showError(`Failed to process ${file.name}: ${err.message}`);
+                }
+            }
+            e.target.value = ''; // Reset input
+        }
+
+        function renderAttachmentStrip() {
+            const strip = document.getElementById('attachment-strip');
+            strip.innerHTML = '';
+            pendingAttachments.forEach(a => {
+                const div = document.createElement('div');
+                div.className = `relative flex items-center gap-2 px-3 py-1.5 rounded-lg doc-chip text-xs group max-w-[200px]`;
+                div.innerHTML = `
+                    <i class="fa-solid ${a.icon}"></i>
+                    <span class="truncate">${a.name}</span>
+                    <button onclick="removeAttachment('${a.id}')" class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] opacity-0 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-xmark"></i></button>
+                `;
+                strip.appendChild(div);
+            });
+            if (pendingAttachments.length === 0) strip.classList.add('hidden');
+        }
+
+        window.removeAttachment = (id) => {
+            pendingAttachments = pendingAttachments.filter(a => a.id !== id);
+            renderAttachmentStrip();
+        };
+
+        // --- 5. CHAT & PERSISTENCE LOGIC ---
+        function createNewSession() {
+            currentChatId = Date.now().toString();
+            conversationHistory = [];
+            document.getElementById('messages-list').innerHTML = '';
+            document.getElementById('welcome-view').classList.remove('hidden');
+            document.getElementById('error-banner').classList.add('hidden');
+            
+            // Re-enable inputs if blocked by budget
+            document.getElementById('user-input').disabled = false;
+            document.getElementById('send-btn').disabled = false;
+        }
+
+        function saveCurrentSession() {
+            if (!currentChatId || conversationHistory.length === 0) return;
+            
+            const sessions = JSON.parse(localStorage.getItem('kaixu_nexus_sessions') || '{}');
+            sessions[currentChatId] = {
+                id: currentChatId,
+                title: conversationHistory.find(m => m.role === 'user')?.content.substring(0, 30) + '...' || 'New Protocol',
+                updatedAt: Date.now(),
+                messages: conversationHistory
+            };
+            localStorage.setItem('kaixu_nexus_sessions', JSON.stringify(sessions));
+            syncSidebarHistory();
+        }
+
+        function syncSidebarHistory() {
+            const list = document.getElementById('history-list');
+            const sessions = JSON.parse(localStorage.getItem('kaixu_nexus_sessions') || '{}');
+            
+            list.innerHTML = '';
+            Object.values(sessions).sort((a,b) => b.updatedAt - a.updatedAt).forEach(sess => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-3 text-[11px] cursor-pointer hover:bg-white/5 rounded-xl truncate text-gray-400 hover:text-white transition-colors border border-transparent hover:border-yellow-500/20`;
+                btn.innerHTML = `<i class="fa-solid fa-message mr-2 text-yellow-500/50"></i> ${sess.title}`;
+                btn.onclick = () => loadSession(sess.id);
+                list.appendChild(btn);
+            });
+        }
+
+        function loadSession(id) {
+            const sessions = JSON.parse(localStorage.getItem('kaixu_nexus_sessions') || '{}');
+            const sess = sessions[id];
+            if (!sess) return;
+
+            currentChatId = id;
+            conversationHistory = sess.messages || [];
+            
+            document.getElementById('welcome-view').classList.add('hidden');
+            const list = document.getElementById('messages-list');
+            list.innerHTML = '';
+            
+            conversationHistory.forEach(msg => {
+                // Do not render system prompts
+                if (msg.role !== 'system') {
+                    const el = appendMessageUI(msg.role, msg.content);
+                    el.innerHTML = marked.parse(msg.content);
+                }
+            });
+            Prism.highlightAllUnder(list);
+            scrollToBottom();
+        }
+
+        function appendMessageUI(role, rawContent) {
+            const list = document.getElementById('messages-list');
+            const div = document.createElement('div');
+            const isUser = role === 'user';
+            
+            div.className = `flex gap-4 p-5 rounded-2xl message-bubble ${isUser ? 'user ml-8' : 'ai mr-8'}`;
+            
+            const avatar = isUser 
+                ? `<div class="w-10 h-10 rounded-full bg-yellow-500 text-black flex items-center justify-center font-black text-xs flex-shrink-0 shadow-[0_0_10px_rgba(255,204,0,0.5)]">YOU</div>`
+                : `<div class="w-10 h-10 rounded-xl bg-black border border-yellow-500/30 flex items-center justify-center flex-shrink-0"><img src="https://cdn1.sharemyimage.com/2026/02/15/Screenshot-2026-02-14-1.45.11-PM-3.png" class="w-7 h-7 object-contain floating-logo"></div>`;
+
+            div.innerHTML = `
+                ${avatar}
+                <div class="flex-1 min-w-0 pt-1 prose prose-invert prose-sm max-w-none text-gray-300 content-box">
+                    ${rawContent} 
+                </div>
+            `;
+            
+            // Add "Copy to Canvas" button for AI responses
+            if (!isUser) {
+                const actions = document.createElement('div');
+                actions.className = 'mt-3 flex gap-2';
+                actions.innerHTML = `<button onclick="copyToCanvas(this)" class="text-[10px] text-gray-500 hover:text-yellow-400 font-bold uppercase tracking-widest"><i class="fa-solid fa-laptop-code mr-1"></i> Send to Canvas</button>`;
+                div.querySelector('.flex-1').appendChild(actions);
+            }
+
+            list.appendChild(div);
+            scrollToBottom();
+            return div.querySelector('.content-box');
+        }
+
+        window.copyToCanvas = (btn) => {
+            const prose = btn.closest('.flex-1').querySelector('.content-box');
+            if (prose) {
+                // Extract code blocks if any, else grab all text
+                const codes = prose.querySelectorAll('pre code');
+                let codeText = "";
+                if(codes.length > 0) {
+                    codes.forEach(c => codeText += c.innerText + "\n\n");
+                } else {
+                    codeText = prose.innerText;
+                }
+                
+                document.getElementById('canvas-editor').value = codeText;
+                setCanvasMode('edit');
+                toggleWorkspace(true);
+            }
+        };
+
+        // --- 6. CORE COMMUNICATION (handleSend) ---
+        async function handleSend() {
+            const inputEl = document.getElementById('user-input');
+            const text = inputEl.value.trim();
+            const apiKey = localStorage.getItem('KAIXU_VIRTUAL_KEY');
+
+            if (!text && pendingAttachments.length === 0) return;
+            if (!apiKey) { toggleSettings(); return; }
+
+            if (!currentChatId) currentChatId = Date.now().toString();
+
+            document.getElementById('welcome-view').classList.add('hidden');
+            document.getElementById('error-banner').classList.add('hidden');
+            
+            // 1. Compile User Content (Text + Attachments)
+            let finalPrompt = text;
+            let displayPrompt = text; // What shows in UI (no giant text dumps)
+
+            if (pendingAttachments.length > 0) {
+                let docContext = pendingAttachments.map(a => `[ATTACHMENT: ${a.name}]\n${a.content}\n`).join("\n---\n");
+                finalPrompt = `I have attached the following document data:\n\n${docContext}\n\nUser Question/Prompt:\n${text}`;
+                
+                const attNames = pendingAttachments.map(a => a.name).join(', ');
+                displayPrompt = `<div class="text-[10px] text-yellow-500/80 mb-2 border border-yellow-500/20 rounded p-2 bg-black/30"><i class="fa-solid fa-paperclip"></i> Attached: ${attNames}</div>${text}`;
+                
+                pendingAttachments = [];
+                renderAttachmentStrip();
+            }
+
+            // 2. Add to UI
+            const userBox = appendMessageUI('user', displayPrompt);
+            // Save logic payload (not UI HTML)
+            conversationHistory.push({ role: 'user', content: finalPrompt });
+            
+            inputEl.value = '';
+            inputEl.style.height = 'auto';
+            
+            // 3. Setup AI Response Bubble
+            const aiContentContainer = appendMessageUI('assistant', '<span class="animate-pulse text-yellow-500/50">Processing context via Nexus...</span>');
+            let accumulatedResponse = "";
+            let firstChunk = true;
+
+            const sendBtn = document.getElementById('send-btn');
+            const stopBtn = document.getElementById('stop-btn');
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+            stopBtn.classList.remove('hidden');
+
+            // Set up AbortController for Interrupt button
+            abortCtrl = new AbortController();
+
+            // 4. Construct EXACT Payload
+            const sysPrompt = localStorage.getItem('KAIXU_SYS_PROMPT') || '';
+            const messagesPayload = [];
+            if (sysPrompt) messagesPayload.push({ role: "system", content: sysPrompt });
+            messagesPayload.push(...conversationHistory);
+
+            const payload = {
+                provider: "gemini",
+                model: "gemini-2.0-flash",
+                messages: messagesPayload,
+                max_tokens: 8192,
+                temperature: 0.7
+            };
+
+            // 5. Execute Stream
+            try {
+                await kaixuStreamChat(apiKey, payload, {
+                    onMeta: (meta) => {
+                        if (meta.month) updateBudgetUI(meta.month);
+                    },
+                    onDelta: (deltaText) => {
+                        if (firstChunk) {
+                            aiContentContainer.innerHTML = '';
+                            firstChunk = false;
+                        }
+                        accumulatedResponse += deltaText;
+                        // Render Markdown & Math
+                        aiContentContainer.innerHTML = marked.parse(accumulatedResponse);
+                        // Highlight syntax as it streams
+                        Prism.highlightAllUnder(aiContentContainer.parentElement);
+                        scrollToBottom();
+                    },
+                    onDone: (meta) => {
+                        conversationHistory.push({ role: 'assistant', content: accumulatedResponse });
+                        saveCurrentSession();
+                        if (meta.month) updateBudgetUI(meta.month);
+                        finishStream();
+                    },
+                    onError: (err) => {
+                        handleStreamError(err, aiContentContainer);
+                    }
+                });
+            } catch (err) {
+                if (err.name !== 'AbortError') {
+                    handleStreamError(err, aiContentContainer);
+                } else {
+                    aiContentContainer.innerHTML += `<div class="text-yellow-500 mt-3 p-3 border border-yellow-500/30 bg-black/50 rounded-lg font-bold text-xs uppercase"><i class="fa-solid fa-ban"></i> Stream Interrupted by User</div>`;
+                    finishStream();
+                }
+            }
+
+            function handleStreamError(err, container) {
+                container.innerHTML += `<div class="text-red-400 mt-3 p-3 border border-red-500/30 bg-red-900/20 rounded-lg font-bold text-xs uppercase"><i class="fa-solid fa-triangle-exclamation"></i> Connection Interrupted: ${err.message}</div>`;
+                showError(err.message);
+                finishStream();
+            }
+
+            function finishStream() {
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i>';
+                stopBtn.classList.add('hidden');
+                abortCtrl = null;
+            }
+        }
+
+        // Event Listeners
+        document.getElementById('user-input').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+            }
+        });
+    </script>
+</body>
+</html>

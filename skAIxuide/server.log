@@ -1,0 +1,750 @@
+nohup: ignoring input
+Serving at port 8000
+Admin Password: DemonLordAtreyuxh
+127.0.0.1 - - [20/Feb/2026 07:40:02] "GET /diagnostics.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:40:02] "GET /diagnostics.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:40:03] "GET /diagnostics.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:40:03] "GET /diagnostics.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:40:03] "GET /diagnostics.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:40:03] "GET /diagnostics.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:40:04] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 07:40:04] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 07:40:06] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 07:40:06] "GET /api HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 07:40:08] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 07:40:25] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 07:40:29] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:40:44] "GET /sw.js HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:40:44] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:40:44] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:40:44] "GET /manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:41:31] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 07:41:31] "GET /api HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 07:41:31] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 401 -
+127.0.0.1 - - [20/Feb/2026 07:42:14] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 07:42:14] "GET /api HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 07:42:15] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:42:20] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 07:42:20] "GET /api HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 07:42:21] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 07:42:26] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 07:42:30] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:42:34] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 07:42:34] "GET /api HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 07:42:35] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:43:20] "GET /diagnostics.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:43:21] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 07:43:21] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 07:43:27] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 07:43:27] "GET /api HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 07:43:28] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:43:44] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 07:43:44] "GET /api HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 07:43:45] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:45:44] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:45:45] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:45:45] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:45:45] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:45:46] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:45:46] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:45:46] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:45:47] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:45:47] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:45:47] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:45:48] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 07:45:48] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 07:45:48] "GET /manifest.json HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 07:45:48] "GET /icon-192.png HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:46:10] "GET / HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 07:46:12] "GET /manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:46:13] "GET /sw.js HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:46:13] "GET /manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:46:13] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:46:13] "GET /icon-512.png HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:46:32] "GET / HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 07:46:35] "GET /sw.js HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 07:47:01] "GET /diagnostics.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:47:03] "GET /sw.js HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 07:47:05] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:47:08] "GET /sw.js HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:49:08] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:49:11] "GET /sw.js HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:49:11] "GET /icon-512.png HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:49:11] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:49:11] "GET / HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 07:49:42] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:49:55] "GET / HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 07:49:55] "GET /icon-192.png HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 07:49:57] "GET /sw.js HTTP/1.1" 304 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 07:50:25] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 07:50:38] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 07:50:44] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 07:50:59] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 07:51:27] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 07:52:06] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 07:52:22] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:55:33] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:55:34] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:55:34] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 07:55:35] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 07:55:35] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 07:55:35] "GET /manifest.json HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 07:55:35] "GET /icon-192.png HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 08:00:04] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:06] "GET /sw.js HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:07] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:07] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:07] "GET /manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:08] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:09] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:10] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:10] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:10] "GET /sw.js HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 08:00:10] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:10] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:11] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 08:00:11] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 08:00:24] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:24] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:24] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:24] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:24] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:25] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:25] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:25] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:25] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:25] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:26] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:00:26] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 08:00:26] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 08:00:50] "GET / HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 08:00:53] "GET /sw.js HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 08:03:30] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:03:33] "GET /sw.js HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:03:33] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:03:33] "GET /icon-192.png HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 08:03:33] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:03:34] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:03:34] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:03:35] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:03:35] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:03:35] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:03:35] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:03:35] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:03:36] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:03:36] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:03:36] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:03:36] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:03:37] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 08:03:37] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 08:12:13] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:12:14] "GET /manifest.json HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 08:12:14] "GET /icon-192.png HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 08:12:16] "GET /sw.js HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:12:16] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:12:16] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:12:16] "GET /manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:19:23] "GET / HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 08:19:24] "GET /manifest.json HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 08:19:24] "GET /icon-192.png HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 08:19:26] "GET /sw.js HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:19:26] "GET /index.html HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 08:19:26] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:19:26] "GET /manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:19:29] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:19:29] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:19:30] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:19:30] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:19:30] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:19:30] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:19:31] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:19:31] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:19:31] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:19:32] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 08:19:32] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 08:19:45] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:19:46] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 08:19:46] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 08:19:46] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:19:46] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:19:46] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:19:47] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:19:47] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 08:19:47] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 08:19:57] "GET /sw.js HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 08:20:21] "GET / HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 08:20:23] "GET /sw.js HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:22:59] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:23:03] "GET /sw.js HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:23:03] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:23:03] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:23:03] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:23:04] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:23:05] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 08:23:05] "GET /favicon.ico HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 08:24:07] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:29:17] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:29:18] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 08:29:18] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 08:29:20] "GET /sw.js HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:29:20] "GET /manifest.json HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 08:29:20] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:29:20] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:29:20] "GET /icon-192.png HTTP/1.1" 304 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 08:30:36] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:38:11] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:38:12] "GET /manifest.json HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 08:38:12] "GET /icon-192.png HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 08:38:14] "GET /sw.js HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:38:14] "GET /manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:38:14] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:38:14] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:38:14] "GET /icon-512.png HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:38:38] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:38:40] "GET /sw.js HTTP/1.1" 304 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 08:39:21] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 08:40:11] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:40:28] "GET /diagnostics.html HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 08:40:30] "GET /sw.js HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 08:42:24] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:42:27] "GET /sw.js HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:42:27] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:42:27] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:42:27] "GET /icon-512.png HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 08:43:36] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 504 -
+127.0.0.1 - - [20/Feb/2026 08:43:56] "GET /diagnostics.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:43:56] "GET /diagnostics.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:43:56] "GET /diagnostics.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:43:56] "GET /diagnostics.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:43:57] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 08:43:57] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 08:46:33] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:46:36] "GET /sw.js HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:46:36] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:46:36] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 08:46:36] "GET /icon-512.png HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 08:46:56] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:18:56] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:18:58] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:18:58] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:18:59] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:19:01] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:19:01] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:19:05] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:19:05] "GET /skAIxuide/sw.js HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:19:06] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:19:06] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:19:06] "GET /skAIxuide/manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:19:06] "GET /skAIxuide/index.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:19:06] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:19:06] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:19:07] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:19:07] "GET /sw.js HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 09:19:44] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 09:24:52] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 09:25:00] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 09:25:07] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 09:25:09] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 09:25:11] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:27:06] "GET /skAIxuide/ HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 09:27:07] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:27:07] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:27:09] "GET /skAIxuide/sw.js HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 09:27:18] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:27:20] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:27:20] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:27:29] "GET /.git/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:27:31] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:27:31] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:27:34] "GET /.git/index HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:27:35] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:27:35] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:27:44] "GET /SkyeDocx/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:27:44] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:27:44] "GET /SkyeDocx/assets/brand/untitled-design-35.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:27:44] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:27:44] "GET /SkyeDocx/assets/brand/sol_tiger.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:27:44] "GET /SkyeDocx/service-worker.js HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:27:44] "GET /SkyeDocx/offline.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:27:44] "GET /SkyeDocx/index.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:27:44] "GET /SkyeDocx/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:27:44] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:27:44] "GET /SkyeDocx/assets/icons/favicon-32.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:27:45] "GET /SkyeDocx/manifest.webmanifest HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:27:45] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:27:45] "GET /SkyeDocx/assets/icons/icon-144.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:27:45] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:27:45] "GET /SkyeDocx/assets/brand/untitled-design-35.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:27:45] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:27:45] "GET /SkyeDocx/assets/icons/favicon-16.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:27:46] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:27:46] "GET /sw.js HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 09:30:59] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 09:31:36] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 09:35:26] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 500 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 09:35:45] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:52:16] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:53:01] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:53:02] "GET /skAIxuide/sw.js HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 09:53:03] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:53:03] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:53:03] "GET /skAIxuide/manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:53:03] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:53:03] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 09:53:38] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 09:53:52] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 09:54:07] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 09:54:20] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 09:54:36] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 500 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 09:54:45] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 09:54:56] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 09:55:06] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy Error] IncompleteRead(224 bytes read)
+127.0.0.1 - - [20/Feb/2026 09:55:36] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 500 -
+127.0.0.1 - - [20/Feb/2026 09:58:28] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:58:28] "GET /skAIxuide/assets/brand/untitled-design-35.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:58:28] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:58:28] "GET /skAIxuide/assets/brand/sol_tiger.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:58:29] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:58:29] "GET /skAIxuide/assets/brand/sol_tiger.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:58:29] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:58:29] "GET /skAIxuide/service-worker.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:58:54] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 09:59:00] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:59:00] "GET /skAIxuide/assets/brand/sol_tiger.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:59:00] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:59:00] "GET /skAIxuide/assets/brand/untitled-design-35.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:59:00] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:59:00] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:59:02] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 09:59:02] "GET /skAIxuide/service-worker.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 09:59:11] "GET /skAIxuide/sw.js HTTP/1.1" 304 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 09:59:24] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:01:14] "GET /skAIxuide/ HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 10:01:15] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:01:15] "GET /skAIxuide/assets/brand/sol_tiger.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:01:15] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:01:15] "GET /skAIxuide/assets/brand/untitled-design-35.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:01:15] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:01:15] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:01:16] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:01:16] "GET /skAIxuide/service-worker.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:01:17] "GET /skAIxuide/sw.js HTTP/1.1" 304 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 10:01:46] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy Error] IncompleteRead(224 bytes read)
+127.0.0.1 - - [20/Feb/2026 10:02:17] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 500 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 10:02:21] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:03:46] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:03:48] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:03:48] "GET /skAIxuide/assets/brand/sol_tiger.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:03:49] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:03:49] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:03:49] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:03:49] "GET /skAIxuide/assets/brand/untitled-design-35.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:03:49] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:03:49] "GET /skAIxuide/service-worker.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:03:50] "GET /skAIxuide/sw.js HTTP/1.1" 304 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 10:04:10] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:05:12] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:05:13] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:05:13] "GET /skAIxuide/assets/brand/untitled-design-35.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:05:13] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:05:13] "GET /skAIxuide/assets/brand/sol_tiger.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:05:13] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:05:13] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:05:13] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:05:13] "GET /skAIxuide/service-worker.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:05:15] "GET /skAIxuide/sw.js HTTP/1.1" 304 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 10:05:30] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy Error] IncompleteRead(224 bytes read)
+127.0.0.1 - - [20/Feb/2026 10:06:00] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 500 -
+127.0.0.1 - - [20/Feb/2026 10:07:58] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:07:59] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:07:59] "GET /skAIxuide/assets/brand/sol_tiger.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:07:59] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:07:59] "GET /skAIxuide/assets/brand/untitled-design-35.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:07:59] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:07:59] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:07:59] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:07:59] "GET /skAIxuide/service-worker.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:08:01] "GET /skAIxuide/sw.js HTTP/1.1" 304 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 10:08:16] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy Error] IncompleteRead(224 bytes read)
+127.0.0.1 - - [20/Feb/2026 10:08:46] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 500 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 10:08:48] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy Error] IncompleteRead(224 bytes read)
+127.0.0.1 - - [20/Feb/2026 10:09:18] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 500 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 10:09:21] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:19:11] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:19:13] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:19:13] "GET /skAIxuide/assets/brand/sol_tiger.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:19:13] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:19:13] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:19:13] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:19:13] "GET /skAIxuide/assets/brand/untitled-design-35.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:19:13] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:19:13] "GET /skAIxuide/service-worker.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:19:15] "GET /skAIxuide/sw.js HTTP/1.1" 304 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 10:19:30] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:19:35] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:19:35] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:19:36] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:19:36] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:19:36] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:19:36] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:19:37] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:19:37] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:19:38] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:19:38] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:19:38] "GET /skAIxuide/manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:19:39] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:19:39] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:19:39] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:19:39] "GET /skAIxuide/assets/brand/untitled-design-35.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:19:39] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:19:39] "GET /skAIxuide/assets/brand/sol_tiger.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:19:39] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:19:39] "GET /skAIxuide/service-worker.js HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 10:19:53] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy Error] IncompleteRead(224 bytes read)
+127.0.0.1 - - [20/Feb/2026 10:20:23] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 500 -
+127.0.0.1 - - [20/Feb/2026 10:20:23] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:20:23] "GET /diagnostics.html HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 48004)
+Traceback (most recent call last):
+  File "/home/codespace/.python/current/lib/python3.12/http/server.py", line 731, in send_head
+    f = open(path, 'rb')
+        ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/workspaces/skAIxuide/diagnostics.html'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/codespace/.python/current/lib/python3.12/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/home/codespace/.python/current/lib/python3.12/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+  File "/home/codespace/.python/current/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/home/codespace/.python/current/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/home/codespace/.python/current/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/home/codespace/.python/current/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/home/codespace/.python/current/lib/python3.12/http/server.py", line 424, in handle_one_request
+    method()
+  File "/workspaces/skAIxuide/server.py", line 39, in do_GET
+  File "/home/codespace/.python/current/lib/python3.12/http/server.py", line 676, in do_GET
+    f = self.send_head()
+        ^^^^^^^^^^^^^^^^
+  File "/home/codespace/.python/current/lib/python3.12/http/server.py", line 733, in send_head
+    self.send_error(HTTPStatus.NOT_FOUND, "File not found")
+  File "/home/codespace/.python/current/lib/python3.12/http/server.py", line 491, in send_error
+    self.wfile.write(body)
+  File "/home/codespace/.python/current/lib/python3.12/socketserver.py", line 840, in write
+    self._sock.sendall(b)
+BrokenPipeError: [Errno 32] Broken pipe
+----------------------------------------
+127.0.0.1 - - [20/Feb/2026 10:20:23] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:20:23] "GET /diagnostics.html HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 48006)
+Traceback (most recent call last):
+  File "/home/codespace/.python/current/lib/python3.12/http/server.py", line 731, in send_head
+    f = open(path, 'rb')
+        ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/workspaces/skAIxuide/diagnostics.html'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/codespace/.python/current/lib/python3.12/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/home/codespace/.python/current/lib/python3.12/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+  File "/home/codespace/.python/current/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/home/codespace/.python/current/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/home/codespace/.python/current/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/home/codespace/.python/current/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/home/codespace/.python/current/lib/python3.12/http/server.py", line 424, in handle_one_request
+    method()
+  File "/workspaces/skAIxuide/server.py", line 39, in do_GET
+  File "/home/codespace/.python/current/lib/python3.12/http/server.py", line 676, in do_GET
+    f = self.send_head()
+        ^^^^^^^^^^^^^^^^
+  File "/home/codespace/.python/current/lib/python3.12/http/server.py", line 733, in send_head
+    self.send_error(HTTPStatus.NOT_FOUND, "File not found")
+  File "/home/codespace/.python/current/lib/python3.12/http/server.py", line 491, in send_error
+    self.wfile.write(body)
+  File "/home/codespace/.python/current/lib/python3.12/socketserver.py", line 840, in write
+    self._sock.sendall(b)
+BrokenPipeError: [Errno 32] Broken pipe
+----------------------------------------
+127.0.0.1 - - [20/Feb/2026 10:20:23] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:20:23] "GET /diagnostics.html HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 10:20:26] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:20:26] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:20:26] "GET /favicon.ico HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 10:20:28] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:20:30] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:20:30] "GET /admin HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:20:33] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:20:33] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:20:34] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:20:34] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 10:22:40] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:26:16] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:26:17] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:26:17] "GET /skAIxuide/assets/brand/sol_tiger.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:26:17] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:26:17] "GET /skAIxuide/assets/brand/untitled-design-35.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:26:17] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:26:17] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:26:17] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:26:17] "GET /skAIxuide/service-worker.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:26:19] "GET /skAIxuide/sw.js HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 10:35:15] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:35:16] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:35:16] "GET /skAIxuide/assets/brand/untitled-design-35.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:35:16] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:35:16] "GET /skAIxuide/assets/brand/sol_tiger.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:35:16] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:35:16] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:35:16] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:35:16] "GET /skAIxuide/assets/brand/sol_tiger.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:35:16] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:35:16] "GET /skAIxuide/service-worker.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:35:18] "GET /skAIxuide/sw.js HTTP/1.1" 304 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 10:35:34] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 10:35:55] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 10:36:01] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:38:59] "GET /skAIxuide/admin_panel.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:39:02] "GET /skAIxuide/sw.js HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 10:39:03] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:39:03] "GET /diagnostics.html HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:39:05] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:39:05] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:39:07] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:39:07] "GET /diagnostics.html HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:39:08] "GET /skAIxuide/admin_panel.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:39:09] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:39:09] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:39:10] "GET /skAIxuide/sw.js HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 10:40:46] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:40:47] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:40:47] "GET /manifest.json HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:40:49] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:40:49] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:47:39] "GET /skAIxuide/admin_panel.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:47:39] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:47:39] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:47:41] "GET /skAIxuide/diagnostics.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:47:41] "GET /skAIxuide/sw.js HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 10:47:43] "GET /skAIxuide/sw.js HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 10:55:20] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:55:22] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:55:22] "GET /manifest.json HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:55:24] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:55:24] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:56:17] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:56:18] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:56:18] "GET /manifest.json HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:56:20] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:56:20] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:57:46] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 10:57:48] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:57:48] "GET /manifest.json HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 10:57:50] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 10:57:50] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:09:41] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:09:42] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:09:42] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:09:42] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:09:42] "GET /manifest.json HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:09:43] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:09:43] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:09:54] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:09:54] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:09:54] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:09:54] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:09:54] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:09:55] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:09:55] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:09:56] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:09:56] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:09:56] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:09:56] "GET /manifest.json HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:10:05] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:10:05] "GET /manifest.json HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:10:07] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:10:07] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:10:29] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:10:30] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:10:30] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:10:30] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:10:30] "GET /manifest.json HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:10:30] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:10:31] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:10:31] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:10:31] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:10:31] "GET /manifest.json HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:10:47] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:10:49] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:10:49] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:10:49] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:10:51] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:10:51] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:10:51] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:10:52] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:10:53] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:10:53] "GET /sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:10:53] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:10:53] "GET /skAIxuide/assets/brand/untitled-design-35.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:10:53] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:10:53] "GET /skAIxuide/assets/brand/sol_tiger.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:10:53] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:10:53] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:10:53] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:10:53] "GET /skAIxuide/assets/brand/sol_tiger.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:10:53] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:10:53] "GET /skAIxuide/service-worker.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:10:55] "GET /skAIxuide/sw.js HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:10:55] "GET /skAIxuide/index.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:10:55] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:10:55] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:10:55] "GET /skAIxuide/manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:11:17] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:11:17] "GET /skAIxuide/Neural-Space-Pro/index.html HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:11:19] "GET /skAIxuide/sw.js HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 11:11:22] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:11:22] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:11:23] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:11:23] "GET /skAIxuide/kaixumagic/index.html HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:11:25] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:11:25] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:11:25] "GET /skAIxuide/sw.js HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 11:13:48] "GET /skAIxuide/diagnostics.html HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 11:13:50] "GET /skAIxuide/sw.js HTTP/1.1" 304 -
+127.0.0.1 - - [20/Feb/2026 11:13:53] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:13:53] "GET /api HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 11:13:56] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:14:31] "GET /skAIxuide/diagnostics.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:14:33] "GET /skAIxuide/sw.js HTTP/1.1" 304 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 11:14:42] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 401 -
+127.0.0.1 - - [20/Feb/2026 11:14:55] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:14:55] "GET /api HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 11:14:56] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 401 -
+127.0.0.1 - - [20/Feb/2026 11:15:00] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:15:00] "GET /api HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 11:15:01] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 401 -
+127.0.0.1 - - [20/Feb/2026 11:16:49] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:16:49] "GET /api HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 11:16:50] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 200 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 11:16:56] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:22:33] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:22:33] "GET /api HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat
+127.0.0.1 - - [20/Feb/2026 11:22:35] "POST /api/.netlify/functions/gateway-chat HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:22:43] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:22:44] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:22:44] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:22:44] "GET /skAIxuide/manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:22:44] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:22:44] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:35:11] "GET /skAIxuide/ HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:35:12] "GET /skAIxuide/manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:35:12] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:35:12] "GET /skAIxuide/icon-192.png HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:35:14] "GET /skAIxuide/sw.js HTTP/1.1" 304 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 11:35:38] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 200 -
+[Proxy Error] IncompleteRead(1226 bytes read)
+127.0.0.1 - - [20/Feb/2026 11:36:36] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 500 -
+127.0.0.1 - - [20/Feb/2026 11:36:36] "GET /Neural-Space-Pro/index.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:36:37] "GET /Neural-Space-Pro/sw.js HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:36:37] "GET /Neural-Space-Pro/manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:36:37] "GET /Neural-Space-Pro/icon-192.png HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:36:39] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:36:39] "GET /sw.js HTTP/1.1" 404 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 11:36:44] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 500 -
+[Proxy] Forwarding to: https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream
+127.0.0.1 - - [20/Feb/2026 11:36:56] "POST /api/.netlify/functions/gateway-stream HTTP/1.1" 500 -
+127.0.0.1 - - [20/Feb/2026 11:37:31] "GET /kaixumagic/index.html HTTP/1.1" 200 -
+127.0.0.1 - - [20/Feb/2026 11:37:33] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:37:33] "GET /kaixumagic/sw.js HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:37:33] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:37:33] "GET /kaixumagic/manifest.json HTTP/1.1" 404 -
+127.0.0.1 - - [20/Feb/2026 11:37:34] code 404, message File not found
+127.0.0.1 - - [20/Feb/2026 11:37:34] "GET /sw.js HTTP/1.1" 404 -
