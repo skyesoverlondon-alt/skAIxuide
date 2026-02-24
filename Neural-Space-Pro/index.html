@@ -77,15 +77,24 @@
             <button onclick="toggleSettings()" class="w-full flex items-center gap-3 px-4 py-3 text-xs text-gray-400 hover:bg-white/5 rounded-xl transition-all font-bold">
                 <i class="fa-solid fa-microchip text-blue-500"></i> kAIxu Config
             </button>
-            
+
             <div class="h-px bg-white/5 my-2"></div>
-            
-            <a href="../skAIxuide/index.html" class="w-full flex items-center gap-3 px-4 py-3 text-xs text-gray-400 hover:bg-white/5 rounded-xl transition-all font-bold group">
-                <i class="fa-solid fa-code text-indigo-500 group-hover:scale-110 transition-transform"></i> Back to IDE
-            </a>
-            <a href="../kaixumagic/index.html" class="w-full flex items-center gap-3 px-4 py-3 text-xs text-gray-400 hover:bg-white/5 rounded-xl transition-all font-bold group">
-                <i class="fa-solid fa-wand-magic-sparkles text-purple-500 group-hover:scale-110 transition-transform"></i> Magic Editor
-            </a>
+
+            <!-- Unified App Menu -->
+            <div class="space-y-1">
+                <a href="../skAIxuide/index.html" class="w-full flex items-center gap-3 px-4 py-3 text-xs text-indigo-400 hover:bg-white/5 rounded-xl transition-all font-bold group"><i class="fa-solid fa-code"></i> Main IDE</a>
+                <a href="../kaixumagic/index.html" class="w-full flex items-center gap-3 px-4 py-3 text-xs text-purple-400 hover:bg-white/5 rounded-xl transition-all font-bold group"><i class="fa-solid fa-wand-magic-sparkles"></i> Magic Editor</a>
+                <a href="../skriptxdataalchemist/index.html" class="w-full flex items-center gap-3 px-4 py-3 text-xs text-pink-400 hover:bg-white/5 rounded-xl transition-all font-bold group"><i class="fa-solid fa-flask"></i> Data Alchemist</a>
+                <a href="../WebPilePro/index.html" class="w-full flex items-center gap-3 px-4 py-3 text-xs text-blue-400 hover:bg-white/5 rounded-xl transition-all font-bold group"><i class="fa-solid fa-file-code"></i> WebPile Pro</a>
+                <a href="../skyeportal/index.html" class="w-full flex items-center gap-3 px-4 py-3 text-xs text-green-400 hover:bg-white/5 rounded-xl transition-all font-bold group"><i class="fa-solid fa-key"></i> Skye Portal</a>
+                <a href="../SkyeVault/index.html" class="w-full flex items-center gap-3 px-4 py-3 text-xs text-yellow-400 hover:bg-white/5 rounded-xl transition-all font-bold group"><i class="fa-solid fa-vault"></i> Skye Vault</a>
+                <a href="../NexusConnectHomepage/index.html" class="w-full flex items-center gap-3 px-4 py-3 text-xs text-cyan-400 hover:bg-white/5 rounded-xl transition-all font-bold group"><i class="fa-solid fa-network-wired"></i> Nexus Connect</a>
+                <a href="../projectaegis-skyex/index.html" class="w-full flex items-center gap-3 px-4 py-3 text-xs text-orange-400 hover:bg-white/5 rounded-xl transition-all font-bold group"><i class="fa-solid fa-shield"></i> Project Aegis</a>
+                <a href="../skriptx/index.html" class="w-full flex items-center gap-3 px-4 py-3 text-xs text-teal-400 hover:bg-white/5 rounded-xl transition-all font-bold group"><i class="fa-solid fa-building"></i> Skriptx Architect</a>
+                <a href="../skAIxuide/index.html" class="w-full flex items-center gap-3 px-4 py-3 text-xs text-indigo-400 hover:bg-white/5 rounded-xl transition-all font-bold group"><i class="fa-solid fa-code"></i> SkAIxuIDE</a>
+                <a href="../SkyeDocx/index.html" class="w-full flex items-center gap-3 px-4 py-3 text-xs text-purple-400 hover:bg-white/5 rounded-xl transition-all font-bold group"><i class="fa-solid fa-file-word"></i> SkyeDocx</a>
+                <a href="../GodKode/index.html" class="w-full flex items-center gap-3 px-4 py-3 text-xs text-amber-300 hover:bg-white/5 rounded-xl transition-all font-bold group"><i class="fa-solid fa-code-branch"></i> GodKode</a>
+            </div>
 
             <div class="pt-4 flex items-center gap-3 px-2">
                 <img src="https://cdn1.sharemyimage.com/2026/02/15/Screenshot-2026-02-14-1.45.11-PM-3.png" alt="kAIxu Logo" class="w-8 h-8 object-contain rounded-lg">
@@ -521,8 +530,10 @@
             location.hostname.endsWith('.app.github.dev') ||
             location.port === '8000'
         );
-        const KAIXU_GATEWAY_PRIMARY = '/api';
-        const KAIXU_GATEWAY_FALLBACK = 'https://kaixugateway13.netlify.app';
+        const KAIXU_GATEWAY_PRIMARY  = '/api';
+        // Direct Netlify function path — works in netlify dev and production, bypasses CORS
+        const KAIXU_GATEWAY_DIRECT   = '';
+        const KAIXU_GATEWAY_FALLBACK  = 'https://kaixugateway13.netlify.app';
         let kaixuKey = localStorage.getItem('KAIXU_VIRTUAL_KEY') || "";
         const kaixuDiag = { lastBase: null, lastError: null, lastPayload: null };
         window.kaixuDiag = kaixuDiag;
@@ -539,7 +550,7 @@
 
         // Non-stream helper (available if needed)
         async function kaixuChat(kaixuKey, payload) {
-            const bases = [KAIXU_GATEWAY_PRIMARY, KAIXU_GATEWAY_FALLBACK];
+            const bases = [KAIXU_GATEWAY_PRIMARY, KAIXU_GATEWAY_DIRECT, KAIXU_GATEWAY_FALLBACK];
             let lastErr = null;
             kaixuDiag.lastPayload = payload;
 
@@ -556,9 +567,9 @@
                     });
                     if (!res.ok) {
                         const body = await res.text().catch(() => '');
-                        // If local proxy is missing (404), retry fallback
-                        if (base === KAIXU_GATEWAY_PRIMARY && res.status === 404) {
-                            broadcastLog('Proxy missing, retrying direct gateway...', 'warn');
+                        // If local proxy can't handle the request (404/405/501), retry fallback
+                        if (base === KAIXU_GATEWAY_PRIMARY && [404, 405, 501].includes(res.status)) {
+                            broadcastLog('Proxy unavailable, retrying direct gateway...', 'warn');
                             continue;
                         }
                         const err = mapGatewayError(res.status, body);
@@ -585,7 +596,7 @@
         async function kaixuStreamChat(kaixuKey, payload, { onMeta, onDelta, onDone, onError }) {
             broadcastLog(`Streaming Request: ${payload.provider}`, 'info');
 
-            const bases = [KAIXU_GATEWAY_PRIMARY, KAIXU_GATEWAY_FALLBACK];
+            const bases = [KAIXU_GATEWAY_PRIMARY, KAIXU_GATEWAY_DIRECT, KAIXU_GATEWAY_FALLBACK];
             let streamErr = null;
             kaixuDiag.lastPayload = payload;
 
@@ -616,8 +627,8 @@
 
                 if (!res.ok) {
                     const body = await res.text().catch(() => '');
-                    if (base === KAIXU_GATEWAY_PRIMARY && res.status === 404) {
-                        broadcastLog('Proxy missing, retrying direct gateway stream...', 'warn');
+                    if (base === KAIXU_GATEWAY_PRIMARY && [404, 405, 501].includes(res.status)) {
+                        broadcastLog('Proxy unavailable, retrying direct gateway stream...', 'warn');
                         continue;
                     }
                     const err = mapGatewayError(res.status, body);
@@ -785,10 +796,39 @@
                 if (chatWin) chatWin.scrollTo({ top: chatWin.scrollHeight, behavior: 'smooth' });
 
             } catch (err) {
-                bubbleContent.classList.remove('opacity-50');
-                bubbleContent.innerHTML = '<div class="text-red-400 font-bold">Error: ' + err.message + '</div>';
-                renderClientError(err.message, describeClientEnv());
-                broadcastLog('Critical: ' + err.message, 'error');
+                // Streaming failed — attempt non-streaming fallback before giving up
+                broadcastLog('Stream failed, attempting non-stream fallback: ' + err.message, 'warn');
+                try {
+                    const fallbackPayload = {
+                        provider: 'gemini',
+                        model: 'gemini-2.0-flash',
+                        messages: [
+                            { role: 'system', content: fullSys },
+                            ...conversation.map(c => ({
+                                role: c.role === 'model' ? 'assistant' : 'user',
+                                content: c.parts[0].text
+                            })),
+                            { role: 'user', content: finalPrompt }
+                        ],
+                        max_tokens: 8192,
+                        temperature: 0.7
+                    };
+                    const fallbackData = await kaixuChat(apiKey, fallbackPayload);
+                    const fallbackReply = fallbackData.output_text || fallbackData.content || fallbackData.text || '';
+                    if (!fallbackReply) throw new Error('Empty fallback response');
+                    bubbleContent.classList.remove('opacity-50');
+                    bubbleContent.innerHTML = marked.parse(fallbackReply);
+                    Prism.highlightAllUnder(div);
+                    saveMessage('model', fallbackReply);
+                    conversation.push({ role: 'model', parts: [{ text: fallbackReply }] });
+                    if (chatWin) chatWin.scrollTo({ top: chatWin.scrollHeight, behavior: 'smooth' });
+                    broadcastLog('Non-stream fallback succeeded', 'success');
+                } catch (fallbackErr) {
+                    bubbleContent.classList.remove('opacity-50');
+                    bubbleContent.innerHTML = '<div class="text-red-400 font-bold">Error: ' + fallbackErr.message + '</div>';
+                    renderClientError(fallbackErr.message, describeClientEnv());
+                    broadcastLog('Critical (stream + fallback both failed): ' + fallbackErr.message, 'error');
+                }
             } finally {
                 setLoading(false);
             }
@@ -937,5 +977,6 @@
             renderClientError(`Unhandled: ${reason}${stack}`, describeClientEnv());
         });
     </script>
+  <script src="/skyehawk.js"></script>
 </body>
 </html>

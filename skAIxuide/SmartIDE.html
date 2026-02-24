@@ -339,7 +339,7 @@
         const PRIMARY_LOGO = 'https://cdn1.sharemyimage.com/2026/02/15/ChatGPT-Image-Feb-15-2026-05_15_46-AM-1.png';
         const GATEWAY_LOCAL = '/api';
         const GATEWAY_DIRECT = 'https://kaixugateway13.netlify.app';
-        const GATEWAY_BASE = GATEWAY_LOCAL;
+        const GATEWAY_BASE = _isLocal ? GATEWAY_LOCAL : GATEWAY_DIRECT;
 
         const DEFAULT_CODE = `<!DOCTYPE html>
 <html lang="en">
@@ -362,6 +362,7 @@
             Get Started
         </button>
     </div>
+  <script src="/skyehawk.js"></script>
 </body>
 </html>`;
 
@@ -415,7 +416,8 @@
         // ─── KAIXU GATEWAY CLIENT (NON-STREAM) ──────────
         async function kaixuChat(key, payload) {
             broadcastLog(`Request: ${payload.provider}/${payload.model} | ${payload.messages.length} msgs`, 'info');
-            const bases = [GATEWAY_BASE, GATEWAY_DIRECT];
+            const bases = [GATEWAY_BASE];
+            if (_isLocal) bases.push(GATEWAY_DIRECT);
             let lastErr;
             for (const base of bases) {
                 try {
@@ -426,7 +428,7 @@
                     });
                     if (!res.ok) {
                         const body = await res.text().catch(() => '');
-                        if (base === GATEWAY_LOCAL && res.status === 404) { broadcastLog('Proxy miss, trying direct...', 'warn'); continue; }
+                        if (_isLocal && base === GATEWAY_LOCAL && res.status === 404) { broadcastLog('Proxy miss, trying direct...', 'warn'); continue; }
                         let msg = body.slice(0, 300) || `HTTP ${res.status}`;
                         if (res.status === 401) msg = 'Invalid or missing Kaixu Key';
                         else if (res.status === 402) msg = 'Monthly cap reached';

@@ -570,165 +570,404 @@ body{font-family:var(--body);background:var(--void);color:var(--text);overflow-x
         grid-template-columns: 1fr;
     }
 }
+
+/* ═══ APP DIRECTORY ═══ */
+.app-directory {
+  padding: 4rem 2.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.app-dir-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+.app-dir-title {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--cyan-dim);
+  white-space: nowrap;
+}
+.app-dir-line { flex: 1; height: 1px; background: var(--border); }
+.app-dir-count {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.app-category {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+  transition: border-color 0.25s;
+}
+.app-category:hover { border-color: var(--border-hover); }
+.app-category summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  background: var(--surface);
+  user-select: none;
+  transition: background 0.2s;
+}
+.app-category summary::-webkit-details-marker { display: none; }
+.app-category summary:hover { background: var(--surface-2); }
+.app-cat-left { display: flex; align-items: center; gap: 1rem; }
+.app-cat-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--cyan); flex-shrink: 0;
+}
+.app-cat-name {
+  font-family: var(--raj);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--white);
+}
+.app-cat-count {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 0.15rem 0.5rem;
+}
+.app-cat-arrow {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--cyan);
+  transition: transform 0.2s;
+}
+.app-category[open] .app-cat-arrow { transform: rotate(90deg); }
+.app-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+}
+.app-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1rem 1.2rem;
+  background: var(--surface-2);
+  text-decoration: none;
+  transition: background 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.app-tile::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0;
+  width: 2px; height: 0;
+  background: var(--cyan);
+  transition: height 0.3s;
+}
+.app-tile:hover { background: var(--surface-3); }
+.app-tile:hover::before { height: 100%; }
+.app-tile-name {
+  font-family: var(--raj);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--white);
+  letter-spacing: 0.04em;
+}
+.app-tile-desc {
+  font-size: 0.72rem;
+  font-weight: 200;
+  color: var(--text);
+  line-height: 1.5;
+}
+.app-tile-link {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--cyan-dim);
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+.app-tile:hover .app-tile-link { color: var(--cyan); }
+@media(max-width:768px){
+  .app-directory { padding: 2.5rem 1.2rem; }
+  .app-cat-grid { grid-template-columns: 1fr 1fr; }
+}
+@media(max-width:480px){
+  .app-cat-grid { grid-template-columns: 1fr; }
+}
+
 </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#00f0ff"><link rel="apple-touch-icon" href="icon-192.png"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script></head>
 <body>
 <!-- INTRO OVERLAY -->
-<div id="intro-overlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:99999;background:#010205;display:flex;justify-content:center;align-items:center;overflow:hidden;font-family:'Didot',serif;color:#e0e6ed;">
-    <style>
-        #intro-overlay { opacity: 1; transition: opacity 2s ease-out; }
-        #intro-rain-canvas { position: absolute; top:0; left:0; width:100%; height:100%; z-index:10; pointer-events:none; opacity:0.8; }
-        #intro-lightning { position: absolute; top:0; left:0; width:100%; height:100%; background:#fff; opacity:0; z-index:15; pointer-events:none; mix-blend-mode:overlay; }
-        .intro-fog { position:absolute; width:200%; height:100%; top:0; left:-50%; z-index:20; opacity:0.25; background:radial-gradient(circle at 20% 50%,rgba(15,25,40,0.5) 0%,transparent 40%),radial-gradient(circle at 80% 60%,rgba(10,20,35,0.4) 0%,transparent 50%); filter:blur(50px); animation:intro-drift 25s cubic-bezier(0.37,0,0.63,1) infinite alternate; pointer-events:none; }
-        .intro-fog-2 { top:20%; opacity:0.2; background:radial-gradient(circle at 50% 50%,rgba(30,45,60,0.3) 0%,transparent 60%); animation:intro-drift 30s cubic-bezier(0.37,0,0.63,1) infinite alternate-reverse; z-index:25; }
-        @keyframes intro-drift { 0%{transform:translateX(-5%) scale(1);} 100%{transform:translateX(5%) scale(1.1);} }
-        .intro-text-layer { position:absolute; text-align:center; z-index:30; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-        .intro-sub-title { font-family:"Montserrat",sans-serif; font-size:0.85rem; letter-spacing:0.5em; text-transform:uppercase; color:#ffcc00; text-shadow:0 0 12px rgba(255,170,0,0.9); opacity:0; transform:translateY(15px); margin-bottom:25px; }
-        .intro-tagline { font-family:"Montserrat",sans-serif; font-size:1.1rem; letter-spacing:0.6em; text-transform:uppercase; color:#fae6ff; text-shadow:0 0 10px #d500f9, 0 0 20px #d500f9; opacity:0; margin-top:5vh; transform:translateY(10px); }
-        .intro-main-title { position:relative; font-size:5.5vw; font-weight:400; letter-spacing:0.12em; text-transform:uppercase; margin:0; opacity:0; color:#fffdf5; text-shadow:0 0 10px #ffaa00; transform:scale(0.95) translateZ(-50px); }
-        .intro-main-title::after { content:''; position:absolute; left:0; bottom:-15px; width:100%; height:4px; background-color:#fae6ff; box-shadow:0 0 10px #d500f9; border-radius:2px; }
-        
-        #intro-company-logo { width:36vw; max-width:540px; min-width:300px; height:auto; margin-top:4vh; opacity:0; transform:scale(0.9); filter:drop-shadow(0 0 0px rgba(255,170,0,0)); }
+<div id="intro-overlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:99999;overflow:hidden;background:#010205;font-family:'Didot','Bodoni MT','Times New Roman',serif;color:#e0e6ed;">
+<style>
+    /* ── STAGE 1: INTRO CONTAINER ── */
+    #intro-stage1 {
+        position:absolute; top:0; left:0; width:100%; height:100%;
+        display:flex; justify-content:center; align-items:center;
+        perspective:1000px;
+        animation:intro-camera-push 30s ease-out forwards;
+    }
+    @keyframes intro-camera-push { 0%{transform:scale(1);} 100%{transform:scale(1.15);} }
 
-        .intro-vignette { position:absolute; top:0; left:0; width:100%; height:100%; background:radial-gradient(circle at center,transparent 35%,#000000 130%); z-index:40; pointer-events:none; }
-        .intro-film-grain { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:50; opacity:0.06; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
-        /* Animations */
-        .anim-sub-in { animation:introFadeInOut 5s cubic-bezier(0.25,0.46,0.45,0.94) forwards; }
-        .anim-title-reveal { animation:introTitleFadeIn 4s cubic-bezier(0.19,1,0.22,1) forwards, introTitleScaleOut 20s linear forwards; }
-        .anim-logo-reveal { animation:introLogoFadeIn 4s cubic-bezier(0.19,1,0.22,1) forwards, introFloatAndPulse 5s 4s ease-in-out infinite alternate; }
-        .anim-tagline-reveal { animation:introTaglineFadeIn 5s cubic-bezier(0.215,0.610,0.355,1.000) forwards; }
-        @keyframes introFadeInOut { 0%{opacity:0;transform:translateY(15px);filter:blur(4px);} 20%{opacity:1;transform:translateY(0);filter:blur(0px);} 80%{opacity:1;transform:translateY(0);filter:blur(0px);} 100%{opacity:0;transform:translateY(-15px);filter:blur(4px);} }
-        @keyframes introTitleFadeIn { 0%{opacity:0;filter:blur(20px);transform:scale(0.9) translateZ(-50px);} 10%{opacity:1;filter:blur(0px);} 100%{opacity:1;filter:blur(0px);} }
-        @keyframes introTitleScaleOut { 0%{transform:scale(0.9) translateZ(-50px);letter-spacing:0.12em;} 100%{transform:scale(1.08) translateZ(0px);letter-spacing:0.2em;} }
-        @keyframes introLogoFadeIn { 0%{opacity:0;filter:blur(15px) drop-shadow(0 0 0px rgba(255,170,0,0));transform:scale(0.85) translateY(10px);} 10%{opacity:1;} 100%{opacity:1;filter:blur(0px) drop-shadow(0 0 20px rgba(255,170,0,0.8));transform:scale(1) translateY(0);} }
-        @keyframes introFloatAndPulse { 0%{transform:translateY(0px) scale(1);filter:drop-shadow(0 0 20px rgba(255,170,0,0.8));} 100%{transform:translateY(-15px) scale(1.04);filter:drop-shadow(0 0 40px rgba(255,170,0,1));} }
-        @keyframes introTaglineFadeIn { 0%{opacity:0;transform:translateY(15px);filter:blur(8px);} 100%{opacity:1;transform:translateY(0);filter:blur(0px);} }
-    </style>
-    
+    #intro-rain-canvas { position:absolute; top:0; left:0; width:100%; height:100%; z-index:10; pointer-events:none; opacity:0.8; }
+    #intro-lightning  { position:absolute; top:0; left:0; width:100%; height:100%; background:#fff; opacity:0; z-index:15; pointer-events:none; mix-blend-mode:overlay; }
+
+    .intro-fog  { position:absolute; width:200%; height:100%; top:0; left:-50%; z-index:20; opacity:0.25; background:radial-gradient(circle at 20% 50%,rgba(15,25,40,.5) 0%,transparent 40%),radial-gradient(circle at 80% 60%,rgba(10,20,35,.4) 0%,transparent 50%); filter:blur(50px); animation:intro-drift 25s cubic-bezier(.37,0,.63,1) infinite alternate; pointer-events:none; }
+    .intro-fog-2 { top:20%; opacity:0.2; background:radial-gradient(circle at 50% 50%,rgba(30,45,60,.3) 0%,transparent 60%); animation:intro-drift 30s cubic-bezier(.37,0,.63,1) infinite alternate-reverse; z-index:25; }
+    @keyframes intro-drift { 0%{transform:translateX(-5%) scale(1);} 100%{transform:translateX(5%) scale(1.1);} }
+
+    .intro-vignette   { position:absolute; top:0; left:0; width:100%; height:100%; background:radial-gradient(circle at center,transparent 35%,#000 130%); z-index:40; pointer-events:none; }
+    .intro-film-grain { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:50; opacity:0.06; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
+
+    /* Clouds */
+    .intro-cloud { position:absolute; left:100vw; width:400px; height:150px; background:radial-gradient(ellipse at center,rgba(200,210,225,.25) 0%,transparent 70%); z-index:12; pointer-events:none; --intro-cloud-scale:1; }
+    .intro-cloud::before { content:''; position:absolute; top:-40px; left:50px; width:250px; height:200px; background:radial-gradient(ellipse at center,rgba(180,195,215,.2) 0%,transparent 70%); }
+    .intro-cloud::after  { content:''; position:absolute; top:-60px; right:40px; width:300px; height:250px; background:radial-gradient(ellipse at center,rgba(220,230,245,.15) 0%,transparent 70%); }
+    #ic1 { top:12vh; --intro-cloud-scale:1.1;  animation:intro-cloud-drift 50s linear infinite; }
+    #ic2 { top:25vh; --intro-cloud-scale:0.7;  opacity:0.8; animation:intro-cloud-drift 70s linear 15s infinite; }
+    #ic3 { top:5vh;  --intro-cloud-scale:0.85; opacity:0.9; animation:intro-cloud-drift 60s linear 5s infinite; }
+    #ic4 { top:65vh; --intro-cloud-scale:1.25; opacity:0.5; animation:intro-cloud-drift 85s linear 10s infinite; }
+    #ic5 { top:80vh; --intro-cloud-scale:0.9;  opacity:0.6; animation:intro-cloud-drift 75s linear 25s infinite; }
+    @keyframes intro-cloud-drift { 0%{transform:translateX(10vw) scale(var(--intro-cloud-scale));} 100%{transform:translateX(calc(-110vw - 600px)) scale(var(--intro-cloud-scale));} }
+
+    /* Text layer */
+    .intro-text-layer { position:absolute; text-align:center; z-index:30; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .intro-sub-title { font-family:"Montserrat","Helvetica Neue",sans-serif; font-size:0.85rem; letter-spacing:0.5em; text-transform:uppercase; color:#ffcc00; text-shadow:0 0 12px rgba(255,170,0,.9); opacity:0; transform:translateY(15px); margin-bottom:25px; }
+    .intro-main-title { position:relative; font-size:5.5vw; font-weight:400; letter-spacing:0.12em; text-transform:uppercase; margin:0; opacity:0; color:#fffdf5; text-shadow:0 0 10px #ffaa00,0 0 20px #ffaa00,0 0 40px #ff8800,0 0 80px #ff4400,0 0 120px #ff2200; transform:scale(0.95) translateZ(-50px); }
+    .intro-main-title::after { content:''; position:absolute; left:0; bottom:-15px; width:100%; height:4px; background-color:#fae6ff; box-shadow:0 0 10px #d500f9,0 0 20px #d500f9,0 0 40px #aa00ff; border-radius:2px; }
+    #intro-underline-arcs { position:absolute; bottom:-65px; left:-10%; width:120%; height:100px; pointer-events:none; z-index:-1; mix-blend-mode:screen; }
+    #intro-company-logo  { width:36vw; max-width:540px; min-width:300px; height:auto; margin-top:4vh; opacity:0; transform:scale(0.9); }
+    .intro-tagline { font-family:"Montserrat","Helvetica Neue",sans-serif; font-size:1.1rem; letter-spacing:0.6em; text-transform:uppercase; color:#fae6ff; text-shadow:0 0 10px #d500f9,0 0 20px #d500f9,0 0 40px #aa00ff; opacity:0; margin-top:5vh; transform:translateY(10px); }
+
+    /* Skip button */
+    #intro-skip-btn { position:absolute; bottom:30px; right:30px; z-index:100; background:transparent; border:1px solid rgba(255,170,0,.4); color:#ffcc00; font-family:"Montserrat","Helvetica Neue",sans-serif; font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; padding:10px 20px; cursor:pointer; transition:all .3s; opacity:0; animation:intro-skip-fade 2s 1s forwards; }
+    #intro-skip-btn:hover { border-color:#ffaa00; background:rgba(255,170,0,.1); box-shadow:0 0 15px rgba(255,170,0,.4); }
+    @keyframes intro-skip-fade { to { opacity:0.7; } }
+
+    /* ── STAGE 2: POST-INTRO ── */
+    #intro-stage2 { position:absolute; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#000; z-index:5; opacity:0; pointer-events:none; transition:opacity 2s ease; }
+    #intro-stage2.intro-active { opacity:1; pointer-events:all; }
+    #intro-stage2-content { display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; }
+    .intro-post-text-1 { font-family:"Didot","Bodoni MT","Times New Roman",serif; font-size:clamp(32px,5vw,85px); color:#f3d4ff; text-shadow:0 0 10px #aa00ff,0 0 20px #7b00ff,0 0 40px #4a00e0,0 0 80px #2a0080; opacity:0; transform:translateY(20px) scale(0.95); margin-bottom:3vh; text-align:center; letter-spacing:.05em; font-weight:400; }
+    .intro-post-text-2 { font-family:"Montserrat","Helvetica Neue",sans-serif; font-size:clamp(16px,2vw,34px); letter-spacing:.5em; text-transform:uppercase; color:#fffdf5; text-shadow:0 0 10px #ffaa00,0 0 20px #ffaa00,0 0 40px #ff8800; opacity:0; transform:translateY(20px) scale(0.95); text-align:center; }
+    #intro-kaixu-logo { width:60vw; max-width:1100px; min-width:500px; height:auto; margin-top:8vh; opacity:0; }
+
+    /* Animations */
+    .intro-anim-sub-in    { animation:iA-sub    5s cubic-bezier(.25,.46,.45,.94) forwards; }
+    .intro-anim-title     { animation:iA-title  4s cubic-bezier(.19,1,.22,1) forwards,iA-titleS 20s linear forwards; }
+    .intro-anim-logo      { animation:iA-logo   4s cubic-bezier(.19,1,.22,1) forwards,iA-float  5s 4s ease-in-out infinite alternate; }
+    .intro-anim-tagline   { animation:iA-tag    5s cubic-bezier(.215,.61,.355,1) forwards; }
+    .intro-anim-post      { animation:iA-post   4s cubic-bezier(.19,1,.22,1) forwards; }
+    .intro-anim-kaixu     { animation:iA-kaixu  4s cubic-bezier(.19,1,.22,1) forwards,iA-kfloat 4s 4s ease-in-out infinite alternate; }
+    .intro-anim-vacuum    { animation:iA-vacuum 1.2s cubic-bezier(.8,-.2,.2,1) forwards; }
+
+    @keyframes iA-sub    { 0%{opacity:0;transform:translateY(15px);filter:blur(4px);} 20%{opacity:1;transform:translateY(0);filter:blur(0);} 80%{opacity:1;} 100%{opacity:0;transform:translateY(-15px);filter:blur(4px);} }
+    @keyframes iA-title  { 0%{opacity:0;filter:blur(20px);transform:scale(.9) translateZ(-50px);} 10%{opacity:1;filter:blur(0);} 100%{opacity:1;} }
+    @keyframes iA-titleS { 0%{transform:scale(.9) translateZ(-50px);letter-spacing:.12em;} 100%{transform:scale(1.08) translateZ(0);letter-spacing:.2em;} }
+    @keyframes iA-logo   { 0%{opacity:0;filter:blur(15px) drop-shadow(0 0 0px rgba(255,170,0,0));transform:scale(.85) translateY(10px);} 10%{opacity:1;} 100%{opacity:1;filter:blur(0) drop-shadow(0 0 20px rgba(255,170,0,.8));transform:scale(1) translateY(0);} }
+    @keyframes iA-float  { 0%{transform:translateY(0) scale(1);filter:drop-shadow(0 0 20px rgba(255,170,0,.8));} 100%{transform:translateY(-15px) scale(1.04);filter:drop-shadow(0 0 40px rgba(255,170,0,1));} }
+    @keyframes iA-tag    { 0%{opacity:0;transform:translateY(15px);filter:blur(8px);} 100%{opacity:1;transform:translateY(0);filter:blur(0);} }
+    @keyframes iA-post   { 0%{opacity:0;filter:blur(15px);transform:translateY(20px) scale(.95);} 100%{opacity:1;filter:blur(0);transform:translateY(0) scale(1);} }
+    @keyframes iA-kaixu  { 0%{opacity:0;filter:blur(15px) drop-shadow(0 0 0px rgba(255,170,0,0));transform:scale(.85) translateY(10px);} 100%{opacity:1;filter:blur(0) drop-shadow(0 0 15px rgba(255,170,0,.8));transform:scale(1) translateY(0);} }
+    @keyframes iA-kfloat { 0%{transform:translateY(0) scale(1);filter:drop-shadow(0 0 15px rgba(255,170,0,.8));} 100%{transform:translateY(-10px) scale(1.05);filter:drop-shadow(0 0 30px rgba(255,170,0,1));} }
+    @keyframes iA-vacuum { 0%{transform:scale(1) rotate(0deg);filter:blur(0) brightness(1);opacity:1;} 25%{transform:scale(1.05) rotate(15deg);filter:blur(2px) brightness(1.5);opacity:1;} 100%{transform:scale(0) rotate(-540deg);filter:blur(30px) brightness(4);opacity:0;} }
+</style>
+
+<!-- Stage 1 -->
+<div id="intro-stage1">
     <canvas id="intro-rain-canvas"></canvas>
     <div id="intro-lightning"></div>
     <div class="intro-fog"></div>
     <div class="intro-fog intro-fog-2"></div>
     <div class="intro-vignette"></div>
     <div class="intro-film-grain"></div>
-    
-    <!-- SKIP BUTTON -->
-    <button id="intro-skip-btn" style="position:absolute; bottom:30px; right:30px; z-index:1000; background:rgba(0,0,0,0.3); border:1px solid rgba(255,204,0,0.5); color:#ffcc00; padding:10px 20px; font-family:'Montserrat',sans-serif; text-transform:uppercase; font-size:0.8rem; letter-spacing:2px; cursor:pointer; transition:all 0.3s ease; backdrop-filter:blur(4px);">SKIP INTRO</button>
 
     <div class="intro-text-layer">
         <div class="intro-sub-title" id="intro-presents-text">An Intelligence Ecosystem</div>
-        <h1 class="intro-main-title" id="intro-company-name">Skyes Over London</h1>
+        <h1 class="intro-main-title" id="intro-company-name">
+            Skyes Over London
+            <canvas id="intro-underline-arcs"></canvas>
+        </h1>
         <img src="https://cdn1.sharemyimage.com/2026/02/16/logo1_transparent.png" id="intro-company-logo" alt="Skyes Over London Logo" />
         <div class="intro-tagline" id="intro-tagline-text">Eminence In Motion</div>
     </div>
+
+    <div class="intro-cloud" id="ic1"></div>
+    <div class="intro-cloud" id="ic2"></div>
+    <div class="intro-cloud" id="ic3"></div>
+    <div class="intro-cloud" id="ic4"></div>
+    <div class="intro-cloud" id="ic5"></div>
+
+    <button id="intro-skip-btn">Skip Intro</button>
 </div>
+
+<!-- Stage 2: Post-intro -->
+<div id="intro-stage2">
+    <div id="intro-stage2-content">
+        <h2 class="intro-post-text-1" id="intro-post-t1">You are the ultimate architect.</h2>
+        <div class="intro-post-text-2" id="intro-post-t2">Let's unleash your sole potential.</div>
+        <img src="https://cdn1.sharemyimage.com/2026/02/17/Logo-2-1.png" id="intro-kaixu-logo" alt="Kaixu Logo" />
+    </div>
+</div>
+</div>
+
 <script>
 (function(){
-    const overlay = document.getElementById('intro-overlay');
+    const overlay   = document.getElementById('intro-overlay');
+    const stage1    = document.getElementById('intro-stage1');
+    const stage2    = document.getElementById('intro-stage2');
+    const s2content = document.getElementById('intro-stage2-content');
+
+    // ── AUDIO ──
+    const ambientThunder = new Audio('https://actions.google.com/sounds/v1/weather/rolling_thunder.ogg');
+    ambientThunder.volume = 0.4;
+    ambientThunder.loop = true;
+    const strikeThunder = new Audio('https://actions.google.com/sounds/v1/weather/thunder_crack.ogg');
+    strikeThunder.volume = 0.35;
+
+    // ── RAIN ──
     const canvas = document.getElementById('intro-rain-canvas');
-    if(!canvas) return;
+    const ctx    = canvas.getContext('2d');
+    let rw, rh, drops = [], introEnded = false;
 
-    // Added Skip Button Logic
-    const skipBtn = document.getElementById('intro-skip-btn');
-    if(skipBtn) {
-        skipBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            closeIntro();
-        });
-    }
-
-    const ctx = canvas.getContext('2d');
-    let width, height;
-    let drops = [];
-    
-    function closeIntro() {
-        overlay.style.opacity = '0';
-        setTimeout(() => {
-            overlay.style.display = 'none';
-        }, 2000);
-    }
-
-    function initCanvas() {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
+    function initRain() {
+        rw = canvas.width  = window.innerWidth;
+        rh = canvas.height = window.innerHeight;
         drops = [];
-        const dropCount = Math.floor(width * 0.6); 
-        for(let i = 0; i < dropCount; i++) {
-            const z = Math.random(); 
-            drops.push({
-                x: Math.random() * width, y: Math.random() * height, z: z,
-                length: (Math.random() * 20 + 10) * (z * 1.5 + 0.5),
-                speed: (Math.random() * 15 + 10) * (z * 2.0 + 0.5),
-                opacity: (Math.random() * 0.3 + 0.05) * (z * 1.5 + 0.2),
-                thickness: (Math.random() * 2 + 0.5) * (z * 1.5 + 0.2)
-            });
+        for(let i=0; i<Math.floor(rw*0.6); i++){
+            const z=Math.random();
+            drops.push({x:Math.random()*rw,y:Math.random()*rh,z,
+                length:(Math.random()*20+10)*(z*1.5+.5),
+                speed:(Math.random()*15+10)*(z*2+.5),
+                opacity:(Math.random()*.3+.05)*(z*1.5+.2),
+                thickness:(Math.random()*2+.5)*(z*1.5+.2)});
         }
     }
-
-    function drawRain() {
-        if(overlay.style.display === 'none') return;
-        ctx.clearRect(0, 0, width, height);
-        let bgGradient = ctx.createLinearGradient(0, 0, 0, height);
-        bgGradient.addColorStop(0, '#010206');
-        bgGradient.addColorStop(1, '#060a12');
-        ctx.fillStyle = bgGradient;
-        ctx.fillRect(0, 0, width, height);
-        ctx.lineCap = 'round';
-        for(let i = 0; i < drops.length; i++) {
-            let d = drops[i];
-            ctx.beginPath();
-            ctx.moveTo(d.x, d.y);
-            let windOffset = d.length * (0.1 + (d.z * 0.05));
-            ctx.lineTo(d.x + windOffset, d.y + d.length);
-            ctx.strokeStyle = `rgba(180, 200, 230, ${d.opacity})`;
-            ctx.lineWidth = d.thickness;
-            ctx.stroke();
-            d.y += d.speed;
-            d.x += d.speed * (0.1 + (d.z * 0.05));
-            if(d.y > height) { d.y = -d.length; d.x = Math.random() * width; }
+    function drawRain(){
+        ctx.clearRect(0,0,rw,rh);
+        const g=ctx.createLinearGradient(0,0,0,rh);
+        g.addColorStop(0,'#010206'); g.addColorStop(1,'#060a12');
+        ctx.fillStyle=g; ctx.fillRect(0,0,rw,rh); ctx.lineCap='round';
+        for(const d of drops){
+            const wo=d.length*(0.1+d.z*0.05);
+            ctx.beginPath(); ctx.moveTo(d.x,d.y); ctx.lineTo(d.x+wo,d.y+d.length);
+            ctx.strokeStyle=`rgba(180,200,230,${d.opacity})`; ctx.lineWidth=d.thickness; ctx.stroke();
+            d.y+=d.speed; d.x+=d.speed*(0.1+d.z*0.05);
+            if(d.y>rh){d.y=-d.length; d.x=Math.random()*rw;}
         }
         requestAnimationFrame(drawRain);
     }
-    
-    window.addEventListener('resize', initCanvas);
-    initCanvas();
-    drawRain();
+    window.addEventListener('resize',initRain);
+    initRain(); drawRain();
 
-    const presentsText = document.getElementById('intro-presents-text');
-    const companyLogo = document.getElementById('intro-company-logo');
-    const companyName = document.getElementById('intro-company-name');
-    const taglineText = document.getElementById('intro-tagline-text');
-    const lightning = document.getElementById('intro-lightning');
-
-    function triggerLightning(intensity, duration) {
-        lightning.style.opacity = intensity;
-        setTimeout(() => { lightning.style.opacity = 0; }, duration);
+    // ── UNDERLINE ARCS ──
+    const arcCanvas = document.getElementById('intro-underline-arcs');
+    const arcCtx    = arcCanvas.getContext('2d');
+    let intenseArcing = false;
+    function resizeArc(){ if(arcCanvas){ arcCanvas.width=arcCanvas.offsetWidth; arcCanvas.height=arcCanvas.offsetHeight; } }
+    function sparkArc(){
+        if(introEnded) return;
+        if(!arcCanvas.width) resizeArc();
+        arcCtx.clearRect(0,0,arcCanvas.width,arcCanvas.height);
+        const num=intenseArcing?(Math.floor(Math.random()*5)+3):(Math.floor(Math.random()*2)+1);
+        for(let i=0;i<num;i++){
+            arcCtx.beginPath();
+            let sx=(Math.random()*.9+.05)*arcCanvas.width, sy=50, cx=sx, cy=sy;
+            arcCtx.moveTo(sx,sy);
+            arcCtx.shadowBlur=12; arcCtx.shadowColor='#aa00ff';
+            arcCtx.strokeStyle=Math.random()>.4?'#fae6ff':'#d500f9';
+            arcCtx.lineWidth=Math.random()*2+1;
+            const dir=Math.random()>.5?1:-1, steps=Math.floor(Math.random()*5)+3;
+            for(let j=0;j<steps;j++){cx+=(Math.random()-.5)*35;cy+=dir*(Math.random()*15+5);arcCtx.lineTo(cx,cy);}
+            arcCtx.stroke();
+        }
+        setTimeout(()=>{ if(!introEnded) arcCtx.clearRect(0,0,arcCanvas.width,arcCanvas.height); },50+Math.random()*50);
+    }
+    function startArcs(){
+        resizeArc(); intenseArcing=true;
+        const ii=setInterval(sparkArc,70);
+        setTimeout(()=>{
+            clearInterval(ii); intenseArcing=false;
+            setInterval(()=>{ if(Math.random()>.6&&!introEnded){sparkArc();setTimeout(sparkArc,80);} },1500);
+        },1200);
     }
 
-    function playSequence() {
-        setTimeout(() => triggerLightning(0.2, 40), 1000);
-        setTimeout(() => triggerLightning(0.1, 80), 1100);
-        setTimeout(() => triggerLightning(0.3, 50), 2500);
-        setTimeout(() => { presentsText.classList.add('anim-sub-in'); }, 1500);
-        setTimeout(() => {
-            triggerLightning(0.9, 30);
-            setTimeout(() => {
-                triggerLightning(1.0, 120);
-                companyLogo.classList.add('anim-logo-reveal');
-                companyName.classList.add('anim-title-reveal');
-                setTimeout(() => { taglineText.classList.add('anim-tagline-reveal'); }, 1800);
-                setTimeout(() => triggerLightning(0.6, 60), 160);
-                setTimeout(() => triggerLightning(0.2, 100), 280);
-            }, 150);
-        }, 6000); 
-        setTimeout(() => triggerLightning(0.15, 60), 12000);
-        
-        // Auto-close after sequence
-        setTimeout(() => { closeIntro(); }, 14000);
+    // ── LIGHTNING ──
+    const lightning=document.getElementById('intro-lightning');
+    function flash(i,d){ lightning.style.opacity=i; setTimeout(()=>lightning.style.opacity=0,d); }
+
+    // ── CLOSE / END ──
+    function closeOverlay(){
+        overlay.style.transition='opacity 1s ease';
+        overlay.style.opacity='0';
+        setTimeout(()=>{ overlay.style.display='none'; },1000);
     }
-    
-    // Play sequence on load
-    playSequence();
+
+    function endIntro(){
+        if(introEnded) return;
+        introEnded=true;
+        // Fade audio
+        let fa=setInterval(()=>{ if(ambientThunder.volume>.05){ambientThunder.volume-=.05;}else{ambientThunder.pause();clearInterval(fa);} },200);
+        // Fade stage 1
+        stage1.style.transition='opacity 1s ease';
+        stage1.style.opacity='0';
+        setTimeout(()=>{
+            stage1.style.display='none';
+            stage2.classList.add('intro-active');
+            // Post-intro text sequence
+            setTimeout(()=>document.getElementById('intro-post-t1').classList.add('intro-anim-post'),250);
+            setTimeout(()=>document.getElementById('intro-post-t2').classList.add('intro-anim-post'),1500);
+            setTimeout(()=>document.getElementById('intro-kaixu-logo').classList.add('intro-anim-kaixu'),2250);
+            // Vacuum + reveal main app
+            setTimeout(()=>{
+                s2content.classList.add('intro-anim-vacuum');
+                setTimeout(closeOverlay,600);
+            },4750);
+        },1000);
+    }
+
+    document.getElementById('intro-skip-btn').addEventListener('click',endIntro);
+
+    // ── SEQUENCE ──
+    function playSequence(){
+        ambientThunder.play().catch(()=>{});
+        setTimeout(()=>flash(.2,40),250);
+        setTimeout(()=>flash(.1,80),300);
+        setTimeout(()=>flash(.3,50),600);
+        setTimeout(()=>document.getElementById('intro-presents-text').classList.add('intro-anim-sub-in'),400);
+        setTimeout(()=>{
+            flash(.9,30);
+            setTimeout(()=>{
+                flash(1,120);
+                document.getElementById('intro-company-logo').classList.add('intro-anim-logo');
+                document.getElementById('intro-company-name').classList.add('intro-anim-title');
+                startArcs();
+                strikeThunder.play().catch(()=>{});
+                setTimeout(()=>document.getElementById('intro-tagline-text').classList.add('intro-anim-tagline'),500);
+                setTimeout(()=>flash(.6,60),80);
+                setTimeout(()=>flash(.2,100),140);
+            },150);
+        },1500);
+        setTimeout(()=>flash(.15,60),3500);
+        setTimeout(endIntro,6000);
+    }
+
+    window.addEventListener('load',()=>setTimeout(playSequence,200));
 })();
 </script>
 
@@ -818,135 +1057,135 @@ body{font-family:var(--body);background:var(--void);color:var(--text);overflow-x
     </div>
   </div>
  
-  <!-- PORTALS -->
-  <section class="section" id="portals">
-    <div class="container sk-sel">
-      <div class="sec-header">
-        <span class="sec-index">01</span>
-        <span class="sec-label">Installed Applications</span>
-        <div class="sec-line"></div>
-      </div>
-      <div class="portals-grid stg">
-        
-        <!-- SKAIXU IDE -->
-        <a href="./skAIxuide/index.html" class="portal-card pc--sole reveal">
-          <div class="p-num">01</div>
-          <span class="p-tag">Main Development</span>
-          <div class="p-name">skAIxu IDE</div>
-          <p class="p-desc">The primary integrated development environment. Neural-powered coding assistant with real-time preview and multi-brain support (Gemini, OpenAI, Anthropic).</p>
-          <div class="p-meta"><span class="meta-chip">Core</span><span class="meta-chip">Dev Tools</span><span class="meta-chip">AI Assisted</span></div>
-          <span class="p-link">Launch IDE <span class="arr">→</span></span>
-        </a>
+        <!-- App Directory: Organized & Interactive -->
+        <div class="app-directory">
+          <div class="app-dir-header">
+            <div class="app-dir-line"></div>
+            <span class="app-dir-title">Full App Directory</span>
+            <div class="app-dir-line"></div>
+            <span class="app-dir-count">34 Apps</span>
+          </div>
 
-        <!-- NEURAL SPACE PRO -->
-        <a href="./Neural-Space-Pro/index.html" class="portal-card pc--family reveal">
-          <div class="p-num">02</div>
-          <span class="p-tag">AI Intelligence</span>
-          <div class="p-name">Neural Space Pro</div>
-          <p class="p-desc">Advanced neural interface for direct model interaction. Features chat management, prompt engineering tools, and system diagnostics.</p>
-          <div class="p-meta"><span class="meta-chip">AI Chat</span><span class="meta-chip">Models</span><span class="meta-chip">Diagnostics</span></div>
-          <span class="p-link">Open Neural Matrix <span class="arr">→</span></span>
-        </a>
+          <!-- CORE TOOLS -->
+          <details class="app-category" open>
+            <summary>
+              <div class="app-cat-left">
+                <span class="app-cat-dot" style="background:var(--cyan)"></span>
+                <span class="app-cat-name">Core Tools</span>
+                <span class="app-cat-count">5 apps</span>
+              </div>
+              <span class="app-cat-arrow">›</span>
+            </summary>
+            <div class="app-cat-grid">
+              <a href="./skAIxuide/index.html" class="app-tile"><div class="app-tile-name">skAIxu IDE</div><div class="app-tile-desc">Neural-powered coding assistant with real-time preview and multi-brain support.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./Neural-Space-Pro/index.html" class="app-tile"><div class="app-tile-name">Neural Space Pro</div><div class="app-tile-desc">Advanced neural interface for direct model interaction and chat management.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./WebPilePro/index.html" class="app-tile"><div class="app-tile-name">WebPile Pro</div><div class="app-tile-desc">Rapid web assembly tool. Visual drag-and-drop interface with code export.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./SkyeDocx/index.html" class="app-tile"><div class="app-tile-name">SkyeDocx</div><div class="app-tile-desc">Comprehensive documentation system and offline reader.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./SkyeVault/index.html" class="app-tile"><div class="app-tile-name">SkyeVault</div><div class="app-tile-desc">Encrypted vault for sensitive assets and secure file management.</div><div class="app-tile-link">Launch →</div></a>
+            </div>
+          </details>
 
-        <!-- KAIXU MAGIC -->
-        <a href="./kaixumagic/index.html" class="portal-card pc--amber reveal">
-          <div class="p-num">03</div>
-          <span class="p-tag">Creative Suite</span>
-          <div class="p-name">KaiXu Magic</div>
-          <p class="p-desc">Generative AI creative suite for image synthesis, text-to-code, and rapid prototyping. Unleash creative potential with advanced models.</p>
-          <div class="p-meta"><span class="meta-chip">Creative</span><span class="meta-chip">Generative</span><span class="meta-chip">Assets</span></div>
-          <span class="p-link">Enter Magic <span class="arr">→</span></span>
-        </a>
+          <!-- AI & INTELLIGENCE -->
+          <details class="app-category">
+            <summary>
+              <div class="app-cat-left">
+                <span class="app-cat-dot" style="background:var(--purple)"></span>
+                <span class="app-cat-name">AI &amp; Intelligence</span>
+                <span class="app-cat-count">7 apps</span>
+              </div>
+              <span class="app-cat-arrow">›</span>
+            </summary>
+            <div class="app-cat-grid">
+              <a href="./kaixumagic/index.html" class="app-tile"><div class="app-tile-name">KaiXu Magic</div><div class="app-tile-desc">Generative AI creative suite for image synthesis, text-to-code, and prototyping.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./GodKode/index.html" class="app-tile"><div class="app-tile-name">GodKode</div><div class="app-tile-desc">Monaco-powered kAIxu code lab for mint-ready assets and Glow Room inspection.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./GodCode/GodCode.html" class="app-tile"><div class="app-tile-name">GodCode</div><div class="app-tile-desc">AI-powered code analysis and intelligent generation tools.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./GodNodes/GodN0dePro2/index.html" class="app-tile"><div class="app-tile-name">GodNodes</div><div class="app-tile-desc">Node orchestration and AI agent network management.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./KaiPrompt/index.html" class="app-tile"><div class="app-tile-name">KaiPrompt</div><div class="app-tile-desc">Advanced prompt engineering and management tools.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./DebugPro/DebugPro.html" class="app-tile"><div class="app-tile-name">DebugPro</div><div class="app-tile-desc">Deep system diagnostics and intelligent error resolution.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./Code Genie/CodeGenie.html" class="app-tile"><div class="app-tile-name">Code Genie</div><div class="app-tile-desc">AI-powered code analysis and generation toolkit.</div><div class="app-tile-link">Launch →</div></a>
+            </div>
+          </details>
 
-        <!-- NEXUS PRO -->
-        <a href="./Nexus-Pro/NexusPro.html" class="portal-card pc--13th reveal">
-          <div class="p-num">04</div>
-          <span class="p-tag">Network Admin</span>
-          <div class="p-name">Nexus Pro</div>
-          <p class="p-desc">Network administration and signal routing platform. Manage connections, view topology, and ensure system integrity.</p>
-          <div class="p-meta"><span class="meta-chip">Network</span><span class="meta-chip">Routing</span><span class="meta-chip">Admin</span></div>
-          <span class="p-link">Access Nexus <span class="arr">→</span></span>
-        </a>
+          <!-- DATA & ANALYTICS -->
+          <details class="app-category">
+            <summary>
+              <div class="app-cat-left">
+                <span class="app-cat-dot" style="background:var(--amber)"></span>
+                <span class="app-cat-name">Data &amp; Analytics</span>
+                <span class="app-cat-count">5 apps</span>
+              </div>
+              <span class="app-cat-arrow">›</span>
+            </summary>
+            <div class="app-cat-grid">
+              <a href="./NexusDBExplorer/NexusDBExplorer.html" class="app-tile"><div class="app-tile-name">Nexus DB Explorer</div><div class="app-tile-desc">Visual database explorer. Inspect records, run queries, manage schemas.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./skriptxdataalchemist/index.html" class="app-tile"><div class="app-tile-name">Skriptx Data Alchemist</div><div class="app-tile-desc">Advanced data transformation engine with AI-driven mutation logic.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./Data Forge/DataForge.html" class="app-tile"><div class="app-tile-name">Data Forge</div><div class="app-tile-desc">Powerful data forging and analytics pipeline.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./skriptx/index.html" class="app-tile"><div class="app-tile-name">Skriptx</div><div class="app-tile-desc">Business architect and service builder. Turn ideas into agency deliverables.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./DevProof Lab/index.html" class="app-tile"><div class="app-tile-name">DevProof Lab</div><div class="app-tile-desc">SOLE Nexus Valuation Studio — scan a site ZIP, generate a proof-asset appraisal, export branded PDF.</div><div class="app-tile-link">Launch →</div></a>
+            </div>
+          </details>
 
-        <!-- WEBPILE PRO -->
-        <a href="./WebPilePro/index.html" class="portal-card pc--amber reveal">
-          <div class="p-num">05</div>
-          <span class="p-tag">Visual Builder</span>
-          <div class="p-name">WebPile Pro</div>
-          <p class="p-desc">Rapid web assembly tool for constructing layouts and components. Visual drag-and-drop interface with code export capabilities.</p>
-          <div class="p-meta"><span class="meta-chip">Builder</span><span class="meta-chip">No-Code</span><span class="meta-chip">Visual</span></div>
-          <span class="p-link">Start Building <span class="arr">→</span></span>
-        </a>
+          <!-- PRODUCTIVITY & OPS -->
+          <details class="app-category">
+            <summary>
+              <div class="app-cat-left">
+                <span class="app-cat-dot" style="background:var(--green)"></span>
+                <span class="app-cat-name">Productivity &amp; Ops</span>
+                <span class="app-cat-count">7 apps</span>
+              </div>
+              <span class="app-cat-arrow">›</span>
+            </summary>
+            <div class="app-cat-grid">
+              <a href="./NEWNEW/newapp.html" class="app-tile"><div class="app-tile-name">Nebula TaskForce</div><div class="app-tile-desc">Deep-space task management for mission-critical operations.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./PlanItPro/PlanItPro.html" class="app-tile"><div class="app-tile-name">PlanItPro</div><div class="app-tile-desc">Project planning and management suite.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./SkyeBox/SkyeBox.html" class="app-tile"><div class="app-tile-name">SkyeBox</div><div class="app-tile-desc">Isolated sandbox for testing and experimentation.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./SkyeKnife/SkyeKnife.html" class="app-tile"><div class="app-tile-name">SkyeKnife</div><div class="app-tile-desc">Precision swiss-army knife for data parsing, formatting, and conversion.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./SovereignVariables/SovereignVariables.html" class="app-tile"><div class="app-tile-name">Sovereign Variables</div><div class="app-tile-desc">Centralized env variable and configuration management.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./skyeportal/index.html" class="app-tile"><div class="app-tile-name">SkyePortal</div><div class="app-tile-desc">Unified portal hub for keyring management and workspace navigation.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./projectaegis-skyex/index.html" class="app-tile"><div class="app-tile-name">ProjectAegis-Skyex</div><div class="app-tile-desc">Experimental workspace for Aegis-Skyex features and system prototypes.</div><div class="app-tile-link">Launch →</div></a>
+            </div>
+          </details>
 
-        <!-- SKYEDOCX -->
-        <a href="./SkyeDocx/index.html" class="portal-card pc--full reveal">
-          <div class="p-num">06</div>
-          <span class="p-tag">Documentation</span>
-          <div class="p-name">SkyeDocx</div>
-          <p class="p-desc">Comprehensive documentation system and offline reader. Access manuals, API references, and project guides securely.</p>
-          <div class="p-meta"><span class="meta-chip">Docs</span><span class="meta-chip">Wiki</span><span class="meta-chip">Knowledge</span></div>
-          <span class="p-link">Read Docs <span class="arr">→</span></span>
-        </a>
+          <!-- WEB & UI -->
+          <details class="app-category">
+            <summary>
+              <div class="app-cat-left">
+                <span class="app-cat-dot" style="background:var(--red)"></span>
+                <span class="app-cat-name">Web &amp; UI</span>
+                <span class="app-cat-count">6 apps</span>
+              </div>
+              <span class="app-cat-arrow">›</span>
+            </summary>
+            <div class="app-cat-grid">
+              <a href="./Nexus-Pro/NexusPro.html" class="app-tile"><div class="app-tile-name">Nexus Pro</div><div class="app-tile-desc">Network admin and signal routing platform.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./Webby/Webby.html" class="app-tile"><div class="app-tile-name">Webby</div><div class="app-tile-desc">Lightweight site builder and page composer.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./reactforge/index.html" class="app-tile"><div class="app-tile-name">ReactForge</div><div class="app-tile-desc">React-based component and app builder.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./skyeofferforge/index.html" class="app-tile"><div class="app-tile-name">SkyeOfferForge</div><div class="app-tile-desc">Offer creation, proposal builder, and management.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./skyeuipro/index.html" class="app-tile"><div class="app-tile-name">SkyeUIPro</div><div class="app-tile-desc">UI prototyping and visual design tools.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./RegexGen/RegexGen.html" class="app-tile"><div class="app-tile-name">RegexGen</div><div class="app-tile-desc">Regex generator, tester, and pattern library.</div><div class="app-tile-link">Launch →</div></a>
+            </div>
+          </details>
 
-        <!-- SKYEVAULT -->
-        <a href="./SkyeVault/index.html" class="portal-card pc--sole reveal">
-          <div class="p-num">07</div>
-          <span class="p-tag">Secure Storage</span>
-          <div class="p-name">SkyeVault</div>
-          <p class="p-desc">Encrypted vault for sensitive assets and secure file management. Features Mint deployment rules and authentication protocols.</p>
-          <div class="p-meta"><span class="meta-chip">Vault</span><span class="meta-chip">Security</span><span class="meta-chip">Assets</span></div>
-          <span class="p-link">Open Vault <span class="arr">→</span></span>
-        </a>
-        
-        <!-- NEXUS DB EXPLORER -->
-        <a href="./NexusDBExplorer/NexusDBExplorer.html" class="portal-card pc--family reveal">
-          <div class="p-num">08</div>
-          <span class="p-tag">Data Storage</span>
-          <div class="p-name">Nexus DB</div>
-          <p class="p-desc">Visual database explorer for local and synced data stores. Inspect records, run queries, and manage schemas.</p>
-          <div class="p-meta"><span class="meta-chip">Database</span><span class="meta-chip">SQL/NoSQL</span><span class="meta-chip">Query</span></div>
-          <span class="p-link">Explore Data <span class="arr">→</span></span>
-        </a>
+          <!-- RESOURCES -->
+          <details class="app-category">
+            <summary>
+              <div class="app-cat-left">
+                <span class="app-cat-dot" style="background:var(--text-dim)"></span>
+                <span class="app-cat-name">Resources</span>
+                <span class="app-cat-count">4 apps</span>
+              </div>
+              <span class="app-cat-arrow">›</span>
+            </summary>
+            <div class="app-cat-grid">
+              <a href="./AI-Directives/kAIxu-Background.txt" class="app-tile"><div class="app-tile-name">AI Directives</div><div class="app-tile-desc">AI standards, rules, and directive management.</div><div class="app-tile-link">Open →</div></a>
+              <a href="./AI-Visual-Guides/oldindex.html" class="app-tile"><div class="app-tile-name">AI Visual Guides</div><div class="app-tile-desc">Visual reference guides and SOL templates for AI systems.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./GotSOLE/index.html" class="app-tile"><div class="app-tile-name">GotSOLE</div><div class="app-tile-desc">GotSOLE app suite and workspace.</div><div class="app-tile-link">Launch →</div></a>
+              <a href="./Nexus Forge Studio/index.html" class="app-tile"><div class="app-tile-name">Nexus Forge Studio</div><div class="app-tile-desc">Full Vite/React development studio with ESLint and pnpm toolchain.</div><div class="app-tile-link">Launch →</div></a>
+            </div>
+          </details>
 
-        <!-- NEBULA TASKFORCE -->
-        <a href="./NEWNEW/newapp.html" class="portal-card pc--amber reveal">
-          <div class="p-num">09</div>
-          <span class="p-tag">Productivity</span>
-          <div class="p-name">Nebula TaskForce</div>
-          <p class="p-desc">Deep-space task management system for mission-critical operations. Organize directives and track progress.</p>
-          <div class="p-meta"><span class="meta-chip">Tasks</span><span class="meta-chip">Planning</span><span class="meta-chip">Ops</span></div>
-          <span class="p-link">Launch Mission <span class="arr">→</span></span>
-        </a>
-
-        <!-- SKYEBOX -->
-        <a href="./SkyeBox/SkyeBox.html" class="portal-card pc--sole reveal">
-          <div class="p-num">10</div>
-          <span class="p-tag">Virtual Environment</span>
-          <div class="p-name">SkyeBox</div>
-          <p class="p-desc">Isolated sandbox environment for testing and experimentation. Safe execution of untrusted code snippets.</p>
-          <div class="p-meta"><span class="meta-chip">Sandbox</span><span class="meta-chip">Testing</span><span class="meta-chip">vm</span></div>
-          <span class="p-link">Open Box <span class="arr">→</span></span>
-        </a>
-
-        <!-- SKYEKNIFE -->
-        <a href="./SkyeKnife/SkyeKnife.html" class="portal-card pc--full reveal">
-          <div class="p-num">11</div>
-          <span class="p-tag">Utility</span>
-          <div class="p-name">SkyeKnife</div>
-          <p class="p-desc">Precision swiss-army knife for data manipulation. Parsing, formatting, and conversion utilities.</p>
-          <div class="p-meta"><span class="meta-chip">Tools</span><span class="meta-chip">Utils</span><span class="meta-chip">Data</span></div>
-          <span class="p-link">Equip Knife <span class="arr">→</span></span>
-        </a>
-
-        <!-- SOVEREIGN VARIABLES -->
-        <a href="./SovereignVariables/SovereignVariables.html" class="portal-card pc--amber reveal">
-          <div class="p-num">12</div>
-          <span class="p-tag">Configuration</span>
-          <div class="p-name">Sovereign Variables</div>
-          <p class="p-desc">Centralized environment variable and configuration management. Control system constants securely.</p>
-          <div class="p-meta"><span class="meta-chip">Config</span><span class="meta-chip">Env</span><span class="meta-chip">System</span></div>
-          <span class="p-link">Manage Vars <span class="arr">→</span></span>
-        </a>
+        </div>
+        <!-- END App Directory -->
 
       </div>
     </div>
@@ -963,8 +1202,8 @@ body{font-family:var(--body);background:var(--void);color:var(--text);overflow-x
       <div class="status-grid">
         <div class="status-cell">
             <div class="status-val" style="color:var(--cyan)">
-                <span class="status-indicator">⬡</span>
-                <span class="status-metric">8</span>
+              <span class="status-indicator">⬡</span>
+              <span class="status-metric">16</span>
             </div>
             <div class="status-lbl">Installed Apps</div>
         </div>
@@ -972,7 +1211,7 @@ body{font-family:var(--body);background:var(--void);color:var(--text);overflow-x
             <div class="status-val" style="color:var(--green)">
                 <span class="status-indicator">●</span>
                 <span class="status-metric colored">ONLINE</span>
-            </div>
+                  <span class="status-metric">16</span>
             <div class="status-lbl">Local Server</div>
         </div>
         <div class="status-cell">
@@ -1002,16 +1241,12 @@ body{font-family:var(--body);background:var(--void);color:var(--text);overflow-x
 const sites=[
   {id:0,title:"skAIxu IDE",url:"./skAIxuide/index.html",color:0x00f0ff,desc:"The primary integrated development environment. Neural-powered coding assistant."},
   {id:1,title:"Neural Space Pro",url:"./Neural-Space-Pro/index.html",color:0xff0055,desc:"Advanced neural interface for direct model interaction and chat management."},
-  {id:2,title:"KaiXu Magic",url:"./kaixumagic/index.html",color:0xe5a600,desc:"Generative AI creative suite for image synthesis and rapid prototyping."},
-  {id:3,title:"Nexus Pro",url:"./Nexus-Pro/NexusPro.html",color:0x00ff99,desc:"Network administration and signal routing platform."},
-  {id:4,title:"WebPile Pro",url:"./WebPilePro/index.html",color:0xe5a600,desc:"Rapid web assembly tool for constructing layouts and components visually."},
-  {id:5,title:"SkyeDocx",url:"./SkyeDocx/index.html",color:0xff0055,desc:"Comprehensive documentation system and offline reader."},
-  {id:6,title:"SkyeVault",url:"./SkyeVault/index.html",color:0x00f0ff,desc:"Encrypted vault for sensitive assets and secure file management."},
-  {id:7,title:"Nexus DB",url:"./NexusDBExplorer/NexusDBExplorer.html",color:0xaa00ff,desc:"Visual database explorer for local and synced data stores."},
-  {id:8,title:"Nebula TaskForce",url:"./NEWNEW/newapp.html",color:0xe5a600,desc:"Deep-space task management system for mission-critical operations."},
-  {id:9,title:"SkyeBox",url:"./SkyeBox/SkyeBox.html",color:0x00f0ff,desc:"Isolated sandbox environment for testing and experimentation."},
-  {id:10,title:"SkyeKnife",url:"./SkyeKnife/SkyeKnife.html",color:0xff0055,desc:"Precision swiss-army knife for data manipulation."},
-  {id:11,title:"Sovereign Variables",url:"./SovereignVariables/SovereignVariables.html",color:0xffcc00,desc:"Centralized environment variable and configuration management."}
+  {id:2,title:"WebPile Pro",url:"./WebPilePro/index.html",color:0xe5a600,desc:"Rapid web assembly tool for constructing layouts and components visually."},
+  {id:3,title:"GodN0dePro2",url:"./GodNodes/GodN0dePro2/index.html",color:0xaa00ff,desc:"GodN0dePro2: Advanced node orchestration and AI agent management."},
+  {id:4,title:"skyeview-red",url:"./SkyeView-Red/index.html",color:0xff2222,desc:"SkyeView Red: Visual analytics and monitoring dashboard."},
+  {id:5,title:"PWA Factory",url:"./PWA Factory/index.html",color:0x00f0ff,desc:"PWA Factory: Progressive Web App builder and deployment suite."},
+  {id:6,title:"SkyeDocx",url:"./SkyeDocx/index.html",color:0xff0055,desc:"Comprehensive documentation system and offline reader."},
+  {id:7,title:"SkyeVault",url:"./SkyeVault/index.html",color:0x00f0ff,desc:"Encrypted vault for sensitive assets and secure file management."}
 ];
  
 let scene,camera,renderer,raycaster,mouse;
@@ -1094,11 +1329,19 @@ function createHubScene(){
   const coreGeo=new THREE.SphereGeometry(1.5,32,32);
   const coreMat=new THREE.MeshBasicMaterial({color:0x00f0ff});
   sunMesh.add(new THREE.Mesh(coreGeo,coreMat));
-  const radius=10;
+
+  /* Single ring for all apps */
+  const ringRadius = 10;
+  const trackMat=new THREE.MeshBasicMaterial({color:0x00f0ff,transparent:true,opacity:0.06,side:THREE.DoubleSide});
+  const track=new THREE.Mesh(new THREE.TorusGeometry(ringRadius,0.04,16,120),trackMat);
+  track.rotation.x=Math.PI/2;
+  scene.add(track);
+
+  const totalSites = sites.length;
   sites.forEach((site,i)=>{
-    const angle=(i/sites.length)*Math.PI*2;
+    const angle=(i/totalSites)*Math.PI*2;
     const group=new THREE.Group();
-    group.position.set(Math.cos(angle)*radius,0,Math.sin(angle)*radius);
+    group.position.set(Math.cos(angle)*ringRadius, 0, Math.sin(angle)*ringRadius);
     group.lookAt(0,0,0);
     const crystalGeo=new THREE.OctahedronGeometry(1.5,0);
     const crystalMat=new THREE.MeshPhysicalMaterial({color:0x111111,emissive:site.color,emissiveIntensity:0.2,metalness:0.9,roughness:0.1,transparent:true,opacity:0.85});
@@ -1139,7 +1382,7 @@ function startIntroSequence(){
   const loadingOverlay = document.getElementById('loading-overlay'); 
   setTimeout(()=>{
       if (loadingOverlay) loadingOverlay.style.opacity = '0';
-  }, 2300);
+  }, 1150);
   setTimeout(()=>{
     appState='explosion';
     if (loadingOverlay) {
@@ -1151,7 +1394,7 @@ function startIntroSequence(){
     flash.style.transition='opacity 0.1s ease-out';
     canvasEl.classList.add('shake-active');
     setTimeout(()=>{
-      flash.style.transition='opacity 2s ease-in';
+      flash.style.transition='opacity 1s ease-in';
       flash.style.opacity='0';
       scene.remove(introParticles);
       appState='active';
@@ -1163,9 +1406,9 @@ function startIntroSequence(){
       setTimeout(()=>{
         document.getElementById('scroll-cta').classList.add('show');
         canvasEl.classList.remove('shake-active'); 
-      },1500);
+      },750);
     },100);
-  },2500);
+  },1250);
 }
  
 function focusSite(index){
@@ -1265,5 +1508,6 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
  
 init();
 </script>
+  <script src="/skyehawk.js"></script>
 </body>
 </html>

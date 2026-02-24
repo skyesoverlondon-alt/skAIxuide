@@ -355,9 +355,9 @@
             } catch (e) {
                 checks.push('server=DOWN');
             }
-            // Gateway reachable?
+            // Gateway reachable? (use local proxy to avoid CORS)
             try {
-                const g = await fetch('https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat', { method: 'HEAD', signal: AbortSignal.timeout(5000) }).catch(() => null);
+                const g = await fetch('/api/.netlify/functions/gateway-chat', { method: 'HEAD', signal: AbortSignal.timeout(5000) }).catch(() => null);
                 checks.push(g ? `gateway=${g.status}` : 'gateway=UNREACHABLE');
             } catch { checks.push('gateway=TIMEOUT'); }
             // Local state
@@ -529,6 +529,11 @@
                 log(`HTTP Status: ${res.status} ${res.statusText}`, res.ok ? 'success' : 'error');
                 
                 if(!res.ok) {
+                    // Read body ONCE as text, then optionally parse as JSON
+                    const rawErr = await res.text().catch(() => '');
+                    let errData = null;
+                    try { errData = JSON.parse(rawErr); } catch(_) {}
+
                     // Analyze Error Codes
                     if(res.status === 401) {
                         log("ERROR: 401 Unauthorized.", 'error');
@@ -548,12 +553,10 @@
                         log("DIAGNOSIS: The endpoint URL is incorrect.", 'warn');
                     }
 
-                    try {
-                        const errData = await res.json();
+                    if(errData) {
                         log(`Server Message: ${JSON.stringify(errData, null, 2)}`, 'error');
-                    } catch(e) {
-                        const text = await res.text();
-                        log(`Raw Response: ${text}`, 'error');
+                    } else if(rawErr) {
+                        log(`Raw Response: ${rawErr.slice(0, 400)}`, 'error');
                     }
                     return;
                 }
