@@ -1,757 +1,1365 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PlanIt Pro | AI Business Plan Generator</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PlanIt Pro — AI Business Plan Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet" />
 <style>
+/* ──────────────────────────────────────────
+   Design tokens & reset
+────────────────────────────────────────── */
 :root {
-  --void: #0f0a1a;
-  --surface: #1a1030;
-  --surface-2: #241845;
-  --glass: rgba(255,255,255,0.08);
-  --glass-border: rgba(255,255,255,0.15);
-  --glass-hover: rgba(255,255,255,0.18);
-  --purple: #a855f7;
-  --pink: #ec4899;
-  --rose: #f43f5e;
-  --cyan: #00f0ff;
-  --yellow: #facc15;
-  --green: #22c55e;
-  --red: #ef4444;
-  --white: #f1f5f9;
-  --text: #cbd5e1;
-  --text-dim: #64748b;
-  --mono: 'IBM Plex Mono', monospace;
-  --body: 'Outfit', sans-serif;
+  --bg:         #07021a;
+  --bg2:        #0b0320;
+  --surface:    rgba(255,255,255,.04);
+  --surface-h:  rgba(255,255,255,.07);
+  --border:     rgba(255,255,255,.10);
+  --border-h:   rgba(124,58,237,.45);
+  --purple:     #7c3aed;
+  --purple-l:   #9d5cf6;
+  --gold:       #fbbf24;
+  --gold-l:     #fde68a;
+  --ink:        #eaf0ff;
+  --ink-dim:    #8892b0;
+  --ink-muted:  #4a516e;
+  --green:      #34d399;
+  --red:        #f87171;
+  --warn:       #fb923c;
+  --mono:       'JetBrains Mono', monospace;
+  --body:       'Inter', system-ui, sans-serif;
+  --r:          14px;
+  --r2:         10px;
+  --shadow:     0 2px 16px rgba(0,0,0,.45);
+  --shadow-lg:  0 8px 40px rgba(0,0,0,.6);
 }
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
 body {
   font-family: var(--body);
-  background: var(--void);
-  color: var(--text);
+  background: var(--bg);
+  color: var(--ink);
   min-height: 100vh;
-  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
-::selection { background: var(--purple); color: #fff; }
+::selection { background: rgba(124,58,237,.35); color: #fff; }
+::-webkit-scrollbar { width:6px; height:6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(124,58,237,.35); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(124,58,237,.6); }
 
-/* Background blobs */
-.bg-blobs {
-  position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+/* ──────────────────────────────────────────
+   Stars
+────────────────────────────────────────── */
+.stars-wrap {
+  position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:0;
 }
-.bg-blobs .blob {
-  position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15;
-  animation: float 12s ease-in-out infinite alternate;
+.star {
+  position:absolute; border-radius:50%;
+  background: rgba(255,255,255,.8);
+  animation: twinkle var(--d, 4s) ease-in-out infinite alternate;
 }
-.blob-1 { width: 500px; height: 500px; background: var(--purple); top: -100px; left: -100px; }
-.blob-2 { width: 400px; height: 400px; background: var(--pink); top: 200px; right: -80px; animation-delay: 3s; }
-.blob-3 { width: 350px; height: 350px; background: #3b82f6; bottom: -60px; left: 30%; animation-delay: 6s; }
-@keyframes float {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(40px, -30px) scale(1.1); }
-}
+@keyframes twinkle { 0%{opacity:.15;transform:scale(1)} 100%{opacity:.7;transform:scale(1.3)} }
 
-/* Unified App Menu */
-.app-menu {
-  position: fixed; top: 10px; right: 10px; z-index: 9999;
-  display: flex; flex-wrap: wrap; gap: 4px; max-width: 420px; justify-content: flex-end;
-}
-.app-menu a {
-  font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.06em;
-  padding: 3px 8px; border-radius: 4px;
-  background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.12);
-  color: #94a3b8; text-decoration: none; white-space: nowrap;
-  transition: all 0.2s;
-}
-.app-menu a:hover {
-  background: rgba(168,85,247,0.25); color: #e2e8f0; border-color: var(--purple);
+/* ──────────────────────────────────────────
+   Layout
+────────────────────────────────────────── */
+.wrap {
+  position: relative; z-index: 1;
+  max-width: 1060px; margin: 0 auto;
+  padding: 0 20px 80px;
 }
 
-/* Layout */
-.container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; position: relative; z-index: 1; }
-
-/* Header */
-.hero { text-align: center; margin-bottom: 2.5rem; padding-top: 2.5rem; }
-.hero h1 {
-  font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900;
-  background: linear-gradient(135deg, var(--purple), var(--pink), var(--rose));
+/* ──────────────────────────────────────────
+   Top bar
+────────────────────────────────────────── */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(7,2,26,.90);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display: flex; align-items: center; gap: 12px; height: 56px;
+}
+.topbar-logo {
+  font-size: 15px; font-weight: 800; letter-spacing: .03em;
+  background: linear-gradient(135deg, var(--purple-l), var(--gold));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  line-height: 1.1; margin-bottom: 0.6rem;
+  background-clip: text; white-space: nowrap;
 }
-.hero p { font-size: 1.15rem; color: var(--text-dim); font-weight: 400; }
-.hero .badge {
-  display: inline-block; margin-top: 0.8rem;
-  font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em;
-  padding: 4px 14px; border-radius: 999px;
-  background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.3);
-  color: var(--purple);
+.topbar-sub {
+  font-size: 11px; color: var(--ink-muted); font-family: var(--mono);
+  border-left: 1px solid var(--border); padding-left: 12px; white-space: nowrap;
+  display: none;
 }
+@media(min-width:600px){ .topbar-sub{display:block;} }
+.topbar-spacer { flex: 1; }
+.completion-pill {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 999px;
+  background: rgba(124,58,237,.12); border: 1px solid rgba(124,58,237,.25);
+  font-size: 11px; font-family: var(--mono); color: var(--purple-l);
+  white-space: nowrap;
+}
+.completion-pip {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--purple-l); flex-shrink: 0;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:.5} 50%{opacity:1} }
+.btn-save-load {
+  padding: 5px 14px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--ink-dim); font-size: 11px; font-weight: 600; font-family: var(--mono);
+  cursor: pointer; transition: all .2s; white-space: nowrap;
+}
+.btn-save-load:hover { border-color: var(--border-h); color: var(--ink); background: var(--surface-h); }
+.nav-home {
+  padding: 5px 12px; border-radius: 8px;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--ink-muted); font-size: 11px; font-family: var(--mono);
+  text-decoration: none; cursor: pointer; transition: all .2s;
+}
+.nav-home:hover { color: var(--ink); border-color: var(--border-h); }
 
-/* Glass card */
+/* ──────────────────────────────────────────
+   Hero
+────────────────────────────────────────── */
+.hero {
+  text-align: center;
+  padding: 56px 0 40px;
+}
+.hero-eyebrow {
+  display: inline-block;
+  font-size: 10px; font-family: var(--mono); letter-spacing: .18em;
+  color: var(--gold); text-transform: uppercase;
+  padding: 3px 14px; border-radius: 999px;
+  background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.2);
+  margin-bottom: 18px;
+}
+.hero h1 {
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  font-weight: 900; line-height: 1.05;
+  letter-spacing: -.02em;
+  background: linear-gradient(140deg, #fff 30%, var(--purple-l) 60%, var(--gold) 85%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 14px;
+}
+.hero-sub {
+  font-size: 1.05rem; color: var(--ink-dim); max-width: 540px; margin: 0 auto;
+  line-height: 1.6;
+}
+.progress-track {
+  display: flex; justify-content: center; gap: 8px; margin-top: 28px; flex-wrap: wrap;
+}
+.progress-dot {
+  width: 28px; height: 5px; border-radius: 999px;
+  background: rgba(255,255,255,.08);
+  transition: background .4s, width .4s;
+  cursor: pointer;
+}
+.progress-dot.done { background: var(--purple); }
+.progress-dot.active { background: var(--gold); width: 40px; }
+
+/* ──────────────────────────────────────────
+   Glass card
+────────────────────────────────────────── */
 .card {
-  background: var(--glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border); border-radius: 16px;
-  padding: 2rem; margin-bottom: 1.5rem;
-  transition: border-color 0.3s;
+  background: var(--surface);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--border); border-radius: var(--r);
+  padding: 28px; margin-bottom: 20px;
+  transition: border-color .3s, box-shadow .3s;
 }
-.card:hover { border-color: rgba(168,85,247,0.35); }
-.card h2 {
-  font-size: 1.25rem; font-weight: 700; color: var(--white); margin-bottom: 1rem;
-  display: flex; align-items: center; gap: 0.5rem;
+.card:hover { border-color: rgba(124,58,237,.2); }
+.card-title {
+  font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--ink-dim); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 8px;
 }
-.card h2 .icon { font-size: 1.3rem; }
+.card-title-icon {
+  width: 24px; height: 24px; border-radius: 6px;
+  background: rgba(124,58,237,.15); border: 1px solid rgba(124,58,237,.2);
+  display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0;
+}
 
-/* Form elements */
-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--white); margin-bottom: 0.4rem; }
-label .req { color: var(--rose); }
-input[type="text"], input[type="password"], textarea {
-  width: 100%; padding: 0.75rem 1rem;
-  background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.12);
-  border-radius: 10px; color: var(--white); font-family: var(--body); font-size: 0.95rem;
-  transition: all 0.25s; outline: none;
+/* ──────────────────────────────────────────
+   Form
+────────────────────────────────────────── */
+.form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field.full { grid-column: 1/-1; }
+label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--ink-dim);
 }
-input:focus, textarea:focus {
-  border-color: var(--purple); box-shadow: 0 0 0 3px rgba(168,85,247,0.15);
+label .req { color: #f87171; margin-left: 2px; }
+input, select, textarea {
+  width: 100%; background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.10); border-radius: var(--r2);
+  color: var(--ink); font-family: var(--body); font-size: 14px;
+  padding: 11px 14px; outline: none; transition: border .2s, box-shadow .2s;
+  -webkit-appearance: none; appearance: none;
 }
-textarea { resize: vertical; min-height: 120px; }
-.form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-.field { margin-bottom: 1rem; }
+input:focus, select:focus, textarea:focus {
+  border-color: rgba(124,58,237,.6);
+  box-shadow: 0 0 0 3px rgba(124,58,237,.12);
+}
+input::placeholder, textarea::placeholder { color: var(--ink-muted); }
+textarea { resize: vertical; min-height: 96px; line-height: 1.55; }
+select { cursor: pointer; }
+select option { background: #0b0320; }
 
-/* Key group */
-.key-group { position: relative; }
-.key-group input { padding-right: 70px; font-family: var(--mono); font-size: 0.85rem; }
-.key-toggle {
-  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
-  background: rgba(255,255,255,0.1); border: none; color: var(--text-dim);
-  font-size: 0.7rem; font-weight: 700; padding: 4px 12px; border-radius: 6px; cursor: pointer;
+.key-row { position: relative; }
+.key-row input { padding-right: 72px; font-family: var(--mono); font-size: 13px; }
+.key-show {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+  border-radius: 6px; color: var(--ink-dim); font-size: 10px; font-weight: 700;
+  padding: 3px 10px; cursor: pointer; letter-spacing: .06em;
+  font-family: var(--mono); transition: all .2s;
 }
-.key-toggle:hover { color: var(--white); background: rgba(255,255,255,0.18); }
-.key-hint { margin-top: 0.4rem; font-size: 0.72rem; color: var(--text-dim); }
+.key-show:hover { color: var(--ink); background: rgba(255,255,255,.14); }
+.field-hint { font-size: 11px; color: var(--ink-muted); line-height: 1.4; }
 
-/* Button */
-.btn-generate {
-  width: 100%; padding: 1rem;
-  background: linear-gradient(135deg, var(--purple), var(--pink), var(--rose));
-  border: none; border-radius: 12px; color: #fff;
-  font-family: var(--body); font-size: 1.05rem; font-weight: 800;
-  cursor: pointer; letter-spacing: 0.02em;
-  transition: transform 0.2s, box-shadow 0.3s;
-  position: relative; overflow: hidden;
+/* ──────────────────────────────────────────
+   Section tabs
+────────────────────────────────────────── */
+.section-tabs {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  padding: 0; margin-bottom: 24px;
 }
-.btn-generate:hover:not(:disabled) {
+.tab-btn {
+  padding: 8px 16px; border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface); color: var(--ink-dim);
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  transition: all .2s; white-space: nowrap;
+  display: flex; align-items: center; gap: 6px;
+}
+.tab-btn:hover { color: var(--ink); border-color: rgba(124,58,237,.3); background: var(--surface-h); }
+.tab-btn.active {
+  background: rgba(124,58,237,.2); border-color: rgba(124,58,237,.5);
+  color: #c4b5fd;
+}
+.tab-btn .check {
+  width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0;
+  border: 1.5px solid var(--ink-muted); font-size: 8px;
+  display: flex; align-items: center; justify-content: center;
+}
+.tab-btn.done .check {
+  background: var(--green); border-color: var(--green); color: #000; font-size: 9px;
+}
+
+/* Section panels */
+.section-panel { display: none; }
+.section-panel.active { display: block; }
+
+/* ──────────────────────────────────────────
+   Section card — per-section generate UI
+────────────────────────────────────────── */
+.section-card {
+  background: rgba(255,255,255,.025);
+  border: 1px solid var(--border); border-radius: var(--r);
+  overflow: hidden;
+}
+.section-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.section-icon {
+  width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+  background: rgba(124,58,237,.18); border: 1px solid rgba(124,58,237,.25);
+  display: flex; align-items: center; justify-content: center; font-size: 14px;
+}
+.section-meta { flex: 1; min-width: 0; }
+.section-name {
+  font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 3px;
+}
+.section-desc { font-size: 12px; color: var(--ink-dim); line-height: 1.4; }
+.section-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+
+.btn-gen {
+  padding: 8px 18px; border-radius: 8px; border: none; cursor: pointer;
+  font-family: var(--body); font-size: 13px; font-weight: 700;
+  background: var(--purple); color: #fff;
+  transition: background .2s, transform .15s, box-shadow .2s;
+  display: flex; align-items: center; gap: 6px;
+}
+.btn-gen:hover:not(:disabled) {
+  background: var(--purple-l);
+  box-shadow: 0 4px 20px rgba(124,58,237,.45);
   transform: translateY(-1px);
-  box-shadow: 0 8px 30px rgba(168,85,247,0.4);
 }
-.btn-generate:disabled { opacity: 0.5; cursor: not-allowed; }
-.btn-generate .shimmer {
+.btn-gen:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-gen .spinner {
+  width: 12px; height: 12px; border: 2px solid rgba(255,255,255,.25);
+  border-top-color: #fff; border-radius: 50%;
+  animation: spin .7s linear infinite; display: none;
+}
+.btn-gen.generating .spinner { display: block; }
+.btn-gen.generating .gen-label { display: none; }
+
+.btn-copy-sec {
+  padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--ink-dim);
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  transition: all .2s;
+}
+.btn-copy-sec:hover { border-color: var(--border-h); color: var(--ink); background: var(--surface-h); }
+
+.section-body { padding: 20px; }
+
+.output-area {
+  min-height: 160px; max-height: 60vh;
+  background: rgba(0,0,0,.3);
+  border: 1px solid rgba(255,255,255,.06); border-radius: 10px;
+  padding: 16px 18px;
+  font-family: var(--mono); font-size: 12.5px; line-height: 1.75;
+  color: #c8d3f0; white-space: pre-wrap; overflow-y: auto;
+  position: relative;
+}
+.output-area.empty::after {
+  content: attr(data-placeholder);
   position: absolute; inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-  transform: translateX(-100%);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--body); font-size: 13px; color: var(--ink-muted);
+  pointer-events: none; text-align: center; padding: 20px;
 }
-.btn-generate:hover:not(:disabled) .shimmer { animation: shimmer 1.2s; }
-@keyframes shimmer { to { transform: translateX(100%); } }
 
-/* Error / Status */
-.error-box {
-  margin-top: 1rem; padding: 0.85rem 1rem; border-radius: 10px;
-  background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3);
-  color: #fca5a5; font-size: 0.85rem; display: none;
+.section-status {
+  margin-top: 10px; font-size: 11px; font-family: var(--mono);
+  color: var(--ink-muted); display: flex; align-items: center; gap: 8px;
 }
-.error-box.show { display: block; animation: shake 0.4s; }
-@keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; background: var(--ink-muted); }
+.status-dot.ok  { background: var(--green); }
+.status-dot.spin { background: var(--purple-l); animation: pulse 1s ease-in-out infinite; }
+.status-dot.err { background: var(--red); }
 
-.status-bar {
-  display: none; margin-top: 1rem; padding: 0.6rem 1rem; border-radius: 8px;
-  background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.25);
-  font-family: var(--mono); font-size: 0.72rem; color: var(--purple);
-}
-.status-bar.show { display: flex; align-items: center; gap: 0.5rem; }
-.status-bar .spinner {
-  width: 14px; height: 14px; border: 2px solid rgba(168,85,247,0.3);
-  border-top-color: var(--purple); border-radius: 50%; animation: spin 0.8s linear infinite;
-}
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* Usage badge */
-.usage-badge {
-  display: none; margin-top: 0.8rem; padding: 0.5rem 0.8rem; border-radius: 8px;
-  background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25);
-  font-family: var(--mono); font-size: 0.7rem; color: var(--green);
+/* ──────────────────────────────────────────
+   Full plan tab
+────────────────────────────────────────── */
+.plan-full-toolbar {
+  display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;
 }
-.usage-badge.show { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-toolbar {
+  padding: 8px 16px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--ink-dim); font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 6px;
+}
+.btn-toolbar:hover { border-color: var(--border-h); color: var(--ink); background: var(--surface-h); }
+.btn-toolbar.primary {
+  background: rgba(124,58,237,.15); border-color: rgba(124,58,237,.35); color: var(--purple-l);
+}
+.btn-toolbar.primary:hover { background: rgba(124,58,237,.28); }
+.btn-toolbar.gold {
+  background: rgba(251,191,36,.08); border-color: rgba(251,191,36,.25); color: var(--gold);
+}
+.btn-toolbar.gold:hover { background: rgba(251,191,36,.15); }
 
-/* Output */
-.output-card { display: none; }
-.output-card.show { display: block; }
-.output-header {
-  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
-  margin-bottom: 1rem;
+.full-plan-out {
+  background: rgba(0,0,0,.35);
+  border: 1px solid rgba(255,255,255,.06); border-radius: var(--r);
+  padding: 28px 32px;
+  font-family: var(--mono); font-size: 12.5px; line-height: 1.8;
+  color: #c8d3f0; white-space: pre-wrap;
+  max-height: 72vh; overflow-y: auto;
 }
-.output-header h2 { margin-bottom: 0; }
-.output-actions { display: flex; gap: 0.5rem; }
-.btn-sm {
-  padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--glass-border);
-  background: var(--glass); color: var(--white); font-size: 0.8rem; font-weight: 600;
-  cursor: pointer; transition: all 0.2s;
+.full-plan-empty {
+  text-align: center; padding: 60px 20px;
+  color: var(--ink-muted); font-size: 14px;
 }
-.btn-sm:hover { background: var(--glass-hover); border-color: var(--purple); }
+.full-plan-empty svg { opacity: .25; margin-bottom: 14px; display: block; margin-left: auto; margin-right: auto; }
+.full-plan-empty strong { display: block; font-size: 16px; margin-bottom: 6px; color: var(--ink-dim); }
 
-/* Section nav */
-.section-nav {
-  display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.2rem;
-  padding-bottom: 1rem; border-bottom: 1px solid var(--glass-border);
+/* ──────────────────────────────────────────
+   Generate All button
+────────────────────────────────────────── */
+.generate-all-btn {
+  width: 100%; padding: 16px;
+  background: linear-gradient(135deg, var(--purple) 0%, #9d5cf6 50%, #c084fc 100%);
+  border: none; border-radius: var(--r); color: #fff;
+  font-size: 16px; font-weight: 800; font-family: var(--body);
+  cursor: pointer; letter-spacing: .02em;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  transition: transform .2s, box-shadow .3s; position: relative; overflow: hidden;
+  margin-top: 8px;
 }
-.section-btn {
-  padding: 0.4rem 0.9rem; border-radius: 8px; border: 1px solid transparent;
-  background: rgba(255,255,255,0.05); color: var(--text-dim); font-size: 0.75rem; font-weight: 600;
-  cursor: pointer; transition: all 0.2s;
+.generate-all-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(124,58,237,.5);
 }
-.section-btn:hover { color: var(--white); background: rgba(255,255,255,0.1); }
-.section-btn.active {
-  background: linear-gradient(135deg, var(--purple), var(--pink));
-  color: #fff; border-color: transparent;
+.generate-all-btn:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
+.generate-all-btn .wave {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+  transform: translateX(-120%);
+  transition: transform 1s ease;
 }
+.generate-all-btn:hover:not(:disabled) .wave { transform: translateX(120%); }
 
-.plan-output {
-  padding: 1.5rem; border-radius: 12px;
-  background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.06);
-  white-space: pre-wrap; font-size: 0.92rem; line-height: 1.7; color: var(--text);
-  max-height: 70vh; overflow-y: auto;
+/* ──────────────────────────────────────────
+   Alerts
+────────────────────────────────────────── */
+.alert {
+  padding: 12px 16px; border-radius: 10px;
+  font-size: 13px; line-height: 1.5; display: none;
+  margin-top: 14px;
 }
-.plan-output::-webkit-scrollbar { width: 6px; }
-.plan-output::-webkit-scrollbar-thumb { background: rgba(168,85,247,0.3); border-radius: 3px; }
+.alert.show { display: block; }
+.alert-error {
+  background: rgba(248,113,113,.1); border: 1px solid rgba(248,113,113,.3); color: #fca5a5;
+  animation: shake .35s;
+}
+.alert-cap {
+  background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.25); color: var(--gold-l);
+}
+.alert-info {
+  background: rgba(124,58,237,.08); border: 1px solid rgba(124,58,237,.2); color: #c4b5fd;
+}
+@keyframes shake { 20%{transform:translateX(-5px)} 60%{transform:translateX(5px)} }
 
-/* Tips */
-.tips ul { list-style: none; }
-.tips li {
-  padding: 0.5rem 0; font-size: 0.92rem; display: flex; align-items: flex-start; gap: 0.5rem;
-  transition: transform 0.2s;
+/* ──────────────────────────────────────────
+   Save / Load modal
+────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 500;
+  display: none; align-items: center; justify-content: center; padding: 20px;
 }
-.tips li:hover { transform: translateX(6px); }
-.tips li::before { content: '\2022'; color: var(--yellow); font-weight: 700; font-size: 1.2rem; flex-shrink: 0; }
+.modal-overlay.open { display: flex; }
+.modal {
+  background: #0c0620; border: 1px solid var(--border);
+  border-radius: var(--r); padding: 28px; width: 100%; max-width: 540px;
+  max-height: 80vh; overflow-y: auto;
+  position: relative;
+}
+.modal-title {
+  font-size: 16px; font-weight: 700; margin-bottom: 18px;
+  display: flex; align-items: center; gap: 8px;
+}
+.modal-close {
+  position: absolute; top: 16px; right: 16px;
+  background: none; border: none; color: var(--ink-muted);
+  font-size: 18px; cursor: pointer; line-height: 1;
+}
+.modal-close:hover { color: var(--ink); }
+.saved-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+.saved-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--surface); cursor: pointer;
+  transition: all .2s;
+}
+.saved-item:hover { border-color: var(--border-h); background: var(--surface-h); }
+.saved-item-name { font-size: 13px; font-weight: 600; flex: 1; }
+.saved-item-meta { font-size: 10px; color: var(--ink-muted); font-family: var(--mono); }
+.saved-item-del {
+  background: none; border: none; color: var(--ink-muted); cursor: pointer;
+  font-size: 13px; padding: 2px 6px; border-radius: 4px;
+  transition: color .2s; flex-shrink: 0;
+}
+.saved-item-del:hover { color: var(--red); }
+.no-saves { text-align: center; color: var(--ink-muted); font-size: 13px; padding: 24px 0; }
+.btn-modal-save {
+  width: 100%; padding: 12px; border-radius: 10px;
+  background: var(--purple); border: none; color: #fff;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  transition: background .2s;
+}
+.btn-modal-save:hover { background: var(--purple-l); }
 
-/* Budget warning */
-.cap-warning {
-  display: none; margin-top: 1rem; padding: 1rem; border-radius: 10px;
-  background: rgba(250,204,21,0.1); border: 1px solid rgba(250,204,21,0.3);
-  color: var(--yellow); font-size: 0.85rem; font-weight: 600;
+/* ──────────────────────────────────────────
+   Footer note
+────────────────────────────────────────── */
+.foot {
+  position: fixed; right: 16px; bottom: 12px; z-index: 2;
+  font-size: 10px; font-family: var(--mono); color: var(--ink-muted);
+  pointer-events: none; user-select: none;
 }
-.cap-warning.show { display: block; }
 
 @media (max-width: 640px) {
-  .container { padding: 1rem; }
-  .card { padding: 1.2rem; }
-  .app-menu { max-width: 260px; }
+  .wrap { padding: 0 12px 80px; }
+  .hero { padding: 32px 0 28px; }
+  .card { padding: 18px 16px; }
+  .section-header { flex-direction: column; }
+  .section-actions { width: 100%; }
+  .btn-gen { flex: 1; justify-content: center; }
 }
 </style>
 </head>
 <body>
 
-<!-- Background blobs -->
-<div class="bg-blobs">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="blob blob-3"></div>
+<!-- Stars -->
+<div class="stars-wrap" id="starsWrap"></div>
+
+<!-- Top bar -->
+<header class="topbar">
+  <span class="topbar-logo">PlanIt Pro</span>
+  <span class="topbar-sub">AI Business Plan Studio · kAIxuGateway13</span>
+  <div class="topbar-spacer"></div>
+  <div class="completion-pill">
+    <div class="completion-pip"></div>
+    <span id="completionLabel">0 / 7 sections</span>
+  </div>
+  <button class="btn-save-load" id="openSaveModal">💾 Save / Load</button>
+  <a class="nav-home" href="../index.html">← Home</a>
+</header>
+
+<!-- Save / Load modal -->
+<div class="modal-overlay" id="saveModal">
+  <div class="modal">
+    <button class="modal-close" id="closeModalBtn">✕</button>
+    <div class="modal-title">💾 Saved Plans</div>
+    <div class="saved-list" id="savedList"></div>
+    <button class="btn-modal-save" id="savePlanBtn">Save Current Plan</button>
+    <div class="alert alert-info" id="saveAlert" style="margin-top:12px;"></div>
+  </div>
 </div>
 
-<!-- Unified App Menu -->
-<nav class="app-menu">
-  <a href="../skAIxuide/index.html">Main IDE</a>
-  <a href="../Neural-Space-Pro/index.html">Neural Space</a>
-  <a href="../kaixumagic/index.html">Magic Editor</a>
-  <a href="../skriptxdataalchemist/index.html">Data Alchemist</a>
-  <a href="../WebPilePro/index.html">WebPile Pro</a>
-  <a href="../skyeportal/index.html">Skye Portal</a>
-  <a href="../SkyeVault/index.html">SkyeVault</a>
-  <a href="../NexusConnectHomepage/index.html">Nexus Connect</a>
-  <a href="../projectaegis-skyex/index.html">Project Aegis</a>
-  <a href="../skriptx/index.html">Skriptx</a>
-  <a href="../SkyeDocx/index.html">SkyeDocx</a>
-</nav>
-
-<div class="container">
+<main class="wrap">
 
   <!-- Hero -->
-  <header class="hero">
-    <h1>PlanIt Pro</h1>
-    <p>AI-powered investor-ready business plans in 60 seconds</p>
-    <span class="badge">Powered by kAIxuGateway13</span>
-  </header>
+  <div class="hero">
+    <div class="hero-eyebrow">Powered by Gemini 2.0 Flash · kAIxuGateway13</div>
+    <h1>Business Plan Studio</h1>
+    <p class="hero-sub">Generate a complete investor-ready business plan section by section — or all at once with one click.</p>
+    <div class="progress-track" id="progressTrack"></div>
+  </div>
 
-  <!-- Kaixu Key Card -->
-  <div class="card" id="key-card">
-    <h2><span class="icon">&#x1F511;</span> Kaixu Key</h2>
-    <div class="field">
-      <label>Virtual Key</label>
-      <div class="key-group">
-        <input type="password" id="kaixuKeyInput" placeholder="Enter your Kaixu Virtual Key..." autocomplete="off">
-        <button class="key-toggle" id="keyToggle" type="button">Show</button>
+  <!-- Section tabs (injected by JS) -->
+  <div class="section-tabs" id="sectionTabs"></div>
+
+  <!-- ── SETUP PANEL ── -->
+  <div class="section-panel active" id="panel-setup">
+
+    <div class="card">
+      <div class="card-title">
+        <div class="card-title-icon">🔑</div>
+        kAIxu Gateway Key
       </div>
-      <p class="key-hint">Your Kaixu key routes requests through the secure kAIxuGateway13 proxy.</p>
+      <div class="form-grid">
+        <div class="field full">
+          <label>Virtual Key</label>
+          <div class="key-row">
+            <input type="password" id="keyInput" placeholder="kv-…" autocomplete="off" />
+            <button class="key-show" id="keyShowBtn">SHOW</button>
+          </div>
+          <span class="field-hint">Routes securely through kAIxuGateway13 · stored in localStorage</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="card-title-icon">🏢</div>
+        Company Details
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Company Name <span class="req">*</span></label>
+          <input type="text" id="companyName" placeholder="Acme AI Corp" />
+        </div>
+        <div class="field">
+          <label>Industry <span class="req">*</span></label>
+          <input type="text" id="industry" placeholder="SaaS, Fintech, E-commerce…" />
+        </div>
+        <div class="field">
+          <label>Business Stage</label>
+          <select id="bizStage">
+            <option value="Idea">Idea / Pre-seed</option>
+            <option value="Startup" selected>Startup / Seed</option>
+            <option value="Growth">Growth / Series A</option>
+            <option value="Expansion">Expansion / Series B+</option>
+            <option value="Enterprise">Enterprise</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Funding Ask</label>
+          <input type="text" id="fundingAsk" placeholder="$500K seed round" />
+        </div>
+        <div class="field">
+          <label>Target Market</label>
+          <input type="text" id="targetMarket" placeholder="B2B SaaS for mid-market retailers" />
+        </div>
+        <div class="field">
+          <label>Geography / Market</label>
+          <input type="text" id="geography" placeholder="US, EU, Global…" />
+        </div>
+        <div class="field full">
+          <label>Elevator Pitch <span class="req">*</span></label>
+          <textarea id="elevatorPitch" style="min-height:80px" placeholder="1–3 sentences: what it is, who it's for, why it wins…"></textarea>
+        </div>
+        <div class="field">
+          <label>Revenue Model</label>
+          <input type="text" id="revenueModel" placeholder="SaaS subscription, freemium, marketplace…" />
+        </div>
+        <div class="field">
+          <label>Key Differentiator</label>
+          <input type="text" id="differentiator" placeholder="Proprietary AI, 10× faster, patent-pending…" />
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="card-title-icon">⚡</div>
+        Generate All Sections
+      </div>
+      <p style="font-size:13px;color:var(--ink-dim);margin-bottom:16px;line-height:1.55;">
+        Run all 7 plan sections sequentially through the AI. Each section takes ~8–15 seconds.
+        Total runtime ~60–90 seconds. Or switch to any section tab and generate individually.
+      </p>
+      <div class="alert alert-error" id="setupError"></div>
+      <div class="alert alert-cap" id="capAlert">Monthly usage cap reached. Upgrade your Kaixu plan to continue.</div>
+      <button class="generate-all-btn" id="generateAllBtn" type="button">
+        <div class="wave"></div>
+        <span id="genAllLabel">⚡ Generate All 7 Sections</span>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ── SECTION PANELS (injected by JS) ── -->
+  <div id="dynamicPanels"></div>
+
+  <!-- ── FULL PLAN PANEL ── -->
+  <div class="section-panel" id="panel-fullplan">
+    <div class="card">
+      <div class="card-title">
+        <div class="card-title-icon">📋</div>
+        Complete Business Plan
+      </div>
+      <div class="plan-full-toolbar">
+        <button class="btn-toolbar primary" id="assembleBtn">🔄 Assemble from Sections</button>
+        <button class="btn-toolbar" id="copyFullBtn">📋 Copy Markdown</button>
+        <button class="btn-toolbar gold" id="downloadMdBtn">⬇ Download .md</button>
+        <button class="btn-toolbar" id="printBtn">🖨 Print</button>
+      </div>
+      <div id="fullPlanContainer">
+        <div class="full-plan-empty">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          <strong>No content yet</strong>
+          Generate sections first, then click "Assemble from Sections"
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Business Inputs Card -->
-  <div class="card">
-    <h2><span class="icon">&#x1F4A1;</span> Tell us about your business</h2>
+</main>
 
-    <div class="field">
-      <label>Business Idea <span class="req">*</span></label>
-      <textarea id="businessIdea" placeholder="Describe your business idea. What problem does it solve? What makes it unique?"></textarea>
-    </div>
-
-    <div class="form-row">
-      <div class="field">
-        <label>Industry</label>
-        <input type="text" id="industry" placeholder="e.g., SaaS, E-commerce">
-      </div>
-      <div class="field">
-        <label>Target Market</label>
-        <input type="text" id="targetMarket" placeholder="e.g., Gen Z entrepreneurs">
-      </div>
-      <div class="field">
-        <label>Funding Needed</label>
-        <input type="text" id="fundingNeeded" placeholder="e.g., $500K seed round">
-      </div>
-    </div>
-
-    <div class="error-box" id="errorBox"></div>
-    <div class="cap-warning" id="capWarning">Monthly cap reached. Further AI requests are blocked until your plan resets or you top up.</div>
-    <div class="status-bar" id="statusBar"><div class="spinner"></div><span id="statusText">Generating...</span></div>
-    <div class="usage-badge" id="usageBadge"></div>
-
-    <button class="btn-generate" id="generateBtn" type="button">
-      <span class="shimmer"></span>
-      Generate Business Plan
-    </button>
-  </div>
-
-  <!-- Output Card -->
-  <div class="card output-card" id="outputCard">
-    <div class="output-header">
-      <h2><span class="icon">&#x1F4CB;</span> Your Business Plan</h2>
-      <div class="output-actions">
-        <button class="btn-sm" id="copyBtn">Copy All</button>
-        <button class="btn-sm" id="downloadBtn">Download</button>
-      </div>
-    </div>
-
-    <div class="section-nav" id="sectionNav">
-      <button class="section-btn active" data-section="all">All Sections</button>
-      <button class="section-btn" data-section="executive">Executive Summary</button>
-      <button class="section-btn" data-section="company">Company Description</button>
-      <button class="section-btn" data-section="market">Market Analysis</button>
-      <button class="section-btn" data-section="organization">Organization</button>
-      <button class="section-btn" data-section="products">Products &amp; Services</button>
-      <button class="section-btn" data-section="marketing">Marketing Strategy</button>
-      <button class="section-btn" data-section="financial">Financial Projections</button>
-    </div>
-
-    <div class="plan-output" id="planOutput"></div>
-  </div>
-
-  <!-- Tips -->
-  <div class="card tips">
-    <h2><span class="icon">&#x26A1;</span> Pro Tips for Success</h2>
-    <ul>
-      <li>Be specific about your unique value proposition and competitive advantages</li>
-      <li>Include realistic financial projections backed by market research</li>
-      <li>Clearly define your target market and customer acquisition strategy</li>
-      <li>Use this as your foundation and customize with your specific data</li>
-      <li>Update regularly as your business evolves and grows</li>
-    </ul>
-  </div>
-
-</div>
+<div class="foot">PlanIt Pro · kAIxuide · Feb 2026</div>
 
 <script>
-(function() {
+/* ════════════════════════════════════════════════════════════
+   PlanIt Pro — Fortune 500 Build
+   kAIxuGateway13 · gemini-2.0-flash · gateway-chat
+   skAIxuide system · Feb 24 2026
+════════════════════════════════════════════════════════════ */
+(function () {
   'use strict';
 
-  /* BroadcastChannel diagnostics */
-  var diagChannel = new BroadcastChannel('kaixu_events');
-  function broadcastLog(message, type) {
-    type = type || 'info';
-    try { diagChannel.postMessage({ source: 'PlanItPro', type: type, message: message, ts: Date.now() }); } catch(e) {}
-    if (type === 'error') console.error('[PlanItPro]', message);
-    else console.log('[PlanItPro][' + type + ']', message);
+  // ── Config ─────────────────────────────────────────────────
+  const IS_LOCAL = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+  const GATEWAY  = (IS_LOCAL ? '/api' : 'https://kaixugateway13.netlify.app')
+                 + '/.netlify/functions/gateway-chat';
+  const STORE_KEY = 'PLANIT_PRO_SAVES_V2';
+  const VK_KEY    = 'KAIXU_VIRTUAL_KEY';
+  const MODEL     = 'gemini-2.0-flash';
+  const PROVIDER  = 'gemini';
+
+  // ── BroadcastChannel ────────────────────────────────────────
+  const bc = (() => { try { return new BroadcastChannel('kaixu_events'); } catch (_) { return null; } })();
+  const emit = (msg, type = 'info') => {
+    if (bc) try { bc.postMessage({ source: 'PlanItPro', type, message: msg, ts: Date.now() }); } catch (_) {}
+  };
+
+  // ── Section definitions ─────────────────────────────────────
+  const SECTIONS = [
+    {
+      id: 'executive', icon: '📊',
+      name: 'Executive Summary',
+      desc: 'High-level overview, mission, key metrics & investment ask',
+      prompt: (c) => `Write a compelling Executive Summary for this business plan.
+
+Company: ${c.name}
+Industry: ${c.industry}
+Stage: ${c.stage}
+Elevator Pitch: ${c.pitch}
+Revenue Model: ${c.revenue}
+Funding Ask: ${c.funding}
+
+Cover:
+1. Business concept overview and mission statement
+2. Target market and customer problem
+3. Unique value proposition and competitive advantage
+4. Current traction or stage milestones
+5. Funding requirement and specific use of funds
+6. Financial highlights: Year 1-3 revenue projections (with assumptions)
+7. The investment opportunity and projected returns
+
+Write in executive voice. Be specific with numbers. 450-600 words. Use bold subheadings.`
+    },
+    {
+      id: 'company', icon: '🏢',
+      name: 'Company Description',
+      desc: 'Business model, legal structure, goals & founding story',
+      prompt: (c) => `Write a detailed Company Description section for this business plan.
+
+Company: ${c.name}
+Industry: ${c.industry}
+Stage: ${c.stage}
+Geography: ${c.geo}
+Pitch: ${c.pitch}
+Revenue Model: ${c.revenue}
+Key Differentiator: ${c.diff}
+
+Cover:
+1. Company overview, founding story, and current state
+2. Mission, vision, and core values
+3. Business model: how the company generates revenue
+4. Legal structure recommendation (C-Corp, LLC, etc.) with rationale
+5. Unique value proposition narrative
+6. Short-term objectives (6-12 months) and long-term objectives (3-5 years)
+7. IP and technology moat (if applicable)
+
+Be concrete and credible. 350-500 words. Use numbered or bolded subheadings.`
+    },
+    {
+      id: 'market', icon: '📈',
+      name: 'Market Analysis',
+      desc: 'TAM/SAM/SOM, trends, competitors & market gaps',
+      prompt: (c) => `Write a rigorous Market Analysis section for this business plan.
+
+Company: ${c.name}
+Industry: ${c.industry}
+Target Market: ${c.target}
+Geography: ${c.geo}
+Key Differentiator: ${c.diff}
+
+Cover:
+1. Industry overview: size, growth rate (CAGR), and key trends
+2. Total Addressable Market (TAM), Serviceable Addressable Market (SAM), and Serviceable Obtainable Market (SOM) with realistic dollar estimates
+3. Customer segments: detailed Ideal Customer Profile (ICP) with firmographics/demographics
+4. Competitive landscape: 4-6 named competitors (real companies or archetypes) with a positioning comparison
+5. Your competitive advantages and defensible differentiators
+6. Barriers to entry you'll benefit from
+7. Market timing: why now is the right moment
+8. Regulatory environment (briefly)
+
+Use real market research benchmarks. Include a simple competitive matrix in text form. 500-700 words.`
+    },
+    {
+      id: 'product', icon: '🛠',
+      name: 'Product & Services',
+      desc: 'Product description, pricing matrix, roadmap & R&D',
+      prompt: (c) => `Write the Products & Services section for this business plan.
+
+Company: ${c.name}
+Industry: ${c.industry}
+Pitch: ${c.pitch}
+Revenue Model: ${c.revenue}
+Key Differentiator: ${c.diff}
+
+Cover:
+1. Core product or service: features, functionality, and user experience
+2. Technology stack or operational process (enough detail to show expertise)
+3. Product development stage: prototype, beta, GA, etc.
+4. Pricing strategy: pricing tiers with price points and rationale (include a pricing table)
+5. Product roadmap: 6 specific milestones over 18 months
+6. Intellectual property and moat (patents, trade secrets, network effects, data)
+7. R&D pipeline and future product vision
+
+Be specific enough to demonstrate domain expertise. 400-600 words.`
+    },
+    {
+      id: 'operations', icon: '⚙️',
+      name: 'Operations & Team',
+      desc: 'Org structure, key roles, team gaps & ops plan',
+      prompt: (c) => `Write the Organization, Management & Operations Plan section for this business plan.
+
+Company: ${c.name}
+Stage: ${c.stage}
+Industry: ${c.industry}
+Pitch: ${c.pitch}
+
+Cover:
+1. Organizational structure (describe as a hierarchy narrative)
+2. Founding team: 2-4 bios with relevant experience and why they're uniquely qualified
+3. Key open roles to hire in the next 12 months (with titles and responsibilities)
+4. Advisory board: strategy for recruiting 2-3 advisors
+5. Operational workflow: how you deliver value to customers end-to-end
+6. Key systems and tools (tech stack, CRM, cloud infra)
+7. Major operational risks and mitigation strategies
+8. Operational KPIs to track (5-7 metrics)
+
+Be realistic for the stated stage. 400-550 words.`
+    },
+    {
+      id: 'marketing', icon: '📣',
+      name: 'Marketing & GTM',
+      desc: 'Go-to-market strategy, channels, CAC, LTV & growth loops',
+      prompt: (c) => `Write the Marketing Strategy & Go-To-Market Plan for this business plan.
+
+Company: ${c.name}
+Industry: ${c.industry}
+Target Market: ${c.target}
+Geography: ${c.geo}
+Revenue Model: ${c.revenue}
+Key Differentiator: ${c.diff}
+Funding Ask: ${c.funding}
+
+Cover:
+1. GTM strategy: phased launch plan (Phase 1: MVP/pilot, Phase 2: scale, Phase 3: expansion)
+2. Primary acquisition channels: list 4-5 with specific tactics per channel
+3. Content and brand strategy: tone, positioning, and content pillars
+4. Sales funnel: awareness → consideration → decision → retention stages
+5. Customer Acquisition Cost (CAC) estimate with assumptions
+6. Lifetime Value (LTV) estimate with assumptions
+7. LTV:CAC ratio target and payback period
+8. Retention, upsell, and referral strategy
+9. 12-month marketing milestones and key experiments
+
+Be channel-specific with concrete tactics. Include realistic metric targets. 450-600 words.`
+    },
+    {
+      id: 'financial', icon: '💰',
+      name: 'Financial Projections',
+      desc: '3-year P&L, burn rate, break-even & use of funds',
+      prompt: (c) => `Write the Financial Projections section for this business plan.
+
+Company: ${c.name}
+Industry: ${c.industry}
+Stage: ${c.stage}
+Revenue Model: ${c.revenue}
+Funding Ask: ${c.funding}
+Pitch: ${c.pitch}
+
+Cover:
+1. Revenue projections (Year 1, Year 2, Year 3) with month-by-month assumptions for Year 1
+2. Cost structure: COGS breakdown and major OpEx categories (engineering, sales, G&A)
+3. Gross margin targets by year (with industry comparison)
+4. EBITDA / net income trajectory
+5. Monthly cash burn rate and runway with proposed funding
+6. Break-even analysis: month and revenue milestone
+7. Use of funds table:
+   | Category | % | $ Amount | Purpose |
+   (Minimum 4 categories: Product, Sales & Marketing, Ops, G&A)
+8. Key SaaS / business metrics: ARR, MRR, churn rate target, NRR, payback period
+9. Return scenario for investors at exit (3-5 year horizon)
+
+Use realistic ${c.industry} benchmarks. Format with tables where appropriate. 500-700 words.`
+    }
+  ];
+
+  // ── DOM shortcuts ───────────────────────────────────────────
+  const $ = (id) => document.getElementById(id);
+  const form = {
+    get name()     { return $('companyName').value.trim(); },
+    get industry() { return $('industry').value.trim() || 'Technology'; },
+    get stage()    { return $('bizStage').value; },
+    get funding()  { return $('fundingAsk').value.trim() || 'TBD'; },
+    get target()   { return $('targetMarket').value.trim() || 'TBD'; },
+    get geo()      { return $('geography').value.trim() || 'Global'; },
+    get pitch()    { return $('elevatorPitch').value.trim(); },
+    get revenue()  { return $('revenueModel').value.trim() || 'TBD'; },
+    get diff()     { return $('differentiator').value.trim() || 'TBD'; },
+  };
+
+  // ── State ───────────────────────────────────────────────────
+  const state = {
+    content:    Object.fromEntries(SECTIONS.map(s => [s.id, ''])),
+    generating:  false,
+    capReached:  false,
+    vk: localStorage.getItem(VK_KEY) || '',
+  };
+
+  // ── Stars ───────────────────────────────────────────────────
+  const starsWrap = $('starsWrap');
+  for (let i = 0; i < 70; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const sz = Math.random() * 2 + 0.5;
+    s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*5+2.5).toFixed(1)}s;animation-delay:${(Math.random()*5).toFixed(1)}s`;
+    starsWrap.appendChild(s);
   }
 
-  /* Heartbeat every 20s */
-  setInterval(function() { broadcastLog('[HEARTBEAT] PlanItPro alive', 'info'); }, 20000);
-
-  /* Environment detection */
-  var _isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.port === '8000';
-  var KAIXU_GATEWAY_PRIMARY = '/api';
-  var KAIXU_GATEWAY_FALLBACK = 'https://kaixugateway13.netlify.app';
-
-  /* Key management */
-  var kaixuKey = localStorage.getItem('KAIXU_VIRTUAL_KEY') || '';
-  var keyInput = document.getElementById('kaixuKeyInput');
-  var keyToggle = document.getElementById('keyToggle');
-
-  keyInput.value = kaixuKey;
-  keyInput.addEventListener('input', function() {
-    kaixuKey = keyInput.value.trim();
-    localStorage.setItem('KAIXU_VIRTUAL_KEY', kaixuKey);
+  // ── Key wiring ──────────────────────────────────────────────
+  const keyInput   = $('keyInput');
+  const keyShowBtn = $('keyShowBtn');
+  keyInput.value   = state.vk;
+  keyInput.addEventListener('input', () => {
+    state.vk = keyInput.value.trim();
+    localStorage.setItem(VK_KEY, state.vk);
   });
-  keyToggle.addEventListener('click', function() {
-    var isHidden = keyInput.type === 'password';
-    keyInput.type = isHidden ? 'text' : 'password';
-    keyToggle.textContent = isHidden ? 'Hide' : 'Show';
+  keyShowBtn.addEventListener('click', () => {
+    const hide = keyInput.type === 'password';
+    keyInput.type = hide ? 'text' : 'password';
+    keyShowBtn.textContent = hide ? 'HIDE' : 'SHOW';
   });
-
-  /* Try to fetch key from local dev server */
-  (async function() {
-    if (!kaixuKey) {
+  // auto-load from local dev server
+  (async () => {
+    if (!state.vk) {
       try {
-        var r = await fetch('/api/kaixu-key', { signal: AbortSignal.timeout(3000) });
-        if (r.ok) {
-          var d = await r.json();
-          if (d.key) {
-            kaixuKey = d.key;
-            keyInput.value = kaixuKey;
-            localStorage.setItem('KAIXU_VIRTUAL_KEY', kaixuKey);
-            broadcastLog('Kaixu key loaded from dev server', 'success');
-          }
-        }
-      } catch(e) {}
+        const r = await fetch('/api/kaixu-key', { signal: AbortSignal.timeout(2000) });
+        if (r.ok) { const d = await r.json(); if (d.key) { state.vk = d.key; keyInput.value = d.key; localStorage.setItem(VK_KEY, d.key); } }
+      } catch (_) {}
     }
   })();
 
-  /* Error mapping */
-  function mapGatewayError(status, body) {
-    var trimmed = (body || '').slice(0, 500);
-    if (status === 401) return new Error('Invalid or missing Kaixu Key. Check your key and try again.');
-    if (status === 402) return new Error('MONTHLY_CAP_REACHED');
-    if (status === 429) return new Error('Rate limited. Please wait a moment and try again.');
-    if (status === 500) return new Error(trimmed || 'Gateway/provider error');
-    return new Error('HTTP ' + status + ': ' + (trimmed || 'unknown error'));
-  }
+  // ── Build tabs & panels ─────────────────────────────────────
+  const tabs = [
+    { id: 'setup',    label: '⚙ Setup' },
+    ...SECTIONS.map(s => ({ id: s.id, label: `${s.icon} ${s.name}` })),
+    { id: 'fullplan', label: '📋 Full Plan' }
+  ];
 
-  /* Streaming SSE client (fetch + ReadableStream, NOT EventSource) */
-  var activeAbort = null;
+  const tabsEl  = $('sectionTabs');
+  const trackEl = $('progressTrack');
+  const dynEl   = $('dynamicPanels');
 
-  async function kaixuStreamChat(key, payload, callbacks) {
-    var onMeta = callbacks.onMeta;
-    var onDelta = callbacks.onDelta;
-    var onDone = callbacks.onDone;
-    var onError = callbacks.onError;
-
-    broadcastLog('Streaming Request: ' + payload.provider + ' / ' + payload.model, 'info');
-
-    var bases = [KAIXU_GATEWAY_PRIMARY, KAIXU_GATEWAY_FALLBACK];
-    var streamErr = null;
-
-    for (var i = 0; i < bases.length; i++) {
-      var base = bases[i];
-      var res = null;
-      try {
-        activeAbort = new AbortController();
-        res = await fetch(base + '/.netlify/functions/gateway-stream', {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + key,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload),
-          signal: activeAbort.signal
-        });
-      } catch(err) {
-        streamErr = err;
-        if (i < bases.length - 1) {
-          broadcastLog('Proxy fetch failed (' + err.message + '); retrying direct gateway...', 'warn');
-          continue;
-        }
-        if (onError) onError(err);
-        return;
-      }
-
-      if (!res.ok) {
-        var errBody = '';
-        try { errBody = await res.text(); } catch(e) {}
-        if (base === KAIXU_GATEWAY_PRIMARY && res.status === 404) {
-          broadcastLog('Proxy missing, retrying direct gateway stream...', 'warn');
-          continue;
-        }
-        var gErr = mapGatewayError(res.status, errBody);
-        if (onError) onError(gErr);
-        return;
-      }
-
-      broadcastLog('Stream connected via ' + base, 'success');
-      var _start = Date.now();
-      var _deltaCount = 0;
-
-      var reader = res.body.getReader();
-      var decoder = new TextDecoder();
-      var buffer = '';
-
-      var watchdog = setTimeout(function() {
-        try { reader.cancel(); } catch(e) {}
-        if (onError) onError(new Error('Stream timeout: no data from gateway'));
-      }, 30000);
-
-      try {
-        while (true) {
-          var chunk = await reader.read();
-          if (chunk.done) break;
-          clearTimeout(watchdog);
-          buffer += decoder.decode(chunk.value, { stream: true });
-          var events = buffer.split('\n\n');
-          buffer = events.pop();
-
-          for (var j = 0; j < events.length; j++) {
-            var evt = events[j];
-            var eventName = null, data = '';
-            var lines = evt.split('\n');
-            for (var k = 0; k < lines.length; k++) {
-              if (lines[k].indexOf('event:') === 0) eventName = lines[k].slice(6).trim();
-              if (lines[k].indexOf('data:') === 0) data += lines[k].slice(5).trim();
-            }
-            if (!data) continue;
-            try {
-              var parsed = JSON.parse(data);
-              if (eventName === 'meta' && onMeta) onMeta(parsed);
-              else if (eventName === 'delta' && onDelta) { _deltaCount++; onDelta(parsed.text || ''); }
-              else if (eventName === 'done') {
-                var elapsed = ((Date.now() - _start) / 1000).toFixed(1);
-                var usage = parsed.usage || {};
-                broadcastLog('Stream COMPLETE in ' + elapsed + 's | chunks=' + _deltaCount + ' | in=' + (usage.input_tokens || '?') + ' out=' + (usage.output_tokens || '?'), 'success');
-                if (onDone) onDone(parsed);
-              }
-              else if (eventName === 'error') {
-                if (onError) onError(new Error(parsed.error));
-              }
-            } catch(e) {
-              broadcastLog('Bad stream chunk: ' + e.message, 'warn');
-            }
-          }
-        }
-      } finally {
-        clearTimeout(watchdog);
-      }
-      return;
+  tabs.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (t.id === 'setup' ? ' active' : '');
+    btn.dataset.tab = t.id;
+    if (t.id !== 'setup' && t.id !== 'fullplan') {
+      btn.innerHTML = `<span class="check" id="check-${t.id}"></span>${t.label}`;
+    } else {
+      btn.textContent = t.label;
     }
+    tabsEl.appendChild(btn);
+  });
 
-    if (streamErr && onError) onError(streamErr);
+  // progress dots for each section
+  SECTIONS.forEach(s => {
+    const dot = document.createElement('div');
+    dot.className = 'progress-dot';
+    dot.dataset.dot = s.id;
+    dot.title = s.name;
+    dot.addEventListener('click', () => switchTab(s.id));
+    trackEl.appendChild(dot);
+  });
+
+  function switchTab(id) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
+    document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+    const panel = $(`panel-${id}`);
+    if (panel) panel.classList.add('active');
   }
 
-  /* DOM refs */
-  var generateBtn = document.getElementById('generateBtn');
-  var errorBox = document.getElementById('errorBox');
-  var statusBar = document.getElementById('statusBar');
-  var statusText = document.getElementById('statusText');
-  var usageBadge = document.getElementById('usageBadge');
-  var capWarning = document.getElementById('capWarning');
-  var outputCard = document.getElementById('outputCard');
-  var planOutput = document.getElementById('planOutput');
-  var copyBtn = document.getElementById('copyBtn');
-  var downloadBtn = document.getElementById('downloadBtn');
-  var sectionNav = document.getElementById('sectionNav');
+  tabsEl.addEventListener('click', e => {
+    const btn = e.target.closest('.tab-btn');
+    if (btn) switchTab(btn.dataset.tab);
+  });
 
-  var fullPlan = '';
-  var capReached = false;
+  // ── Inject section panels ────────────────────────────────────
+  SECTIONS.forEach(sec => {
+    const div = document.createElement('div');
+    div.className = 'section-panel';
+    div.id = `panel-${sec.id}`;
+    div.innerHTML = `
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon">${sec.icon}</div>
+          <div class="section-meta">
+            <div class="section-name">${sec.name}</div>
+            <div class="section-desc">${sec.desc}</div>
+          </div>
+          <div class="section-actions">
+            <button class="btn-copy-sec" data-copy="${sec.id}">Copy</button>
+            <button class="btn-gen" id="genBtn-${sec.id}" data-gen="${sec.id}">
+              <div class="spinner"></div>
+              <span class="gen-label">✦ Generate</span>
+            </button>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="output-area empty" id="out-${sec.id}"
+               data-placeholder="Click Generate to create this section with AI…"></div>
+          <div class="section-status" id="status-${sec.id}">
+            <div class="status-dot" id="dot-${sec.id}"></div>
+            <span id="statusText-${sec.id}">Not generated</span>
+          </div>
+          <div class="alert alert-error" id="err-${sec.id}" style="margin-top:10px;"></div>
+        </div>
+      </div>`;
+    dynEl.appendChild(div);
+  });
 
-  function showError(msg) {
-    errorBox.textContent = msg;
-    errorBox.classList.add('show');
-  }
-  function hideError() { errorBox.classList.remove('show'); }
-  function showStatus(msg) {
-    statusText.textContent = msg;
-    statusBar.classList.add('show');
-  }
-  function hideStatus() { statusBar.classList.remove('show'); }
+  // ── Gateway call ────────────────────────────────────────────
+  const SYSTEM_PROMPT = `You are an elite business strategist and startup advisor with 20 years of experience writing investor-grade business plans for Fortune 500 companies and VC-backed startups, including many that have raised Series A+ rounds. Write with precision, authority, and specificity. Use realistic financial figures and industry benchmarks. Format output clearly with bold or ALL CAPS subheadings. Never hedge with vague language — be direct and specific.`;
 
-  /* Prompt builder */
-  function buildPrompt() {
-    var idea = document.getElementById('businessIdea').value.trim();
-    var industry = document.getElementById('industry').value.trim();
-    var target = document.getElementById('targetMarket').value.trim();
-    var funding = document.getElementById('fundingNeeded').value.trim();
-
-    return 'Create a comprehensive, professional business plan for the following business:\n\n' +
-      'Business Idea: ' + idea + '\n' +
-      'Industry: ' + (industry || 'Not specified') + '\n' +
-      'Target Market: ' + (target || 'Not specified') + '\n' +
-      'Funding Needed: ' + (funding || 'Not specified') + '\n\n' +
-      'Create a complete business plan with these sections:\n\n' +
-      '1. EXECUTIVE SUMMARY\n   - Business concept overview\n   - Mission statement\n   - Key success factors\n   - Financial highlights\n\n' +
-      '2. COMPANY DESCRIPTION\n   - Business model\n   - Unique value proposition\n   - Company goals and objectives\n   - Legal structure\n\n' +
-      '3. MARKET ANALYSIS\n   - Industry overview\n   - Target market segments\n   - Market trends\n   - Competitive analysis\n   - Market size and growth potential\n\n' +
-      '4. ORGANIZATION & MANAGEMENT\n   - Organizational structure\n   - Management team\n   - Key personnel\n\n' +
-      '5. PRODUCTS & SERVICES\n   - Detailed product/service descriptions\n   - Pricing strategy\n   - Product lifecycle\n   - Research and development\n\n' +
-      '6. MARKETING & SALES STRATEGY\n   - Marketing plan\n   - Sales strategy\n   - Distribution channels\n   - Customer acquisition strategy\n   - Brand positioning\n\n' +
-      '7. FINANCIAL PROJECTIONS\n   - Revenue model\n   - 3-year financial forecast\n   - Break-even analysis\n   - Funding requirements\n   - Use of funds\n\n' +
-      'Make it detailed, realistic, and investor-ready. Use clear numbered headings.';
-  }
-
-  /* Generate */
-  generateBtn.addEventListener('click', async function() {
-    hideError();
-    capWarning.classList.remove('show');
-
-    if (!kaixuKey) {
-      showError('Please enter your Kaixu Key first.');
-      keyInput.focus();
-      return;
-    }
-    var idea = document.getElementById('businessIdea').value.trim();
-    if (!idea) {
-      showError('Please describe your business idea.');
-      document.getElementById('businessIdea').focus();
-      return;
-    }
-    if (capReached) {
-      capWarning.classList.add('show');
-      return;
-    }
-
-    generateBtn.disabled = true;
-    fullPlan = '';
-    planOutput.textContent = '';
-    outputCard.classList.add('show');
-    usageBadge.classList.remove('show');
-    showStatus('Connecting to gateway...');
-    broadcastLog('Generating plan for: ' + idea.slice(0, 60) + '...', 'info');
-
-    var payload = {
-      provider: 'gemini',
-      model: 'gemini-2.0-flash',
-      messages: [
-        { role: 'system', content: 'You are an expert business strategist and financial analyst. Generate professional, investor-ready business plans with realistic projections.' },
-        { role: 'user', content: buildPrompt() }
-      ],
-      max_tokens: 8192,
-      temperature: 0.7
-    };
-
-    await kaixuStreamChat(kaixuKey, payload, {
-      onMeta: function(meta) {
-        showStatus('Streaming from ' + (meta.provider || 'gateway') + '...');
-        if (meta.month) {
-          var rem = ((meta.month.cap_cents - meta.month.spent_cents) / 100).toFixed(2);
-          broadcastLog('Budget remaining: $' + rem, 'info');
-        }
+  async function callGateway(userMsg) {
+    if (!state.vk) throw new Error('No Kaixu Key — enter it in the Setup tab.');
+    const res = await fetch(GATEWAY, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${state.vk}`
       },
-      onDelta: function(text) {
-        showStatus('Writing plan...');
-        fullPlan += text;
-        planOutput.textContent = fullPlan;
-        planOutput.scrollTop = planOutput.scrollHeight;
-      },
-      onDone: function(parsed) {
-        hideStatus();
-        broadcastLog('Business plan generation complete.', 'success');
-
-        if (parsed.usage) {
-          usageBadge.innerHTML = '<span>In: ' + (parsed.usage.input_tokens || 0) + '</span>' +
-            '<span>Out: ' + (parsed.usage.output_tokens || 0) + '</span>';
-          if (parsed.usage.cost_cents != null) {
-            usageBadge.innerHTML += '<span>Cost: ' + parsed.usage.cost_cents + ' cents</span>';
-          }
-          usageBadge.classList.add('show');
-        }
-        if (parsed.month) {
-          var rem = ((parsed.month.cap_cents - parsed.month.spent_cents) / 100).toFixed(2);
-          usageBadge.innerHTML += '<span>Budget left: $' + rem + '</span>';
-          usageBadge.classList.add('show');
-          if (parsed.month.spent_cents >= parsed.month.cap_cents) {
-            capReached = true;
-            capWarning.classList.add('show');
-          }
-        }
-        generateBtn.disabled = false;
-      },
-      onError: function(err) {
-        hideStatus();
-        generateBtn.disabled = false;
-        if (err.message === 'MONTHLY_CAP_REACHED') {
-          capReached = true;
-          capWarning.classList.add('show');
-          broadcastLog('Monthly cap reached', 'error');
-        } else {
-          showError(err.message);
-          broadcastLog('Error: ' + err.message, 'error');
-        }
-      }
+      body: JSON.stringify({
+        provider: PROVIDER,
+        model: MODEL,
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user',   content: userMsg }
+        ],
+        max_tokens: 2048,
+        temperature: 0.72,
+        stream: false
+      })
     });
 
-    if (generateBtn.disabled) {
-      hideStatus();
-      generateBtn.disabled = false;
+    if (!res.ok) {
+      const txt = await res.text().catch(() => '');
+      if (res.status === 402) { state.capReached = true; throw new Error('__CAP__'); }
+      if (res.status === 401) throw new Error('Invalid Kaixu Key — check the Setup tab.');
+      if (res.status === 429) throw new Error('Rate limited — wait a moment and retry.');
+      throw new Error(`Gateway ${res.status}: ${txt.slice(0, 200) || 'unknown error'}`);
     }
-  });
 
-  /* Section filtering */
-  var sectionMap = {
-    all: null,
-    executive: 'EXECUTIVE SUMMARY',
-    company: 'COMPANY DESCRIPTION',
-    market: 'MARKET ANALYSIS',
-    organization: 'ORGANIZATION',
-    products: 'PRODUCTS',
-    marketing: 'MARKETING',
-    financial: 'FINANCIAL'
-  };
-
-  function filterSection(key) {
-    if (key === 'all' || !fullPlan) {
-      planOutput.textContent = fullPlan;
-      return;
-    }
-    var term = sectionMap[key];
-    var lines = fullPlan.split('\n');
-    var inSection = false;
-    var out = [];
-    for (var i = 0; i < lines.length; i++) {
-      var line = lines[i];
-      if (line.toUpperCase().indexOf(term) !== -1) {
-        inSection = true;
-      } else if (inSection && /^\d+\.|^[A-Z\s]{4,}:/.test(line) && line.toUpperCase().indexOf(term) === -1) {
-        break;
-      }
-      if (inSection) out.push(line);
-    }
-    planOutput.textContent = out.join('\n') || fullPlan;
+    const data = await res.json();
+    // normalize across gateway response shapes
+    const text =
+      data.content ||
+      data.text ||
+      data.choices?.[0]?.message?.content ||
+      data.candidates?.[0]?.content?.parts?.[0]?.text ||
+      '';
+    if (!text.trim()) throw new Error('Empty response from gateway — check your key and try again.');
+    return { text, usage: data.usage || data.usageMetadata || null, month: data.month || null };
   }
 
-  sectionNav.addEventListener('click', function(e) {
-    var btn = e.target.closest('.section-btn');
-    if (!btn) return;
-    sectionNav.querySelectorAll('.section-btn').forEach(function(b) { b.classList.remove('active'); });
-    btn.classList.add('active');
-    filterSection(btn.dataset.section);
-  });
+  // ── Generate a single section ────────────────────────────────
+  async function generateSection(secId) {
+    const sec = SECTIONS.find(s => s.id === secId);
+    if (!sec) return;
 
-  /* Copy / Download */
-  copyBtn.addEventListener('click', function() {
-    navigator.clipboard.writeText(fullPlan).then(function() {
+    if (!form.name || !form.pitch) {
+      showSetupError('Enter Company Name and Elevator Pitch in the Setup tab first.');
+      switchTab('setup');
+      return;
+    }
+
+    const btn  = $(`genBtn-${secId}`);
+    const out  = $(`out-${secId}`);
+    const err  = $(`err-${secId}`);
+
+    btn.classList.add('generating'); btn.disabled = true;
+    err.classList.remove('show');
+    out.classList.remove('empty'); out.textContent = '';
+    setSecStatus(secId, 'spin', 'Connecting to kAIxuGateway13…');
+    emit(`Generating: ${sec.name} for "${form.name}"`);
+
+    try {
+      const ctx = {
+        name: form.name, industry: form.industry, stage: form.stage,
+        funding: form.funding, target: form.target, geo: form.geo,
+        pitch: form.pitch, revenue: form.revenue, diff: form.diff
+      };
+      const t0 = Date.now();
+      setSecStatus(secId, 'spin', `Writing ${sec.name}…`);
+      const { text, usage, month } = await callGateway(sec.prompt(ctx));
+      const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+
+      state.content[secId] = text;
+      out.textContent = text;
+      const tok = usage ? (usage.output_tokens || usage.outputTokenCount || '?') : '?';
+      setSecStatus(secId, 'ok', `Done in ${elapsed}s · ${tok} tokens`);
+      markDone(secId);
+      updateCompletion();
+      emit(`${sec.name} complete in ${elapsed}s`, 'success');
+
+      if (month && month.spent_cents >= month.cap_cents) {
+        state.capReached = true;
+        $('capAlert').classList.add('show');
+      }
+    } catch (e) {
+      if (e.message === '__CAP__') {
+        setSecStatus(secId, 'err', 'Monthly cap reached');
+        $('capAlert').classList.add('show');
+        emit('Monthly cap reached', 'error');
+      } else {
+        setSecStatus(secId, 'err', e.message.slice(0, 100));
+        err.textContent = e.message;
+        err.classList.add('show');
+        emit(`Error [${sec.name}]: ${e.message}`, 'error');
+      }
+    } finally {
+      btn.classList.remove('generating');
+      btn.disabled = false;
+    }
+  }
+
+  // ── Status / completion helpers ─────────────────────────────
+  function setSecStatus(secId, kind, msg) {
+    const dot  = $(`dot-${secId}`);
+    const stxt = $(`statusText-${secId}`);
+    if (dot)  dot.className  = `status-dot ${kind}`;
+    if (stxt) stxt.textContent = msg;
+  }
+
+  function markDone(secId) {
+    const check = $(`check-${secId}`);
+    if (check) {
+      check.textContent = '✓';
+      check.closest('.tab-btn')?.classList.add('done');
+    }
+    const dot = document.querySelector(`[data-dot="${secId}"]`);
+    if (dot) dot.classList.add('done');
+  }
+
+  function updateCompletion() {
+    const done = SECTIONS.filter(s => state.content[s.id]?.trim()).length;
+    $('completionLabel').textContent = `${done} / ${SECTIONS.length} sections`;
+    document.querySelectorAll('.progress-dot').forEach((d, i) => {
+      if (SECTIONS[i] && state.content[SECTIONS[i].id]?.trim()) d.classList.add('done');
+      else d.classList.remove('done');
+    });
+  }
+
+  // ── Section button delegation ────────────────────────────────
+  dynEl.addEventListener('click', e => {
+    const genBtn  = e.target.closest('[data-gen]');
+    const copyBtn = e.target.closest('[data-copy]');
+    if (genBtn)  generateSection(genBtn.dataset.gen);
+    if (copyBtn) {
+      const txt = state.content[copyBtn.dataset.copy] || '';
+      if (!txt) return;
+      navigator.clipboard.writeText(txt).catch(() => {});
+      const orig = copyBtn.textContent;
       copyBtn.textContent = 'Copied!';
-      setTimeout(function() { copyBtn.textContent = 'Copy All'; }, 1500);
+      setTimeout(() => { copyBtn.textContent = orig; }, 1400);
+    }
+  });
+
+  // ── Setup error ─────────────────────────────────────────────
+  function showSetupError(msg) {
+    const el = $('setupError');
+    el.textContent = msg; el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 5000);
+  }
+
+  // ── Generate All ─────────────────────────────────────────────
+  $('generateAllBtn').addEventListener('click', async () => {
+    if (state.generating) return;
+    $('setupError').classList.remove('show');
+    $('capAlert').classList.remove('show');
+
+    if (!state.vk)   { showSetupError('Enter your Kaixu Key first.'); return; }
+    if (!form.name)  { showSetupError('Company Name is required.'); $('companyName').focus(); return; }
+    if (!form.pitch) { showSetupError('Elevator Pitch is required.'); $('elevatorPitch').focus(); return; }
+
+    state.generating = true;
+    const btn = $('generateAllBtn');
+    btn.disabled = true;
+    $('genAllLabel').textContent = '⏳ Generating sections…';
+
+    for (const sec of SECTIONS) {
+      if (state.capReached) break;
+      switchTab(sec.id);
+      await generateSection(sec.id);
+      await new Promise(r => setTimeout(r, 350));
+    }
+
+    btn.disabled = false;
+    const allDone = SECTIONS.every(s => state.content[s.id]?.trim());
+    $('genAllLabel').textContent = state.capReached ? '🚫 Cap reached' : allDone ? '✅ All 7 Sections Done!' : '⚡ Generate All 7 Sections';
+    if (!state.capReached) setTimeout(() => { $('genAllLabel').textContent = '⚡ Generate All 7 Sections'; }, 4000);
+    state.generating = false;
+    assembleFull();
+    emit(`Generate All complete for "${form.name}"`, 'success');
+  });
+
+  // ── Assemble full plan ───────────────────────────────────────
+  function assembleFull() {
+    const co    = form.name || 'Business Plan';
+    const date  = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    const parts = [
+      `# ${co} — Complete Business Plan\nGenerated by PlanIt Pro · ${date}\nPowered by kAIxuGateway13 · Gemini 2.0 Flash\n`
+    ];
+    SECTIONS.forEach(s => {
+      if (state.content[s.id]?.trim()) {
+        parts.push(`\n${'═'.repeat(64)}\n${s.icon}  ${s.name.toUpperCase()}\n${'═'.repeat(64)}\n\n${state.content[s.id]}`);
+      }
     });
+    return parts.length > 1 ? parts.join('\n') : null;
+  }
+
+  $('assembleBtn').addEventListener('click', () => {
+    const plan = assembleFull();
+    const container = $('fullPlanContainer');
+    if (!plan) {
+      container.innerHTML = `<div class="full-plan-empty">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <strong>No sections generated yet</strong>Go to Setup and click Generate All, or generate sections individually.</div>`;
+      return;
+    }
+    const pre = document.createElement('pre');
+    pre.className = 'full-plan-out';
+    pre.textContent = plan;
+    container.innerHTML = '';
+    container.appendChild(pre);
   });
 
-  downloadBtn.addEventListener('click', function() {
-    var blob = new Blob([fullPlan], { type: 'text/plain' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 'business-plan.txt';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+  $('copyFullBtn').addEventListener('click', async () => {
+    const plan = assembleFull();
+    if (!plan) return;
+    await navigator.clipboard.writeText(plan).catch(() => {});
+    const btn = $('copyFullBtn');
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => { btn.textContent = '📋 Copy Markdown'; }, 1600);
+  });
+
+  $('downloadMdBtn').addEventListener('click', () => {
+    const plan = assembleFull();
+    if (!plan) return;
+    const name = (form.name || 'business-plan').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const blob = new Blob([plan], { type: 'text/markdown' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url; a.download = `${name}-business-plan.md`;
+    document.body.appendChild(a); a.click(); a.remove();
     URL.revokeObjectURL(url);
-    broadcastLog('Business plan downloaded', 'info');
+    emit(`Business plan downloaded: ${name}-business-plan.md`);
   });
 
-  broadcastLog('PlanItPro initialized', 'success');
+  $('printBtn').addEventListener('click', () => {
+    const plan = assembleFull();
+    if (!plan) return;
+    const w = window.open('', '_blank');
+    const safe = plan.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    w.document.write(`<!doctype html><html><head><title>${(form.name || 'Business Plan')} — Business Plan</title>
+      <style>body{font-family:Georgia,serif;max-width:720px;margin:40px auto;line-height:1.7;color:#111;font-size:14px}
+      pre{white-space:pre-wrap;font-family:inherit}</style></head>
+      <body><pre>${safe}</pre></body></html>`);
+    w.document.close(); w.focus(); w.print();
+  });
+
+  // ── Save / Load ──────────────────────────────────────────────
+  const loadSaves = () => { try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); } catch (_) { return []; } };
+  const writeSaves = (arr) => localStorage.setItem(STORE_KEY, JSON.stringify(arr));
+
+  function renderSavedList() {
+    const saves = loadSaves();
+    const savedList = $('savedList');
+    savedList.innerHTML = '';
+    if (!saves.length) {
+      savedList.innerHTML = '<div class="no-saves">No saved plans yet.</div>';
+      return;
+    }
+    saves.forEach((sv, idx) => {
+      const item = document.createElement('div');
+      item.className = 'saved-item';
+      item.innerHTML = `
+        <div style="flex:1;min-width:0">
+          <div class="saved-item-name">${esc(sv.name || 'Untitled')}</div>
+          <div class="saved-item-meta">${esc(sv.date)} · ${sv.sectionsCount} sections</div>
+        </div>
+        <button class="saved-item-del" data-del="${idx}" title="Delete">✕</button>`;
+      item.addEventListener('click', e => {
+        if (e.target.closest('[data-del]')) return;
+        loadPlan(sv);
+        $('saveModal').classList.remove('open');
+      });
+      item.querySelector('[data-del]').addEventListener('click', () => {
+        const arr = loadSaves(); arr.splice(idx, 1); writeSaves(arr); renderSavedList();
+      });
+      $('savedList').appendChild(item);
+    });
+  }
+
+  function loadPlan(sv) {
+    if (sv.form) {
+      $('companyName').value    = sv.form.name     || '';
+      $('industry').value       = sv.form.industry || '';
+      $('bizStage').value       = sv.form.stage    || 'Startup';
+      $('fundingAsk').value     = sv.form.funding  || '';
+      $('targetMarket').value   = sv.form.target   || '';
+      $('geography').value      = sv.form.geo      || '';
+      $('elevatorPitch').value  = sv.form.pitch    || '';
+      $('revenueModel').value   = sv.form.revenue  || '';
+      $('differentiator').value = sv.form.diff     || '';
+    }
+    if (sv.content) {
+      SECTIONS.forEach(s => {
+        state.content[s.id] = sv.content[s.id] || '';
+        const out = $(`out-${s.id}`);
+        if (out && state.content[s.id]) {
+          out.classList.remove('empty');
+          out.textContent = state.content[s.id];
+          setSecStatus(s.id, 'ok', 'Loaded from save');
+          markDone(s.id);
+        }
+      });
+    }
+    updateCompletion();
+    emit(`Plan loaded: ${sv.name}`, 'success');
+  }
+
+  $('savePlanBtn').addEventListener('click', () => {
+    const done = SECTIONS.filter(s => state.content[s.id]?.trim()).length;
+    if (!done && !form.name) {
+      const al = $('saveAlert');
+      al.textContent = 'Nothing to save yet — fill in company details or generate a section first.';
+      al.classList.add('show');
+      setTimeout(() => al.classList.remove('show'), 4000);
+      return;
+    }
+    const saves = loadSaves();
+    saves.unshift({
+      name: form.name || 'Untitled Plan',
+      date: new Date().toLocaleDateString(),
+      sectionsCount: done,
+      form: {
+        name: form.name, industry: form.industry, stage: form.stage,
+        funding: form.funding, target: form.target, geo: form.geo,
+        pitch: form.pitch, revenue: form.revenue, diff: form.diff
+      },
+      content: { ...state.content }
+    });
+    if (saves.length > 20) saves.length = 20;
+    writeSaves(saves);
+    renderSavedList();
+    const al = $('saveAlert');
+    al.textContent = `✓ "${form.name || 'Plan'}" saved successfully.`;
+    al.classList.add('show');
+    setTimeout(() => al.classList.remove('show'), 3000);
+    emit(`Plan saved: ${form.name}`);
+  });
+
+  $('openSaveModal').addEventListener('click', () => {
+    renderSavedList();
+    $('saveAlert').classList.remove('show');
+    $('saveModal').classList.add('open');
+  });
+  $('closeModalBtn').addEventListener('click', () => $('saveModal').classList.remove('open'));
+  $('saveModal').addEventListener('click', e => { if (e.target === $('saveModal')) $('saveModal').classList.remove('open'); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') $('saveModal').classList.remove('open'); });
+
+  // ── Utility ─────────────────────────────────────────────────
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  // ── Init ─────────────────────────────────────────────────────
+  updateCompletion();
+  emit('PlanIt Pro initialized · Fortune 500 Build · Feb 24 2026', 'info');
+  console.log('%c[PlanIt Pro] Fortune 500 Build loaded · kAIxuGateway13', 'color:#9d5cf6;font-weight:700;font-size:13px');
+
 })();
 </script>
-  <script src="/skyehawk.js"></script>
+<script src="/skyehawk.js"></script>
 </body>
 </html>

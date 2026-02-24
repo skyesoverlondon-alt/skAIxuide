@@ -42,7 +42,7 @@
     { name: 'DebugPro',         icon: '🐛', url: '/DebugPro/',                keywords: ['debugpro', 'debug'] },
     { name: 'CodeGenie',        icon: '🧞', url: '/Code%20Genie/',            keywords: ['codegenie', 'genie'] },
     { name: 'RegexGen',         icon: '🔣', url: '/RegexGen/',                keywords: ['regex', 'regexgen', 'pattern'] },
-    { name: 'PlanItPro',        icon: '📅', url: '/PlanItPro/',               keywords: ['planit', 'plan', 'project'] },
+    { name: 'PlanIt Pro',       icon: '📊', url: '/PlanItPro/PlanItPro.html', keywords: ['planit', 'plan', 'business plan', 'investor', 'startup', 'executive summary', 'financial projections', 'gtm'] },
     { name: 'Nexus Pro',        icon: '🌀', url: '/Nexus-Pro/',               keywords: ['nexuspro', 'nexus'] },
     { name: 'Nexus Forge',      icon: '🔧', url: '/Nexus%20Forge%20Studio/',  keywords: ['nexusforge', 'forge studio'] },
     { name: 'NexusDB Explorer', icon: '🗃️', url: '/NexusDBExplorer/',        keywords: ['nexusdb', 'database', 'db explorer'] },
