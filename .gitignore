@@ -14,5 +14,10 @@ Thumbs.db
 # Backup files
 *.bak
 
+# Archives / build artifacts
+*.zip
+*.tar.gz
+*.rar
+
 # Local Netlify folder
 .netlify
