@@ -2,7 +2,7 @@
 // Collects the upstream SSE stream and returns it through, bypassing CORS.
 // Works in both netlify dev and Netlify deployment.
 
-const UPSTREAM = 'https://kaixugateway13.netlify.app/.netlify/functions/gateway-stream';
+const UPSTREAM = 'https://skyesol.netlify.app/.netlify/functions/gateway-stream';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',

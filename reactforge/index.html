@@ -89,9 +89,9 @@
         <div class="brand-title">React<span>Forge</span></div>
         <span class="pill">AI Compiler</span>
       </div>
-      <div class="keybox" role="group" aria-label="Gemini API key input">
+      <div class="keybox" role="group" aria-label="Kaixu Virtual Key input">
         <span data-lucide="key" style="width:16px;height:16px;color:#94a3b8"></span>
-        <input id="apiKey" type="password" placeholder="Paste Gemini API Key" aria-label="Gemini API Key" />
+        <input id="apiKey" type="password" placeholder="KAIXU_VIRTUAL_KEY" aria-label="Kaixu Virtual Key" />
         <span class="hint" id="keyHint"></span>
       </div>
     </div>
@@ -260,28 +260,59 @@ Review the provided HTML/JS code.
   </script>
 
   <script>
-    async function generateContent(prompt, systemInstruction, apiKey){
-      if(!apiKey) throw new Error("API Key is missing");
-      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+    // ── kAIxuGateway13 ─────────────────────────────────────────────────
+    const _RF_IS_LOCAL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const _RF_GW_PRIMARY = _RF_IS_LOCAL ? '/api' : 'https://skyesol.netlify.app';
+    const _RF_GW_FALLBACK = 'https://skyesol.netlify.app';
+    function getRFKey() {
+      const inp = (document.getElementById('apiKey') || {}).value || '';
+      return inp.trim() || localStorage.getItem('KAIXU_VIRTUAL_KEY') || '';
+    }
+
+    // ── Observability ───────────────────────────────────────────────
+    const _rfChannel = (function(){ try { return new BroadcastChannel('kaixu_events'); } catch(_){ return null; } })();
+    function rfBroadcast(message, type = 'info') {
+      if (_rfChannel) try { _rfChannel.postMessage({ message, type, source: 'reactforge', ts: Date.now() }); } catch(_) {}
+      console.log(`[ReactForge][${type}]`, message);
+    }
+    setInterval(function() { rfBroadcast('[HEARTBEAT] ReactForge alive', 'info'); }, 20000);
+
+    async function generateContent(prompt, systemInstruction){
+      const kaixuKey = getRFKey();
+      if(!kaixuKey) throw new Error('Enter your KAIXU_VIRTUAL_KEY');
       const payload = {
-        contents: [{ parts: [{ text: prompt }] }],
-        systemInstruction: { parts: [{ text: systemInstruction }] }
+        provider: 'gemini',
+        model: 'gemini-2.0-flash',
+        messages: [
+          { role: 'system', content: systemInstruction || '' },
+          { role: 'user', content: prompt }
+        ],
+        max_tokens: 8192,
+        temperature: 0.7
       };
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-      if(!response.ok){
-        let msg = `API Error: ${response.status}`;
-        try{
-          const errorData = await response.json();
-          msg = errorData?.error?.message || msg;
-        }catch(_){}
-        throw new Error(msg);
+      const bases = [_RF_GW_PRIMARY, _RF_GW_FALLBACK];
+      for (let i = 0; i < bases.length; i++) {
+        const base = bases[i];
+        try {
+          rfBroadcast(`Gateway request via ${base}`, 'info');
+          const res = await fetch(`${base}/.netlify/functions/gateway-chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${kaixuKey}` },
+            body: JSON.stringify(payload)
+          });
+          if(res.status === 401) throw new Error('Invalid KAIXU_VIRTUAL_KEY (401)');
+          if(res.status === 402) throw new Error('Monthly cap reached');
+          if(res.status === 429) throw new Error('Rate limit — try again shortly');
+          if(!res.ok) { if(i < bases.length-1){ rfBroadcast(`Retrying via fallback…`,'warn'); continue; } throw new Error(`Gateway error: ${res.status}`); }
+          const data = await res.json();
+          if(data.month){ const rem=((data.month.cap_cents||0)-(data.month.spent_cents||0))/100; rfBroadcast(`Budget remaining: $${rem.toFixed(2)}`,'info'); }
+          rfBroadcast(`Response OK in=${data.usage?.input_tokens||'?'} out=${data.usage?.output_tokens||'?'}`, 'success');
+          return data.output_text || '';
+        } catch(err) {
+          if(i < bases.length-1){ rfBroadcast(`Failed (${err.message}); retrying…`,'warn'); continue; }
+          throw err;
+        }
       }
-      const data = await response.json();
-      return data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
     }
 
     function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
@@ -358,64 +389,62 @@ Review the provided HTML/JS code.
       clearError();
       updateOfflineUI();
 
-      const apiKey = (document.getElementById("apiKey").value || "").trim();
-      localStorage.setItem("gemini_api_key", apiKey);
+      const kaixuKey = getRFKey();
+      localStorage.setItem('KAIXU_VIRTUAL_KEY', kaixuKey);
 
-      const input = document.getElementById("inputCode").value || "";
-      if(!apiKey){
-        setStepState(document.getElementById("step1"), "err");
-        showError("Please enter a valid Gemini API Key in the top right corner.");
+      const input = document.getElementById('inputCode').value || '';
+      if(!kaixuKey){
+        setStepState(document.getElementById('step1'), 'err');
+        showError('Please enter your KAIXU_VIRTUAL_KEY in the top right corner.');
         return;
       }
       if(!input.trim()) return;
 
-      const btn = document.getElementById("compileBtn");
+      const btn = document.getElementById('compileBtn');
       btn.disabled = true;
-      document.getElementById("compileBtnText").textContent = "Compiling...";
-      btn.querySelector("[data-lucide]").setAttribute("data-lucide","refresh-cw");
+      document.getElementById('compileBtnText').textContent = 'Compiling…';
+      btn.querySelector('[data-lucide]').setAttribute('data-lucide','refresh-cw');
       if(window.lucide) lucide.createIcons();
 
-      setStepState(document.getElementById("step1"), "active");
-      setStepState(document.getElementById("step2"), "idle");
-      setStepState(document.getElementById("step3"), "idle");
-      setOutput("");
+      setStepState(document.getElementById('step1'), 'active');
+      setStepState(document.getElementById('step2'), 'idle');
+      setStepState(document.getElementById('step3'), 'idle');
+      setOutput('');
 
       try{
         await sleep(600);
 
         const architectResponse = await generateContent(
           `CONVERT THIS REACT CODE:\n${input}`,
-          ARCHITECT_PROMPT,
-          apiKey
+          ARCHITECT_PROMPT
         );
-        setStepState(document.getElementById("step1"), "done");
+        setStepState(document.getElementById('step1'), 'done');
 
-        setStepState(document.getElementById("step2"), "active");
+        setStepState(document.getElementById('step2'), 'active');
         const auditorResponse = await generateContent(
           `AUDIT THIS HTML CODE:\n${architectResponse}`,
-          AUDITOR_PROMPT,
-          apiKey
+          AUDITOR_PROMPT
         );
-        setStepState(document.getElementById("step2"), "done");
+        setStepState(document.getElementById('step2'), 'done');
 
-        setStepState(document.getElementById("step3"), "active");
+        setStepState(document.getElementById('step3'), 'active');
         const cleanHtml = parsePossibleMarkdownHtml(auditorResponse);
-        if(!cleanHtml || !cleanHtml.startsWith("<")) throw new Error("The model response did not contain valid HTML. Try again.");
+        if(!cleanHtml || !cleanHtml.startsWith('<')) throw new Error('The model response did not contain valid HTML. Try again.');
         setOutput(cleanHtml);
-        setStepState(document.getElementById("step3"), "done");
+        setStepState(document.getElementById('step3'), 'done');
       }catch(err){
         console.error(err);
-        const s1 = document.getElementById("step1");
-        const s2 = document.getElementById("step2");
-        const s3 = document.getElementById("step3");
-        if(s3.classList.contains("active")) setStepState(s3,"err");
-        else if(s2.classList.contains("active")) setStepState(s2,"err");
-        else setStepState(s1,"err");
-        showError(err?.message || "Conversion failed. Please check your API key.");
+        const s1 = document.getElementById('step1');
+        const s2 = document.getElementById('step2');
+        const s3 = document.getElementById('step3');
+        if(s3.classList.contains('active')) setStepState(s3,'err');
+        else if(s2.classList.contains('active')) setStepState(s2,'err');
+        else setStepState(s1,'err');
+        showError(err?.message || 'Conversion failed. Please check your KAIXU_VIRTUAL_KEY.');
       }finally{
         btn.disabled = false;
-        document.getElementById("compileBtnText").textContent = "Compile to HTML";
-        btn.querySelector("[data-lucide]").setAttribute("data-lucide","sparkles");
+        document.getElementById('compileBtnText').textContent = 'Compile to HTML';
+        btn.querySelector('[data-lucide]').setAttribute('data-lucide','sparkles');
         if(window.lucide) lucide.createIcons();
       }
     }
@@ -458,8 +487,8 @@ Review the provided HTML/JS code.
 
     (function init(){
       if(window.lucide) lucide.createIcons();
-      const storedKey = localStorage.getItem("gemini_api_key") || "";
-      if(storedKey) document.getElementById("apiKey").value = storedKey;
+      const storedKey = localStorage.getItem('KAIXU_VIRTUAL_KEY') || '';
+      if(storedKey) document.getElementById('apiKey').value = storedKey;
       document.getElementById("inputCode").value = DEMO_CODE;
       document.getElementById("compileBtn").addEventListener("click", handleConvert);
       document.getElementById("copyBtn").addEventListener("click", copyToClipboard);

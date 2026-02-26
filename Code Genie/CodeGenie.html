@@ -49,25 +49,19 @@
             <!-- Notifications Container -->
             <div id="notification-area" class="flex items-center"></div>
             
-            <!-- Model Input -->
-            <div class="flex items-center bg-purple-900/50 border border-purple-700/50 rounded-lg px-3 py-1.5 shadow-inner" title="Select Model">
+            <!-- Model Display (fixed via kAIxuGateway13) -->
+            <div class="flex items-center bg-purple-900/50 border border-purple-700/50 rounded-lg px-3 py-1.5 shadow-inner" title="Routed via kAIxuGateway13">
                 <i data-lucide="cpu" class="w-3.5 h-3.5 text-purple-400 mr-2"></i>
-                <input 
-                    type="text" 
-                    id="user-model"
-                    value="gemini-2.5-flash-preview-09-2025"
-                    placeholder="Model Name..." 
-                    class="bg-transparent text-sm text-yellow-100 placeholder-purple-400/50 focus:outline-none w-48 font-mono"
-                />
+                <span class="text-sm text-yellow-100 font-mono" id="user-model">gemini-2.0-flash</span>
             </div>
 
-            <!-- API Key Input -->
-            <div class="flex items-center bg-purple-900/50 border border-purple-700/50 rounded-lg px-3 py-1.5 shadow-inner" title="API Key">
+            <!-- Kaixu Key Input -->
+            <div class="flex items-center bg-purple-900/50 border border-purple-700/50 rounded-lg px-3 py-1.5 shadow-inner" title="Kaixu Virtual Key">
                 <i data-lucide="key" class="w-3.5 h-3.5 text-purple-400 mr-2"></i>
                 <input 
                     type="password" 
                     id="user-api-key"
-                    placeholder="Enter Gemini API Key..." 
+                    placeholder="KAIXU_VIRTUAL_KEY…" 
                     class="bg-transparent text-sm text-yellow-100 placeholder-purple-400/50 focus:outline-none w-48 font-mono"
                 />
             </div>
@@ -284,12 +278,35 @@
         const previewFrame = document.getElementById('preview-frame');
         const structureList = document.getElementById('structure-list');
         const colorInput = document.getElementById('annotation-color');
-        const modelInput = document.getElementById('user-model');
         const apiKeyInput = document.getElementById('user-api-key');
         const annotateBtn = document.getElementById('annotate-btn');
         const inspectorBtn = document.getElementById('inspector-btn');
         const inspectorOverlay = document.getElementById('inspector-overlay');
         const notificationArea = document.getElementById('notification-area');
+
+        // ── kAIxuGateway13 ───────────────────────────────────────────
+        const _CG_IS_LOCAL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const _CG_GW_PRIMARY = _CG_IS_LOCAL ? '/api' : 'https://skyesol.netlify.app';
+        const _CG_GW_FALLBACK = 'https://skyesol.netlify.app';
+        function getCGKey() {
+            const inp = apiKeyInput ? apiKeyInput.value.trim() : '';
+            return inp || localStorage.getItem('KAIXU_VIRTUAL_KEY') || '';
+        }
+        if (apiKeyInput) {
+            const _cgStored = localStorage.getItem('KAIXU_VIRTUAL_KEY') || '';
+            if (_cgStored) apiKeyInput.value = _cgStored;
+            apiKeyInput.addEventListener('change', function() {
+                if (this.value.trim()) localStorage.setItem('KAIXU_VIRTUAL_KEY', this.value.trim());
+            });
+        }
+
+        // ── Observability ───────────────────────────────────────────
+        const _cgChannel = (function(){ try { return new BroadcastChannel('kaixu_events'); } catch(_){ return null; } })();
+        function broadcastLog(message, type = 'info') {
+            if (_cgChannel) try { _cgChannel.postMessage({ message, type, source: 'codegenie', ts: Date.now() }); } catch(_) {}
+            console.log(`[CodeGenie][${type}]`, message);
+        }
+        setInterval(function() { broadcastLog('[HEARTBEAT] CodeGenie alive', 'info'); }, 20000);
 
         // Initialize Lucide Icons
         lucide.createIcons();
@@ -426,41 +443,44 @@
             }, isError ? 5000 : 3000);
         }
 
-        // --- Gemini API Logic --- //
+        // ── kAIxuGateway13 API (replaces direct Gemini call) ──────────────────────
 
-        async function handleApiRequestWithRetry(payload, maxRetries = 5) {
-            // Environment defaults or user provided
-            const fallbackKey = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : ""; 
-            const activeKey = apiKeyInput.value || fallbackKey;
-            
-            if (!activeKey) {
-                throw new Error("Please enter your Gemini API Key.");
-            }
-            
-            const modelName = modelInput.value || "gemini-2.5-flash-preview-09-2025";
-            const currentApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${activeKey}`;
-            
-            let retries = 0;
-            const delays = [1000, 2000, 4000, 8000, 16000];
+        async function handleApiRequestWithRetry(userPrompt, maxRetries = 3) {
+            const kaixuKey = getCGKey();
+            if (!kaixuKey) throw new Error('Enter your KAIXU_VIRTUAL_KEY to use Code Genie.');
 
-            while (retries < maxRetries) {
+            const payload = {
+                provider: 'gemini',
+                model: 'gemini-2.0-flash',
+                messages: [
+                    { role: 'system', content: 'You are a precise code formatter. Return only raw code without markdown wrappers.' },
+                    { role: 'user', content: userPrompt }
+                ],
+                max_tokens: 8192,
+                temperature: 0.7
+            };
+
+            const bases = [_CG_GW_PRIMARY, _CG_GW_FALLBACK];
+            for (let i = 0; i < bases.length; i++) {
+                const base = bases[i];
                 try {
-                    const response = await fetch(currentApiUrl, {
+                    broadcastLog(`Code Genie gateway request via ${base}`, 'info');
+                    const res = await fetch(`${base}/.netlify/functions/gateway-chat`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${kaixuKey}` },
                         body: JSON.stringify(payload)
                     });
-
-                    if (!response.ok) {
-                        const errData = await response.json().catch(() => ({}));
-                        throw new Error(`API Error ${response.status}: ${errData.error?.message || 'Unknown error'}`);
-                    }
-
-                    return await response.json();
-                } catch (err) {
-                    retries++;
-                    if (retries >= maxRetries) throw err;
-                    await new Promise(resolve => setTimeout(resolve, delays[retries - 1]));
+                    if (res.status === 401) throw new Error('Invalid KAIXU_VIRTUAL_KEY (401)');
+                    if (res.status === 402) throw new Error('Monthly cap reached — top up your account');
+                    if (res.status === 429) throw new Error('Rate limit hit — try again shortly');
+                    if (!res.ok) { if (i < bases.length - 1) { broadcastLog(`Retrying via fallback…`, 'warn'); continue; } throw new Error(`Gateway error: ${res.status}`); }
+                    const data = await res.json();
+                    if (data.month) { const rem = ((data.month.cap_cents||0)-(data.month.spent_cents||0))/100; broadcastLog(`Budget remaining: $${rem.toFixed(2)}`, 'info'); }
+                    broadcastLog(`Code Genie response OK in=${data.usage?.input_tokens||'?'} out=${data.usage?.output_tokens||'?'}`, 'success');
+                    return data.output_text || '';
+                } catch(err) {
+                    if (i < bases.length - 1) { broadcastLog(`Gateway failed (${err.message}); retrying…`, 'warn'); continue; }
+                    throw err;
                 }
             }
         }
@@ -477,32 +497,28 @@
             document.getElementById('btn-text').innerText = 'Genie is working...';
             lucide.createIcons();
 
-            const prompt = `
-You are an expert AI code structural assistant. 
+            const prompt = `You are an expert AI code structural assistant. 
 Take the following code and add highly visible, clear HTML/CSS/JS comment blocks (e.g., <!-- ===================== HEADER SECTION ===================== --> or /* --- UTILITIES --- */) to separate the logical sections. 
 This is to make the code incredibly easy for a user to navigate and edit.
 DO NOT change, fix, or alter ANY of the actual functional code, tags, or logic. ONLY insert comments.
 Return ONLY the raw annotated code. Do not wrap it in markdown block quotes (like \`\`\`html) if possible.
 
 Code to annotate:
-${currentCode}
-`;
-            const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-                systemInstruction: { parts: [{ text: "You are a precise code formatter. Return only raw code without markdown wrappers." }] }
-            };
+${currentCode}`;
 
             try {
-                const result = await handleApiRequestWithRetry(payload);
-                let responseText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                broadcastLog('Code Genie annotating code…', 'info');
+                let responseText = await handleApiRequestWithRetry(prompt);
                 
-                if (!responseText) throw new Error("No response generated");
+                if (!responseText) throw new Error('No response generated');
 
                 responseText = responseText.replace(/^```[a-z]*\n/i, '').replace(/\n```$/i, '').trim();
                 updateCode(responseText);
-                showNotification("Code magically annotated & structured!");
+                showNotification('Code magically annotated & structured!');
+                broadcastLog('Code annotation complete', 'success');
             } catch (err) {
                 showNotification(err.message, true);
+                broadcastLog(`Code Genie error: ${err.message}`, 'error');
             } finally {
                 // UI Restore State
                 isAnnotating = false;

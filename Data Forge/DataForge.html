@@ -85,14 +85,14 @@
                 <i data-lucide="help-circle" class="w-5 h-5"></i>
             </button>
 
-            <div class="flex items-center bg-slate-900 border border-slate-700 rounded-md px-3 py-1.5 focus-within:border-cyber-500/50 transition-colors">
+            <div class="flex items-center bg-slate-900 border border-slate-700 rounded-md px-3 py-1.5 focus-within:border-cyber-500/50 transition-colors" title="Routed via kAIxuGateway13">
                 <i data-lucide="cpu" class="w-4 h-4 text-slate-500 mr-2"></i>
-                <input type="text" id="model-input" value="gemini-2.5-flash-preview-09-2025" placeholder="Model Name" class="bg-transparent text-xs text-cyber-100 placeholder-slate-600 focus:outline-none w-48 font-mono">
+                <span class="text-xs text-cyber-100 font-mono">gemini-2.0-flash</span>
             </div>
 
             <div class="flex items-center bg-slate-900 border border-slate-700 rounded-md px-3 py-1.5 focus-within:border-cyber-500/50 transition-colors">
                 <i data-lucide="key" class="w-4 h-4 text-slate-500 mr-2"></i>
-                <input type="password" id="api-key-input" placeholder="Gemini API Key..." class="bg-transparent text-xs text-cyber-100 placeholder-slate-600 focus:outline-none w-48 font-mono">
+                <input type="password" id="api-key-input" placeholder="KAIXU_VIRTUAL_KEY…" class="bg-transparent text-xs text-cyber-100 placeholder-slate-600 focus:outline-none w-48 font-mono">
             </div>
         </div>
     </header>
@@ -283,7 +283,6 @@
         const countSlider = document.getElementById('count-slider');
         const countDisplay = document.getElementById('count-display');
         const apiKeyInput = document.getElementById('api-key-input');
-        const modelInput = document.getElementById('model-input');
         const generateBtn = document.getElementById('generate-btn');
         const btnIcon = document.getElementById('btn-icon');
         const btnText = document.getElementById('btn-text');
@@ -295,6 +294,32 @@
         const downloadBtn = document.getElementById('download-btn');
         const copyIcon = document.getElementById('copy-icon');
         const copyText = document.getElementById('copy-text');
+
+        // ── kAIxuGateway13 Config ───────────────────────────────────────────────
+        const _DF_IS_LOCAL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const _DF_GW_PRIMARY = _DF_IS_LOCAL ? '/api' : 'https://skyesol.netlify.app';
+        const _DF_GW_FALLBACK = 'https://skyesol.netlify.app';
+        // Load stored key; allow override from input field
+        function getDFKey() {
+            const inp = apiKeyInput ? apiKeyInput.value.trim() : '';
+            return inp || localStorage.getItem('KAIXU_VIRTUAL_KEY') || '';
+        }
+        if (apiKeyInput) {
+            const _stored = localStorage.getItem('KAIXU_VIRTUAL_KEY') || '';
+            if (_stored) apiKeyInput.value = _stored;
+            apiKeyInput.addEventListener('change', function() {
+                if (this.value.trim()) localStorage.setItem('KAIXU_VIRTUAL_KEY', this.value.trim());
+            });
+        }
+
+        // ── Observability ───────────────────────────────────────────────────────
+        const _dfChannel = (function(){ try { return new BroadcastChannel('kaixu_events'); } catch(_){ return null; } })();
+        function broadcastLog(message, type = 'info') {
+            if (_dfChannel) try { _dfChannel.postMessage({ message, type, source: 'dataforge', ts: Date.now() }); } catch(_) {}
+            console.log(`[DataForge][${type}]`, message);
+        }
+        setInterval(function() { broadcastLog('[HEARTBEAT] DataForge alive', 'info'); }, 20000);
+        broadcastLog('DataForge initialized — routing via kAIxuGateway13', 'success');
 
         // Tutorial Modal Elements
         const helpBtn = document.getElementById('help-btn');
@@ -392,98 +417,99 @@
             document.body.removeChild(a);
         });
 
-        // Core API Generation Function
+        // Core API Generation Function — routes through kAIxuGateway13
         async function generateData() {
             const promptText = promptInput.value.trim();
             if (!promptText) {
-                showNotification("Please enter a data description.", true);
+                showNotification('Please enter a data description.', true);
                 return;
             }
 
-            const fallbackKey = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : ""; 
-            const activeKey = apiKeyInput.value || fallbackKey;
-            
-            if (!activeKey) {
-                showNotification("API Key is required.", true);
-                openTutorial(); // Hint the user on how to use it
+            const kaixuKey = getDFKey();
+            if (!kaixuKey) {
+                showNotification('Set your KAIXU_VIRTUAL_KEY to use DataForge AI.', true);
+                openTutorial();
                 return;
             }
 
-            const modelName = modelInput.value || "gemini-2.5-flash-preview-09-2025";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${activeKey}`;
-
-            // Determine Format specifics
             let formatValue = 'json';
             formatRadios.forEach(r => { if(r.checked) formatValue = r.value; });
             const count = countSlider.value;
 
-            // Construct strict prompt
             const formatRules = {
                 'json': `Return ONLY raw, valid JSON containing an array of exactly ${count} mock objects. Ensure high realism: use UUIDs for IDs, ISO-8601 for dates, and realistic strings. Do not include markdown \`\`\` wrappers.`,
                 'typescript': `Return ONLY raw, valid TypeScript code containing the Interfaces and Types for this data. Include detailed JSDoc comments. Do not include markdown \`\`\` wrappers.`,
                 'sql': `Return ONLY raw, valid SQL code containing CREATE TABLE statements and INSERT statements for exactly ${count} rows of mock data. Use realistic data. Do not include markdown \`\`\` wrappers.`
             };
 
-            const fullPrompt = `You are a Senior Data Architect. 
-Task: Design the schema and mock data for the following description: "${promptText}".
-Constraint: ${formatRules[formatValue]}`;
+            const systemPrompt = 'You output strictly raw code/data only. No pleasantries. No markdown backticks.';
+            const userPrompt = `You are a Senior Data Architect.\nTask: Design the schema and mock data for the following description: "${promptText}".\nConstraint: ${formatRules[formatValue]}`;
 
-            const payload = {
-                contents: [{ parts: [{ text: fullPrompt }] }],
-                systemInstruction: { parts: [{ text: "You output strictly raw code/data only. No pleasantries. No markdown backticks." }] }
+            const gatewayPayload = {
+                provider: 'gemini',
+                model: 'gemini-2.0-flash',
+                messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: userPrompt }
+                ],
+                max_tokens: 8192,
+                temperature: 0.7
             };
 
             // UI Loading State
             generateBtn.disabled = true;
             generateBtn.classList.replace('bg-cyber-500', 'bg-slate-700');
             generateBtn.classList.replace('text-slate-950', 'text-slate-400');
-            btnText.innerText = 'Forging...';
+            btnText.innerText = 'Forging…';
             btnIcon.classList.add('animate-spin');
             btnIcon.setAttribute('data-lucide', 'loader-2');
             lucide.createIcons();
             loadingOverlay.classList.remove('hidden');
+            broadcastLog(`Generating data for: ${promptText.slice(0,60)}`, 'info');
 
+            const bases = [_DF_GW_PRIMARY, _DF_GW_FALLBACK];
             try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
+                let lastErr;
+                for (let i = 0; i < bases.length; i++) {
+                    const base = bases[i];
+                    try {
+                        const response = await fetch(`${base}/.netlify/functions/gateway-chat`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${kaixuKey}` },
+                            body: JSON.stringify(gatewayPayload)
+                        });
+                        if (response.status === 401) throw new Error('Invalid KAIXU_VIRTUAL_KEY (401)');
+                        if (response.status === 402) { showNotification('Monthly cap reached', true); throw new Error('Monthly cap reached'); }
+                        if (response.status === 429) throw new Error('Rate limit — try again shortly');
+                        if (!response.ok) { if (i < bases.length - 1) { broadcastLog(`Retrying via fallback…`, 'warn'); continue; } throw new Error(`Gateway error: ${response.status}`); }
 
-                if (!response.ok) {
-                    const errData = await response.json().catch(() => ({}));
-                    throw new Error(`API Error: ${errData.error?.message || response.status}`);
+                        const result = await response.json();
+                        if (result.month) { const rem = ((result.month.cap_cents||0)-(result.month.spent_cents||0))/100; broadcastLog(`Budget remaining: $${rem.toFixed(2)}`, 'info'); }
+                        let text = result.output_text || '';
+                        if (!text) throw new Error('AI returned empty response');
+
+                        text = text.replace(/^```[a-z]*\n/i, '').replace(/\n```$/i, '').trim();
+                        currentOutputText = text;
+                        codeOutput.className = `language-${formatValue === 'typescript' ? 'typescript' : formatValue}`;
+                        codeOutput.innerHTML = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                        hljs.highlightElement(codeOutput);
+                        copyBtn.disabled = false;
+                        downloadBtn.disabled = false;
+                        showNotification('Generation complete!');
+                        broadcastLog(`DataForge generation OK: in=${result.usage?.input_tokens||'?'} out=${result.usage?.output_tokens||'?'}`, 'success');
+                        return;
+                    } catch(err) {
+                        lastErr = err;
+                        if (i < bases.length - 1) { broadcastLog(`Gateway failed (${err.message}); retrying…`, 'warn'); continue; }
+                        throw err;
+                    }
                 }
-
-                const result = await response.json();
-                let text = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                
-                if (!text) throw new Error("AI returned empty response");
-
-                // Clean up any stray markdown wrappers just in case
-                text = text.replace(/^```[a-z]*\n/i, '').replace(/\n```$/i, '').trim();
-
-                currentOutputText = text;
-                
-                // Update Code Block
-                codeOutput.className = `language-${formatValue === 'typescript' ? 'typescript' : formatValue}`;
-                
-                // Escape HTML tags to prevent rendering issues in <pre>
-                codeOutput.innerHTML = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                
-                // Apply Highlight.js
-                hljs.highlightElement(codeOutput);
-
-                // Enable Action Buttons
-                copyBtn.disabled = false;
-                downloadBtn.disabled = false;
-                showNotification("Generation complete!");
-
+                throw lastErr;
             } catch (err) {
                 showNotification(err.message, true);
-                codeOutput.innerText = `// Error: ${err.message}\n// Please check your API key and model name.`;
+                codeOutput.innerText = `// Error: ${err.message}\n// Check your KAIXU_VIRTUAL_KEY and gateway status.`;
+                broadcastLog(`DataForge error: ${err.message}`, 'error');
             } finally {
-                // Restore UI State
                 generateBtn.disabled = false;
                 generateBtn.classList.replace('bg-slate-700', 'bg-cyber-500');
                 generateBtn.classList.replace('text-slate-400', 'text-slate-950');

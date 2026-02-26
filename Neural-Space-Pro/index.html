@@ -26,32 +26,92 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
-        :root { --sidebar-bg: #0a0a0a; --main-bg: #0f0f0f; --canvas-bg: #141414; --accent: #3b82f6; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--main-bg); color: #ececec; overflow: hidden; }
-        
-        .canvas-closed #canvas-panel { transform: translateX(100%); width: 0; opacity: 0; pointer-events: none; }
-        .canvas-open #canvas-panel { transform: translateX(0); width: 50%; opacity: 1; pointer-events: all; }
-        #canvas-panel { transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1); border-left: 1px solid rgba(255,255,255,0.08); z-index: 60; }
-        
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 10px; }
-        
-        .prose { max-width: 100% !important; font-size: 15px; color: #d1d5db !important; }
-        .prose pre { background: #000 !important; border: 1px solid #222; padding: 0 !important; border-radius: 12px; }
-        
-        .glass-panel { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px); }
-        .action-btn { @apply p-2.5 rounded-xl hover:bg-white/5 transition-all text-gray-500 hover:text-white cursor-pointer flex items-center justify-center; }
-        .active-tab { @apply border-b-2 border-blue-500 text-blue-400; }
-        
-        @keyframes pulse-ring { 0% { transform: scale(.33); opacity: 1; } 80%, 100% { opacity: 0; } }
-        .status-dot-active::before { content: ''; display: block; width: 300%; height: 300%; box-sizing: border-box; margin-left: -100%; margin-top: -100%; border-radius: 45px; background-color: #3b82f6; animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
-        .doc-chip { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); }
-        
-        .logo-img { width: 32px; height: 32px; object-fit: contain; }
-        .logo-img-large { width: 80px; height: 80px; object-fit: contain; }
+        :root {
+            --bg:#01020b;
+            --panel:rgba(9,10,21,0.9);
+            --panel-soft:rgba(12,13,30,0.75);
+            --border:rgba(255,255,255,0.12);
+            --text:#f5f6ff;
+            --muted:rgba(255,255,255,0.65);
+            --accent:#5eead4;
+            --accent2:#a855f7;
+            --accent3:#f59e0b;
+            --danger:#ef4444;
+            --glow:0 20px 45px rgba(0,0,0,0.65);
+        }
+        *{box-sizing:border-box;}
+        body{margin:0;min-height:100vh;background:radial-gradient(circle at 10% 10%,rgba(94,234,212,0.2),transparent 35%),radial-gradient(circle at 80% 0%,rgba(168,85,247,0.2),transparent 45%),#02030b;font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--text);}
+        #app-body{background:transparent;}
+        .ns-shell{min-height:100vh;display:flex;background:linear-gradient(180deg,#05060f,#02030b 60%,#01010a);}
+        aside{border-right:1px solid rgba(255,255,255,0.05);box-shadow:inset -4px 0 30px rgba(0,0,0,0.55);}
+        .ns-page-header{height:92px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(4,4,11,0.8);position:sticky;top:0;z-index:10;backdrop-filter:blur(12px);}
+        .ns-page-header .logo-img{width:40px;height:40px;}
+        .ns-header-links button{border:none;background:transparent;color:var(--muted);font-size:12px;letter-spacing:0.3em;text-transform:uppercase;}
+        .ns-hero{margin:24px 32px 0;padding:32px;border-radius:28px;background:linear-gradient(135deg,rgba(94,234,212,0.08),rgba(8,8,24,0.95));border:1px solid rgba(255,255,255,0.15);box-shadow:var(--glow);display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;}
+        .ns-hero h1{font-size:clamp(32px,4vw,48px);margin:0 0 12px;font-weight:700;}
+        .ns-hero-description{margin:0;color:var(--muted);font-size:16px;line-height:1.6;}
+        .ns-eyebrow{font-size:10px;letter-spacing:0.5em;text-transform:uppercase;color:var(--accent3);margin-bottom:8px;display:inline-block;}
+        .ns-hero-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-top:18px;}
+        .ns-hero-stat{padding:14px 16px;border-radius:16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);}
+        .ns-hero-stat span{display:block;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+        .ns-hero-stat strong{font-size:22px;display:block;color:#fff;font-weight:600;}
+        .ns-hero-sub{font-size:11px;text-transform:uppercase;letter-spacing:.3em;color:var(--muted);margin-top:6px;display:block;}
+        .ns-hero-panel{background:rgba(5,6,15,0.9);border-radius:22px;padding:20px;border:1px solid rgba(255,255,255,0.1);box-shadow:0 10px 30px rgba(0,0,0,0.5);}
+        .ns-hero-panel small{display:block;color:var(--muted);letter-spacing:0.2em;text-transform:uppercase;font-size:10px;margin-bottom:8px;}
+        .ns-hero-status{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+        .ns-hero-status strong{font-size:28px;font-weight:700;}
+        .ns-hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;}
+        .ns-hero-btn{border:none;border-radius:16px;padding:12px 18px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:var(--accent);color:#03030a;cursor:pointer;box-shadow:0 15px 30px rgba(94,234,212,0.35);transition:transform .25s ease,box-shadow .25s ease;}
+        .ns-hero-btn.secondary{background:rgba(168,85,247,0.8);color:#fff;box-shadow:0 15px 30px rgba(168,85,247,0.35);}
+        .ns-hero-btn:hover{transform:translateY(-2px);}
+        .ns-hero-callout{font-size:14px;line-height:1.5;color:var(--muted);margin-bottom:10px;}
+        .ns-hero-callout span{color:var(--accent);font-weight:700;}
+        .ns-analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin:20px 32px 0;}
+        .ns-analytics-card{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:22px;box-shadow:var(--glow);min-height:140px;}
+        .ns-analytics-card h3{margin:0;font-size:13px;letter-spacing:0.4em;text-transform:uppercase;color:var(--muted);}
+        .ns-analytics-card strong{display:block;margin-top:8px;font-size:28px;font-weight:700;}
+        .ns-analytics-card .ns-analytics-note{font-size:12px;color:var(--muted);margin-top:4px;}
+        .ns-content-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr);gap:18px;margin:24px 32px 32px;flex:1;min-height:0;}
+        .ns-chat-column{display:flex;flex-direction:column;gap:16px;min-height:0;}
+        .ns-chat-shell{background:rgba(3,4,9,0.9);border-radius:28px;padding:20px;display:flex;flex-direction:column;gap:16px;box-shadow:0 25px 50px rgba(0,0,0,0.6);min-height:0;flex:1;}
+        .ns-chat-window{flex:1;overflow-y:auto;border-radius:22px;border:1px solid rgba(255,255,255,0.05);background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(5,6,15,0.9));padding:28px;min-height:0;}
+        .ns-chat-window .ank{min-height:0;}
+        .ns-side-column{display:flex;flex-direction:column;gap:16px;}
+        .ns-panel{background:rgba(14,15,32,0.85);border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 20px 40px rgba(0,0,0,0.45);display:flex;flex-direction:column;gap:12px;min-height:150px;}
+        .ns-error-panel{border-color:rgba(248,113,113,0.5);background:rgba(248,113,113,0.08);color:#fef2f2;}
+        .ns-panel-head{font-size:12px;letter-spacing:0.4em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px;}
+        .ns-panel-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;}
+        .ns-panel-note{font-size:12px;color:var(--muted);line-height:1.4;}
+        .ns-status-stack{display:flex;flex-direction:column;gap:10px;}
+        .ns-status-chip{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted);}
+        .ns-status-chip strong{color:#fff;font-size:16px;font-weight:600;}
+        .ns-input-card{background:var(--panel);border-radius:32px;padding:24px;display:flex;flex-direction:column;gap:14px;border:1px solid rgba(255,255,255,0.08);box-shadow:0 25px 50px rgba(0,0,0,0.6);}
+        .ns-input-card textarea{width:100%;border:none;border-radius:22px;background:rgba(255,255,255,0.03);color:#fff;padding:16px;resize:none;font-size:16px;font-family:'Inter',sans-serif;min-height:120px;outline:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.04);}
+        .ns-input-toolbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+        .ns-input-toolbar .action-btn{background:rgba(255,255,255,0.04);border-radius:16px;padding:10px 14px;border:1px solid rgba(255,255,255,0.08);color:var(--muted);}
+        .ns-input-toolbar .action-btn:hover{border-color:rgba(94,234,212,0.5);}
+        .ns-input-toolbar .send-btn{width:56px;height:56px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#02030b;font-size:18px;box-shadow:0 15px 30px rgba(94,234,212,0.35);cursor:pointer;display:flex;align-items:center;justify-content:center;}
+        .ns-input-toolbar .send-btn:disabled{opacity:0.45;cursor:not-allowed;box-shadow:none;}
+        #attachment-strip, .ns-attachment-strip{min-height:80px;display:flex;flex-wrap:wrap;gap:12px;}
+        .hidden{display:none !important;}
+        .glass-panel{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.09);backdrop-filter:blur(10px);border-radius:999px;padding:7px 14px;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;}
+        .action-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:var(--muted);border-radius:18px;padding:10px 12px;display:inline-flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;transition:all .2s ease;}
+        .action-btn:hover{border-color:rgba(255,255,255,0.3);color:#fff;}
+        .status-dot-active::before{content:'';display:block;width:300%;height:300%;box-sizing:border-box;margin-left:-100%;margin-top:-100%;border-radius:45px;background-color:#5eead4;animation:pulse-ring 1.25s cubic-bezier(0.215,0.61,0.355,1) infinite;}
+        @keyframes pulse-ring{0%{transform:scale(.33);opacity:1;}80%,100%{opacity:0;}}
+        .animate-fade{animation:fade-up .5s ease both;}
+        @keyframes fade-up{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+        #canvas-panel{position:relative;width:0;transition:all .45s cubic-bezier(.19,1,.22,1);border-left:1px solid rgba(255,255,255,0.08);background:rgba(1,2,7,0.95);box-shadow:-20px 0 60px rgba(0,0,0,0.6);z-index:20;}
+        .canvas-open #canvas-panel{width:52%;opacity:1;pointer-events:all;}
+        .canvas-closed #canvas-panel{width:0;opacity:0;pointer-events:none;}
+        #canvas-panel header{border-bottom:1px solid rgba(255,255,255,0.08);font-size:12px;letter-spacing:.4em;text-transform:uppercase;}
+        #canvas-body{padding:0;}
+        #canvas-editor{background:transparent;border:none;color:#fff;outline:none;}
+        #settings-modal{backdrop-filter:blur(30px);}
+        #settings-modal > div{border-radius:30px;border:1px solid rgba(255,255,255,0.1);box-shadow:0 40px 80px rgba(0,0,0,0.7);}
     </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#3b82f6"><link rel="apple-touch-icon" href="icon-192.png"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script></head>
-<body class="h-screen flex canvas-closed" id="app-body">
+<body class="ns-shell canvas-closed" id="app-body">
 
     <!-- Knowledge Base Drawer -->
     <div id="kb-drawer" class="fixed inset-y-0 left-0 w-80 bg-black/95 z-[100] transform -translate-x-full transition-transform duration-300 border-r border-white/10 p-6 flex flex-col shadow-2xl">
@@ -107,8 +167,8 @@
     </aside>
 
     <!-- Main Workspace -->
-    <main class="flex-1 flex flex-col relative bg-[var(--main-bg)] overflow-hidden">
-        <header class="h-20 border-b border-white/5 flex items-center justify-between px-8 bg-black/20 z-40">
+    <main class="flex-1 flex flex-col relative overflow-hidden">
+        <header class="ns-page-header">
             <div class="flex items-center gap-4">
                 <div class="flex items-center gap-3">
                     <img src="https://cdn1.sharemyimage.com/2026/02/15/Screenshot-2026-02-14-1.45.11-PM-3.png" alt="kAIxu Logo" class="logo-img">
@@ -129,7 +189,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                <div id="engine-status" class="hidden px-4 py-2 glass-panel rounded-full flex items-center gap-3 animate-pulse">
+                <div id="engine-status" class="hidden px-4 py-2 glass-panel rounded-full flex items-center gap-3">
                     <i class="fa-solid fa-brain text-blue-400 text-xs"></i>
                     <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Processing...</span>
                 </div>
@@ -137,42 +197,116 @@
             </div>
         </header>
 
-        <div id="client-error-panel" class="hidden mx-8 mt-4 p-4 rounded-2xl border border-red-500/30 bg-red-500/5 text-red-200 text-xs space-y-2">
-            <div class="flex items-center justify-between gap-2">
-                <span class="font-black tracking-widest text-[11px] uppercase">Client Error</span>
-                <button onclick="clearClientError()" class="text-[11px] font-bold text-red-200 hover:text-white">Dismiss</button>
-            </div>
-            <div id="client-error-message" class="font-mono break-words whitespace-pre-wrap leading-relaxed"></div>
-        </div>
-
-        <div id="chat-window" class="flex-1 overflow-y-auto pt-10 pb-32">
-            <div id="welcome-view" class="h-full flex flex-col items-center justify-center text-center p-12 space-y-8 max-w-2xl mx-auto">
-                <img src="https://cdn1.sharemyimage.com/2026/02/15/Screenshot-2026-02-14-1.45.11-PM-3.png" alt="kAIxu Logo" class="logo-img-large shadow-2xl">
-                <div>
-                    <h2 class="text-5xl font-black tracking-tighter leading-tight">Neural Space Pro.</h2>
-                    <p class="text-gray-500 font-medium mt-4">Advanced neural intelligence for multi-modal analysis, documentation synthesis, and technical reasoning.</p>
-                </div>
-            </div>
-            <div id="messages-list" class="max-w-4xl mx-auto px-6 space-y-12"></div>
-        </div>
-
-        <footer class="p-6 md:p-10 relative bg-gradient-to-t from-[var(--main-bg)] to-transparent">
-            <div class="max-w-4xl mx-auto relative">
-                <div id="attachment-strip" class="hidden flex flex-wrap gap-2 mb-4 animate-fade"></div>
-                <div class="bg-[#1c1c1c] rounded-[2.5rem] shadow-2xl border border-white/5 flex flex-col overflow-hidden focus-within:border-white/15 transition-all">
-                    <textarea id="user-input" rows="1" placeholder="Consult kAIxu Neural Space..." class="w-full bg-transparent p-6 px-8 resize-none focus:outline-none max-h-[400px] text-[16px]" oninput="autoResize(this)"></textarea>
-                    <div class="flex items-center justify-between px-6 pb-6">
-                        <div class="flex gap-1">
-                            <input type="file" id="file-upload" class="hidden" accept="image/*,.pdf,.xlsx,.xls,.csv" multiple onchange="handleFiles(event)">
-                            <button onclick="document.getElementById('file-upload').click()" class="action-btn" title="Attach Data"><i class="fa-solid fa-paperclip text-sm"></i></button>
-                            <button onclick="toggleMode('edit')" id="edit-toggle" class="action-btn" title="Image Transform"><i class="fa-solid fa-wand-magic-sparkles text-sm"></i></button>
-                            <button onclick="toggleSearch()" id="search-btn" class="action-btn text-blue-400" title="Web Search"><i class="fa-solid fa-globe text-sm"></i></button>
-                        </div>
-                        <button id="send-btn" onclick="handleSend()" class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center hover:scale-105 shadow-xl disabled:opacity-20"><i class="fa-solid fa-arrow-up text-xl"></i></button>
+        <section class="ns-hero">
+            <div>
+                <p class="ns-eyebrow">Fortune 500 Command Deck</p>
+                <h1>Neural Space Pro</h1>
+                <p class="ns-hero-description">High-fidelity intelligence for multi-modal architects. Stream, annotate, and orchestrate mission-critical briefings from one executive panel.</p>
+                <div class="ns-hero-stats">
+                    <div class="ns-hero-stat">
+                        <span>Active Model</span>
+                        <strong id="hero-model">kAIxu Neural Space Pro</strong>
+                        <small class="ns-hero-sub">Synced with the heartbeat.</small>
+                    </div>
+                    <div class="ns-hero-stat">
+                        <span>Active Sessions</span>
+                        <strong id="hero-sessions">0 sessions</strong>
+                        <small class="ns-hero-sub">Historic conversations rehydrate instantly.</small>
+                    </div>
+                    <div class="ns-hero-stat">
+                        <span>Attachments</span>
+                        <strong id="hero-attachments">No files</strong>
+                        <small class="ns-hero-sub">PDFs, docs or spreadsheets ready.</small>
                     </div>
                 </div>
             </div>
-        </footer>
+            <div class="ns-hero-panel">
+                <small>Live Signal · kaixu_events</small>
+                <div class="ns-hero-status">
+                    <strong id="hero-status">Online</strong>
+                    <span class="status-dot-active"></span>
+                </div>
+                <p class="ns-hero-callout">Telemetry snapshot last synced <span id="hero-last-sync">—</span></p>
+                <div class="ns-hero-actions">
+                    <button class="ns-hero-btn" onclick="createNewChat()">New Session</button>
+                    <button class="ns-hero-btn secondary" onclick="toggleKB()">Knowledge Base</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="ns-analytics-grid">
+            <article class="ns-analytics-card">
+                <h3>Stream Health</h3>
+                <strong id="hero-health">Signal stable</strong>
+                <p class="ns-analytics-note">Heartbeat data ensures every request keeps the gateway lit.</p>
+            </article>
+            <article class="ns-analytics-card">
+                <h3>Knowledge Fabric</h3>
+                <strong>Curated briefs ready</strong>
+                <p class="ns-analytics-note">Pinned knowledge assets remain available via the KB drawer.</p>
+            </article>
+            <article class="ns-analytics-card">
+                <h3>Security</h3>
+                <strong id="hero-errors">No critical events</strong>
+                <p class="ns-analytics-note">Errors and warnings surface in this console and telemetry feed.</p>
+            </article>
+        </div>
+
+        <div class="ns-content-grid">
+            <div class="ns-chat-column">
+                <div class="ns-chat-shell">
+                    <div id="client-error-panel" class="hidden ns-error-panel">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="font-black tracking-widest text-[11px] uppercase">Client Error</span>
+                            <button onclick="clearClientError()" class="text-[11px] font-bold text-red-200 hover:text-white">Dismiss</button>
+                        </div>
+                        <div id="client-error-message" class="font-mono break-words whitespace-pre-wrap leading-relaxed text-sm"></div>
+                    </div>
+                    <div id="chat-window" class="ns-chat-window">
+                        <div id="welcome-view" class="h-full flex flex-col items-center justify-center text-center px-6 py-16 space-y-6 max-w-2xl mx-auto">
+                            <img src="https://cdn1.sharemyimage.com/2026/02/15/Screenshot-2026-02-14-1.45.11-PM-3.png" alt="kAIxu Logo" class="logo-img-large shadow-2xl">
+                            <div>
+                                <h2 class="text-5xl font-black tracking-tighter leading-tight">Neural Space Pro.</h2>
+                                <p class="text-gray-500 font-medium mt-4">Advanced neural intelligence for multi-modal analysis, documentation synthesis, and technical reasoning.</p>
+                            </div>
+                        </div>
+                        <div id="messages-list" class="max-w-4xl mx-auto px-6 space-y-12"></div>
+                    </div>
+                </div>
+                <footer class="ns-input-card">
+                    <textarea id="user-input" rows="1" placeholder="Consult kAIxu Neural Space..." oninput="autoResize(this)"></textarea>
+                    <div class="ns-input-toolbar">
+                        <div class="flex gap-2 flex-wrap">
+                            <input type="file" id="file-upload" class="hidden" accept="image/*,.pdf,.xlsx,.xls,.csv" multiple onchange="handleFiles(event)">
+                            <button onclick="document.getElementById('file-upload').click()" class="action-btn" title="Attach Data"><i class="fa-solid fa-paperclip text-sm"></i></button>
+                            <button onclick="toggleMode('edit')" id="edit-toggle" class="action-btn" title="Image Transform"><i class="fa-solid fa-wand-magic-sparkles text-sm"></i></button>
+                            <button onclick="toggleSearch()" id="search-btn" class="action-btn" title="Web Search"><i class="fa-solid fa-globe text-sm"></i></button>
+                        </div>
+                        <button id="send-btn" onclick="handleSend()" class="send-btn"><i class="fa-solid fa-arrow-up"></i></button>
+                    </div>
+                </footer>
+            </div>
+            <section class="ns-side-column">
+                <div class="ns-panel">
+                    <div class="ns-panel-head">Attachments</div>
+                    <div id="attachment-strip" class="hidden ns-attachment-strip"></div>
+                    <p class="ns-panel-note">Drop docs, spreadsheets, or images and Neural Space will make them queryable.</p>
+                </div>
+                <div class="ns-panel">
+                    <div class="ns-panel-head">Realtime Status</div>
+                    <div class="ns-status-stack">
+                        <div class="ns-status-chip"><span>Model</span><strong id="hero-model-mini">kAIxu Neural Space Pro</strong></div>
+                        <div class="ns-status-chip"><span>Heartbeat</span><strong id="hero-status-mini">Online</strong></div>
+                        <div class="ns-status-chip"><span>Synced</span><strong id="hero-last-sync-mini">--:--</strong></div>
+                    </div>
+                    <p class="ns-panel-note">Status mirrors the BroadcastChannel heartbeat for executives on call.</p>
+                </div>
+                <div class="ns-panel">
+                    <div class="ns-panel-head">Broadcast</div>
+                    <p class="ns-panel-note">All signals flow through kaixu_events so every app stays observant.</p>
+                </div>
+            </section>
+        </div>
     </main>
 
     <!-- Canvas -->
@@ -267,7 +401,7 @@
             }
             // Gateway reachable?
             try {
-                const g = await fetch('https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat', { method: 'HEAD', signal: AbortSignal.timeout(5000) }).catch(() => null);
+                const g = await fetch('https://skyesol.netlify.app/.netlify/functions/gateway-chat', { method: 'HEAD', signal: AbortSignal.timeout(5000) }).catch(() => null);
                 checks.push(g ? `gateway=${g.status}` : 'gateway=UNREACHABLE');
             } catch { checks.push('gateway=TIMEOUT'); }
             // Local state
@@ -289,8 +423,9 @@
             if (!clientErrorPanel || !clientErrorMessage) return;
             clientErrorMessage.textContent = `${msg}${extra ? `\n${extra}` : ''}`;
             clientErrorPanel.classList.remove('hidden');
+            setHeroError('Critical: ' + msg);
         };
-        window.clearClientError = () => { if (clientErrorPanel) clientErrorPanel.classList.add('hidden'); };
+        window.clearClientError = () => { if (clientErrorPanel) clientErrorPanel.classList.add('hidden'); setHeroError('No critical events'); };
 
         // --- LOCAL PERSISTENCE LAYER (Replaces Firebase) ---
         // Uses Browser LocalStorage for zero-setup persistence
@@ -432,6 +567,7 @@
                 strip.appendChild(div);
             });
             if (attachments.length === 0) strip.classList.add('hidden');
+            updateHeroMetrics();
         }
 
         window.removeFile = (id) => { attachments = attachments.filter(a => a.id !== id); renderStrip(); };
@@ -533,7 +669,7 @@
         const KAIXU_GATEWAY_PRIMARY  = '/api';
         // Direct Netlify function path — works in netlify dev and production, bypasses CORS
         const KAIXU_GATEWAY_DIRECT   = '';
-        const KAIXU_GATEWAY_FALLBACK  = 'https://kaixugateway13.netlify.app';
+        const KAIXU_GATEWAY_FALLBACK  = 'https://skyesol.netlify.app';
         let kaixuKey = localStorage.getItem('KAIXU_VIRTUAL_KEY') || "";
         const kaixuDiag = { lastBase: null, lastError: null, lastPayload: null };
         window.kaixuDiag = kaixuDiag;
@@ -883,6 +1019,7 @@
                 div.onclick = () => loadSession(chat.id);
                 list.appendChild(div);
             });
+            updateHeroMetrics();
         }
 
         async function loadSession(id) {
@@ -952,11 +1089,53 @@
             }
         };
 
+        function refreshHeroStatus() {
+            const status = navigator.onLine ? 'Online' : 'Offline';
+            const heroStatus = document.getElementById('hero-status');
+            const heroStatusMini = document.getElementById('hero-status-mini');
+            const heroHealth = document.getElementById('hero-health');
+            const syncStamp = new Date().toLocaleTimeString();
+            const heroLastSync = document.getElementById('hero-last-sync');
+            const heroLastSyncMini = document.getElementById('hero-last-sync-mini');
+            if (heroStatus) heroStatus.textContent = status;
+            if (heroStatusMini) heroStatusMini.textContent = status;
+            if (heroHealth) heroHealth.textContent = navigator.onLine ? 'Signal stable' : 'Offline';
+            if (heroLastSync) heroLastSync.textContent = syncStamp;
+            if (heroLastSyncMini) heroLastSyncMini.textContent = syncStamp;
+        }
+
+        function updateHeroMetrics() {
+            const historyList = document.getElementById('history-list');
+            const heroSessions = document.getElementById('hero-sessions');
+            const sessions = historyList ? historyList.childElementCount : 0;
+            if (heroSessions) heroSessions.textContent = `${sessions} session${sessions === 1 ? '' : 's'}`;
+            const attachmentsStrip = document.getElementById('attachment-strip');
+            const heroAttachments = document.getElementById('hero-attachments');
+            const attachmentCount = attachmentsStrip ? attachmentsStrip.children.length : 0;
+            if (heroAttachments) heroAttachments.textContent = attachmentCount ? `${attachmentCount} file${attachmentCount === 1 ? '' : 's'}` : 'No files';
+            const activeModel = document.getElementById('active-model');
+            const heroModel = document.getElementById('hero-model');
+            const heroModelMini = document.getElementById('hero-model-mini');
+            if (activeModel) {
+                if (heroModel) heroModel.textContent = activeModel.textContent;
+                if (heroModelMini) heroModelMini.textContent = activeModel.textContent;
+            }
+            refreshHeroStatus();
+        }
+
+        function setHeroError(value) {
+            const heroErrors = document.getElementById('hero-errors');
+            if (heroErrors) heroErrors.textContent = value;
+        }
+
         // Initialize marked with katex extension
         marked.use(markedKatex({ throwOnError: false }));
         
         // Initial Load
         loadLocalStore();
+        updateHeroMetrics();
+        refreshHeroStatus();
+        setHeroError('No critical events');
         // Auto-inject key from server .env (overrides localStorage if available)
         injectKeyFromServer();
 
@@ -970,6 +1149,9 @@
                 }
             });
         }
+
+        window.addEventListener('online', refreshHeroStatus);
+        window.addEventListener('offline', refreshHeroStatus);
 
         window.addEventListener('unhandledrejection', (event) => {
             const reason = event.reason && event.reason.message ? event.reason.message : String(event.reason || 'Unknown rejection');

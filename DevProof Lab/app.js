@@ -164,7 +164,7 @@ function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
 /* ─────────────────────────────────────────────────────────────
    kAIxuGateway13 client (MANDATORY)
    - ALL AI calls must go through /api/.netlify/functions/* which Netlify redirects
-     to https://kaixugateway13.netlify.app/:splat via netlify.toml.
+     to https://skyesol.netlify.app/:splat via netlify.toml.
    - No direct provider SDKs. No provider keys.
 ───────────────────────────────────────────────────────────── */
 
@@ -221,7 +221,7 @@ function kaixuMapHTTPError(status){
 
 async function kaixuChat(payload){
   const key = kaixuGetKey();
-  const PROXY_HINT = "AI proxy not found (404). Ensure your Netlify deploy includes _redirects with: /api/* https://kaixugateway13.netlify.app/:splat 200!";
+  const PROXY_HINT = "AI proxy not found (404). Ensure your Netlify deploy includes _redirects with: /api/* https://skyesol.netlify.app/:splat 200!";
 
   const t0 = performance.now();
   const res = await fetch("/api/.netlify/functions/gateway-chat", {

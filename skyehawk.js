@@ -60,12 +60,13 @@
   ];
 
   /* ─────────────────────────────────────────────────────
-     KAIXU GATEWAY CONFIG  (matches other apps in repo)
+     KAIXU GATEWAY CONFIG  (matches kAIxuGateway13 directive)
   ───────────────────────────────────────────────────── */
-  const GATEWAY_URL = 'https://kaixugateway13.netlify.app/api/chat';
-  const GATEWAY_ALT = '/api/kaixu-chat';
-  const KEY_STORAGE  = 'KAIXU_VIRTUAL_KEY';
-  const SYS_STORAGE  = 'kaixu_sys';
+  const _SH_IS_LOCAL  = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  const GATEWAY_URL   = (_SH_IS_LOCAL ? '/api' : 'https://skyesol.netlify.app') + '/.netlify/functions/gateway-stream';
+  const GATEWAY_ALT   = 'https://skyesol.netlify.app/.netlify/functions/gateway-stream';
+  const KEY_STORAGE   = 'KAIXU_VIRTUAL_KEY';
+  const SYS_STORAGE   = 'kaixu_sys';
 
   /* ─────────────────────────────────────────────────────
      GESTURE STATE
@@ -557,10 +558,13 @@
     if (chatAbort) { try { chatAbort.abort(); } catch(_) {} }
     chatAbort = new AbortController();
 
+    // kAIxuGateway13 standard payload
     const payload = {
-      model: 'gpt-4o',
-      stream: true,
+      provider: 'gemini',
+      model: 'gemini-2.0-flash',
       messages: [{ role: 'system', content: sys }, ...messages],
+      max_tokens: 8192,
+      temperature: 0.7
     };
 
     const headers = {
@@ -594,6 +598,7 @@
     const dec = new TextDecoder();
     let buf = '';
     let full = '';
+    let eventType = '';
 
     while (true) {
       const { done, value } = await reader.read();
@@ -603,13 +608,22 @@
       buf = parts.pop();
       for (const line of parts) {
         const t = line.trim();
-        if (!t || !t.startsWith('data:')) continue;
+        if (!t) { eventType = ''; continue; }
+        if (t.startsWith('event:')) { eventType = t.slice(6).trim(); continue; }
+        if (!t.startsWith('data:')) continue;
         const raw = t.slice(5).trim();
         if (raw === '[DONE]') { onDone(full); return; }
         try {
           const j = JSON.parse(raw);
-          const delta = j?.choices?.[0]?.delta?.content || '';
-          if (delta) { full += delta; onDelta(delta); }
+          // kAIxu SSE: event: delta → { text }
+          if (eventType === 'delta' || j.text !== undefined) {
+            const delta = j.text || '';
+            if (delta) { full += delta; onDelta(delta); }
+          } else if (eventType === 'done') {
+            onDone(full); return;
+          } else if (eventType === 'error') {
+            onError(j.error || 'Stream error'); return;
+          }
         } catch(_) {}
       }
     }
@@ -1126,11 +1140,11 @@
 
     const gw2Badge = document.createElement('span'); gw2Badge.textContent = '…';
     gw2Badge.style.background = '#1e293b'; gw2Badge.style.color = '#94a3b8';
-    const { row: gw2Row, val: gw2Val } = diagRow('Gateway (fallback)', 'kaixugateway13.netlify.app', gw2Badge);
+    const { row: gw2Row, val: gw2Val } = diagRow('Gateway (fallback)', 'skyesol.netlify.app', gw2Badge);
     diagPanel.appendChild(gw2Row);
 
     const diagLink = document.createElement('a');
-    diagLink.href = 'https://kaixugateway13.netlify.app';
+    diagLink.href = 'https://skyesol.netlify.app';
     diagLink.target = '_blank';
     diagLink.rel = 'noopener noreferrer';
     diagLink.style.cssText = 'display:block;text-align:center;font-size:11px;color:rgba(255,215,0,.6);text-decoration:none;padding:8px;border-radius:8px;border:1px dashed rgba(255,215,0,.2);margin-top:4px;transition:color .2s;';
@@ -1159,7 +1173,7 @@
       if (diagRan) return; diagRan = true;
       gw1Badge.textContent = '⏳'; gw2Badge.textContent = '⏳';
       pingGateway(window.location.origin + '/api/kaixu-chat', gw1Badge, gw1Val);
-      pingGateway('https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat', gw2Badge, gw2Val);
+      pingGateway('https://skyesol.netlify.app/.netlify/functions/gateway-chat', gw2Badge, gw2Val);
     }
 
     // ── ASSEMBLE ──

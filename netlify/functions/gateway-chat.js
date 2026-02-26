@@ -2,7 +2,7 @@
 // Bypasses CORS for all client origins (codespace, dev, production).
 // Reachable at /.netlify/functions/gateway-chat in both netlify dev and deployed.
 
-const UPSTREAM = 'https://kaixugateway13.netlify.app/.netlify/functions/gateway-chat';
+const UPSTREAM = 'https://skyesol.netlify.app/.netlify/functions/gateway-chat';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',

@@ -5,7 +5,7 @@ const IS_LOCAL =
   typeof window !== "undefined" &&
   (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
 
-export const GW_BASE = IS_LOCAL ? "/api" : "https://kaixugateway13.netlify.app";
+export const GW_BASE = IS_LOCAL ? "/api" : "https://skyesol.netlify.app";
 export const GW_URL  = GW_BASE + "/.netlify/functions/gateway-chat";
 
 export function getKey() {

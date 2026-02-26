@@ -260,8 +260,21 @@
     </div>
 
     <script>
+        // --- GATEWAY CONFIG ---
+        const _KAIXU_IS_LOCAL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const _KAIXU_GATEWAY_PRIMARY = _KAIXU_IS_LOCAL ? '/api' : 'https://skyesol.netlify.app';
+        const _KAIXU_GATEWAY_FALLBACK = 'https://skyesol.netlify.app';
+
+        // --- OBSERVABILITY ---
+        const diagChannel = (function(){ try { return new BroadcastChannel('kaixu_events'); } catch(_){ return null; } })();
+        function broadcastLog(message, type = 'info') {
+            if (diagChannel) try { diagChannel.postMessage({ message, type, source: 'projectaegis', ts: Date.now() }); } catch(_) {}
+            addLog(message, type);
+        }
+        setInterval(function() { broadcastLog('[HEARTBEAT] ProjectAegis alive', 'info'); }, 20000);
+
         // --- STATE ---
-        let apiKey = '';
+        let kaixuKey = localStorage.getItem('KAIXU_VIRTUAL_KEY') || '';
         let files = [];
         let processing = false;
         let selectedFileIdx = null;
@@ -306,35 +319,61 @@
         }
 
         async function callGeminiEngine(systemPrompt, userPrompt) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            const options = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: userPrompt }] }],
-                    systemInstruction: { parts: [{ text: systemPrompt }] }
-                })
+            const payload = {
+                provider: 'gemini',
+                model: 'gemini-2.0-flash',
+                messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: userPrompt }
+                ],
+                max_tokens: 8192,
+                temperature: 0.7
             };
-            const data = await fetchWithRetry(url, options);
-            return data.candidates?.[0]?.content?.parts?.[0]?.text?.trim().replace(/^```[a-z]*\n|```$/g, '') || "";
+            const bases = [_KAIXU_GATEWAY_PRIMARY, _KAIXU_GATEWAY_FALLBACK];
+            for (let i = 0; i < bases.length; i++) {
+                const base = bases[i];
+                try {
+                    const res = await fetch(`${base}/.netlify/functions/gateway-chat`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${kaixuKey}`
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                    if (res.status === 401) throw new Error('Invalid Kaixu Key (401 — set KAIXU_VIRTUAL_KEY)');
+                    if (res.status === 402) { broadcastLog('Monthly cap reached', 'error'); throw new Error('Monthly cap reached'); }
+                    if (res.status === 429) throw new Error('Rate limit reached — try again shortly');
+                    if (!res.ok) { if (i < bases.length - 1) { broadcastLog(`Gateway unavailable at ${base}, retrying...`, 'warn'); continue; } throw new Error(`Gateway error: ${res.status}`); }
+                    const data = await res.json();
+                    if (data.month) { const rem = ((data.month.cap_cents||0) - (data.month.spent_cents||0)) / 100; broadcastLog(`Budget remaining: $${rem.toFixed(2)}`, 'info'); }
+                    broadcastLog(`AI response received via ${base}`, 'success');
+                    return (data.output_text || '').trim().replace(/^```[a-z]*\n|```$/g, '');
+                } catch(err) {
+                    if (i < bases.length - 1) { broadcastLog(`Fallback: ${err.message}`, 'warn'); continue; }
+                    throw err;
+                }
+            }
         }
 
         // --- HANDLERS ---
         function handleAuth() {
-            const val = document.getElementById('api-key-input').value;
-            if (val.trim().length > 20) {
-                apiKey = val.trim();
+            const val = document.getElementById('api-key-input').value.trim();
+            if (val.length > 20) {
+                kaixuKey = val;
+                localStorage.setItem('KAIXU_VIRTUAL_KEY', kaixuKey);
+                broadcastLog(`Aegis key authenticated: ...${kaixuKey.slice(-4)}`, 'success');
                 document.getElementById('auth-screen').classList.add('hidden');
                 document.getElementById('app-container').classList.remove('hidden');
-                addLog("Aegis Kernel Booted: kAIxu Logic Engine Initialized", "success");
+                addLog('Aegis Kernel Booted: kAIxu Logic Engine Initialized', 'success');
                 renderSettings();
             } else {
-                addLog("Authentication Failure: Invalid API Key Format", "error");
+                addLog('Authentication Failure: Invalid Kaixu Key Format', 'error');
             }
         }
 
         function logout() {
-            apiKey = '';
+            kaixuKey = '';
             document.getElementById('auth-screen').classList.remove('hidden');
             document.getElementById('app-container').classList.add('hidden');
             document.getElementById('api-key-input').value = '';
@@ -533,8 +572,17 @@
             addLog("kAIxu protected build exported to filesystem", "success");
         }
 
-        // Init icons
-        window.onload = () => lucide.createIcons();
+        // Init icons + auto-boot if key already stored
+        window.onload = () => {
+            lucide.createIcons();
+            if (kaixuKey) {
+                document.getElementById('api-key-input').value = kaixuKey;
+                document.getElementById('auth-screen').classList.add('hidden');
+                document.getElementById('app-container').classList.remove('hidden');
+                renderSettings();
+                broadcastLog('ProjectAegis auto-booted with stored Kaixu Key', 'success');
+            }
+        };
 
     </script>
   <script src="/skyehawk.js"></script>

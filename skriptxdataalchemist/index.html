@@ -268,7 +268,6 @@ tr:hover td{background:rgba(124,58,237,.05)}
       <label class="lbl">Model</label>
       <select class="inp" id="mut-model">
         <option value="gemini-2.0-flash">Gemini 2.0 Flash (fast)</option>
-        <option value="gemini-1.5-pro">Gemini 1.5 Pro (precise)</option>
         <option value="claude-3-5-sonnet-20241022">Claude 3.5 Sonnet</option>
         <option value="gpt-4o">GPT-4o</option>
       </select>
@@ -369,7 +368,7 @@ tr:hover td{background:rgba(124,58,237,.05)}
 
 <script>
 const IS_LOCAL=location.hostname==='localhost'||location.hostname==='127.0.0.1';
-const GW=(IS_LOCAL?'/api':'https://kaixugateway13.netlify.app')+'/.netlify/functions/gateway-chat';
+const GW=(IS_LOCAL?'/api':'https://skyesol.netlify.app')+'/.netlify/functions/gateway-chat';
 const bc=new BroadcastChannel('kaixu_events');
 
 let ORIG={};

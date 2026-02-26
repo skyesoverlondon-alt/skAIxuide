@@ -348,7 +348,7 @@
                      location.hostname === '127.0.0.1' ||
                      location.hostname.includes('codespaces') ||
                      location.hostname.endsWith('.app.github.dev');
-    const GW = IS_LOCAL ? '/api' : 'https://kaixugateway13.netlify.app';
+    const GW = IS_LOCAL ? '/api' : 'https://skyesol.netlify.app';
 
     function getKey() { return localStorage.getItem('KAIXU_VIRTUAL_KEY') || ''; }
 
@@ -642,7 +642,7 @@
             var code = await gwChat([
                 { role: 'system', content: sys },
                 { role: 'user', content: prompt }
-            ], { model: 'gemini-2.0-flash', max_tokens: 16000, temperature: 0.5 });
+            ], { model: 'gemini-2.0-flash', max_tokens: 8192, temperature: 0.5 });
 
             var html = code.trim();
             var dtIdx = html.search(/<!DOCTYPE|<html/i);
@@ -679,7 +679,7 @@
             var code = await gwChat([
                 { role: 'system', content: sys },
                 { role: 'user', content: 'Current HTML:\n' + lastUICode.substring(0, 14000) + '\n\nInstruction: ' + instruction }
-            ], { model: 'gemini-2.0-flash', max_tokens: 16000, temperature: 0.3 });
+            ], { model: 'gemini-2.0-flash', max_tokens: 8192, temperature: 0.3 });
 
             var html = code.trim();
             var dtIdx = html.search(/<!DOCTYPE|<html/i);
