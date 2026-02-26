@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SkAIxuIDE | Real Intelligence IDE</title>
+    <!-- Preconnect: eliminate DNS + TLS latency for all external resources -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://skyesol.netlify.app">
+    <link rel="dns-prefetch" href="https://cdn1.sharemyimage.com">
     <!-- SPLASH FAILSAFE: runs before ANY CDN script, so CDN hangs can't block it -->
     <script>
     (function(){
@@ -17,7 +25,7 @@
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- SECURITY PATCH: DOMPurify for XSS prevention -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
@@ -447,7 +455,7 @@
     <title>SkAIxu IDE | Real Intelligence Architecture</title>
     <script src="https://cdn.tailwindcss.com"><\/script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>
-    <script src="https://unpkg.com/lucide@latest"><\/script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"><\/script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; background-color: #050505; font-family: 'Inter', sans-serif; overflow-x: hidden; color: #fff; }
