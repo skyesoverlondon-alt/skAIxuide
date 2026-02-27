@@ -63,7 +63,7 @@
      KAIXU GATEWAY CONFIG  (matches kAIxuGateway13 directive)
   ───────────────────────────────────────────────────── */
   const _SH_IS_LOCAL  = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  const GATEWAY_URL   = (_SH_IS_LOCAL ? '/api' : 'https://skyesol.netlify.app') + '/.netlify/functions/gateway-stream';
+  const GATEWAY_URL   = (_SH_IS_LOCAL ? '/api' : '') + '/.netlify/functions/gateway-stream';
   const GATEWAY_ALT   = 'https://skyesol.netlify.app/.netlify/functions/gateway-stream';
   const KEY_STORAGE   = 'KAIXU_VIRTUAL_KEY';
   const SYS_STORAGE   = 'kaixu_sys';

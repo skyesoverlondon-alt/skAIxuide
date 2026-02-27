@@ -262,7 +262,7 @@ Review the provided HTML/JS code.
   <script>
     // ── kAIxuGateway13 ─────────────────────────────────────────────────
     const _RF_IS_LOCAL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    const _RF_GW_PRIMARY = _RF_IS_LOCAL ? '/api' : 'https://skyesol.netlify.app';
+    const _RF_GW_PRIMARY = _RF_IS_LOCAL ? '/api' : '';
     const _RF_GW_FALLBACK = 'https://skyesol.netlify.app';
     function getRFKey() {
       const inp = (document.getElementById('apiKey') || {}).value || '';

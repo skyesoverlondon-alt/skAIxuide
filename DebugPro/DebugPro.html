@@ -3,7 +3,7 @@ import { Code, Wand2, Download, Loader2, Key, Bug, Zap, CheckCircle, AlertTriang
 
 // ── kAIxuGateway13 config ─────────────────────────────────────────────
 const _DP_IS_LOCAL = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-const _DP_GW_PRIMARY = _DP_IS_LOCAL ? '/api' : 'https://skyesol.netlify.app';
+const _DP_GW_PRIMARY = _DP_IS_LOCAL ? '/api' : '';
 const _DP_GW_FALLBACK = 'https://skyesol.netlify.app';
 const _dpChannel = (function(){ try { return new BroadcastChannel('kaixu_events'); } catch(_){ return null; } })();
 function dpBroadcast(message, type = 'info') {

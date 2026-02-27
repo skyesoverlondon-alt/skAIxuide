@@ -286,7 +286,7 @@
 
         // ── kAIxuGateway13 ───────────────────────────────────────────
         const _CG_IS_LOCAL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        const _CG_GW_PRIMARY = _CG_IS_LOCAL ? '/api' : 'https://skyesol.netlify.app';
+        const _CG_GW_PRIMARY = _CG_IS_LOCAL ? '/api' : '';
         const _CG_GW_FALLBACK = 'https://skyesol.netlify.app';
         function getCGKey() {
             const inp = apiKeyInput ? apiKeyInput.value.trim() : '';

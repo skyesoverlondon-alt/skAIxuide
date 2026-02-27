@@ -444,7 +444,7 @@
             window.location.hostname === '127.0.0.1' || 
             window.location.hostname.includes('github.dev') || 
             window.location.hostname.includes('codespaces')
-        ) ? "/api" : "https://skyesol.netlify.app";
+        ) ? "/api" : "";
 
         // THE FULL UN-MINIFIED SKAIXU SPECS HTML
         const DEFAULT_CODE = `<!DOCTYPE html>
@@ -1339,7 +1339,7 @@
 
         // --- KAIXU GATEWAY CLIENT (MATCHING NEURAL-SPACE-PRO) ---
         const KAIXU_IS_LOCAL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.includes('codespaces') || location.hostname.endsWith('.app.github.dev') || location.port === '8000');
-        const KAIXU_GATEWAY_PRIMARY = KAIXU_IS_LOCAL ? '/api' : 'https://skyesol.netlify.app';
+        const KAIXU_GATEWAY_PRIMARY = KAIXU_IS_LOCAL ? '/api' : '';
         const KAIXU_GATEWAY_FALLBACK = 'https://skyesol.netlify.app';
 
         // Non-streaming JSON endpoint (ported from Neural-Space-Pro)
